@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#121718"><meta name="description" content="粒序 GRAINFORM，一款让方块化为流沙的原创网页益智游戏。同色沙粒连接左右边界，即可整片消除。">
-<title>粒序 · 细沙候选（待验收）</title>
+<title>粒序 GRAINFORM 0.2.1 · 细沙候选（待验收）</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eec468'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%2358d4ca'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -11,7 +11,7 @@
 <div class="app">
 <header class="topbar">
   <a class="brand" href="game.html" aria-label="粒序 GRAINFORM 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-cn">粒序</span><span class="brand-en">GRAINFORM</span></a>
-  <div class="top-actions"><span class="edition">细沙预览</span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 · P" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg></button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 17h14M9 4v6M15 14v6"/></svg></button><button id="landscapeHelp" class="icon-button landscape-help" aria-label="查看玩法" title="玩法与操作">?</button></div>
+  <div class="top-actions"><span class="edition">细沙预览 0.2.1</span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 · P" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg></button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 17h14M9 4v6M15 14v6"/></svg></button><button id="landscapeHelp" class="icon-button landscape-help" aria-label="查看玩法" title="玩法与操作">?</button></div>
 </header>
 <main class="game-layout">
   <aside class="left-panel">
@@ -76,7 +76,7 @@
 <dialog id="helpDialog" aria-labelledby="helpTitle">
   <div class="dialog-top"><span class="tiny-label">玩法指南</span><button class="dialog-close icon-button" data-close aria-label="关闭玩法">×</button></div>
   <h2 id="helpTitle">让同色，彼此相连</h2>
-  <ol class="how-list"><li><span>01</span><div><strong>方块落下，沙粒流动</strong><p>移动、旋转方块。落地后会散成沙粒，向下和两侧堆积。</p></div></li><li><span>02</span><div><strong>连通两侧，整片消除</strong><p>同色沙粒通过上下左右连接，碰到左右两面墙时，整个连通区域消除。斜角相接不算。</p></div></li><li><span>03</span><div><strong>连续消除，连锁加分</strong><p>下一块落地前再次消除，触发连锁。细沙按 9 粒折算 1 等量单位，得分 =（等量单位 + 每片 100 分）× 流速等级 × 连锁倍数。</p></div></li></ol>
+  <ol class="how-list"><li><span>01</span><div><strong>方块落下，沙粒流动</strong><p>移动、旋转方块。落地后会散成沙粒，向下和两侧堆积。</p></div></li><li><span>02</span><div><strong>连通两侧，整片消除</strong><p>同色沙粒上下左右或斜角相接都算连通。只有同一个连通区域同时碰到左右两面墙时才整片消除；隔着空格或其他颜色不会连通。</p></div></li><li><span>03</span><div><strong>连续消除，连锁加分</strong><p>下一块落地前再次消除，触发连锁。细沙按 9 粒折算 1 等量单位，得分 =（等量单位 + 每片 100 分）× 流速等级 × 连锁倍数。</p></div></li></ol>
   <p class="tip-note">留意「下一个」，把同色放在一起。每消除 1,800 等量单位会提升等级，方块落下得越多也会逐渐加速；顶部出生位置被堵住时，本局结束。</p>
   <p class="subtle help-keyboard">方向键移动与旋转，空格直接落下，P 或 Esc 暂停。手机可长按左右键或下落键，松开即停。</p>
   <button class="primary-button dialog-done" data-close>明白了</button>

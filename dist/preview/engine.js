@@ -1,6 +1,8 @@
 // High-resolution granular preview. Physical grains have velocity, friction and sleep.
 // The original world size is preserved at 3x linear density; score area is divided by 9.
 export const SCALE=3, AREA_SCALE=9, WIDTH=288, HEIGHT=432, BLOCK=24, PHYSICS_SUBSTEPS=2, SLEEP_STEPS=14;
+// 0.2.1: diagonal contact joins the same-color component; empty cells are never bridged.
+export const CONNECTIVITY=8;
 const TILE=12, Q=16, REST=SLEEP_STEPS;
 export const SHAPES = [
   [[0,0],[1,0],[0,1],[1,1]],
@@ -283,6 +285,10 @@ export class Game {
         if(x<w-1&&v[i+1]!==stamp&&g[i+1]===color){v[i+1]=stamp;q[tail++]=i+1;}
         if(y>0&&v[i-w]!==stamp&&g[i-w]===color){v[i-w]=stamp;q[tail++]=i-w;}
         if(y<h-1&&v[i+w]!==stamp&&g[i+w]===color){v[i+w]=stamp;q[tail++]=i+w;}
+        if(x>0&&y>0&&v[i-w-1]!==stamp&&g[i-w-1]===color){v[i-w-1]=stamp;q[tail++]=i-w-1;}
+        if(x<w-1&&y>0&&v[i-w+1]!==stamp&&g[i-w+1]===color){v[i-w+1]=stamp;q[tail++]=i-w+1;}
+        if(x>0&&y<h-1&&v[i+w-1]!==stamp&&g[i+w-1]===color){v[i+w-1]=stamp;q[tail++]=i+w-1;}
+        if(x<w-1&&y<h-1&&v[i+w+1]!==stamp&&g[i+w+1]===color){v[i+w+1]=stamp;q[tail++]=i+w+1;}
       }
       if(right){regions++;for(let k=0;k<tail;k++){this.clearCells[count++]=q[k];this.clearMask[q[k]]=1;}}
     }

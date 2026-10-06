@@ -1,9 +1,9 @@
-# GRAINFORM 0.2.0 audio-startup diagnostic candidate
+# Historical 0.2.0 audio-startup candidate, inherited by 0.2.1
 
 This independent test branch is based on public main commit
 `f34f17f62ef0051c62474f10cd9f391c6ff608e1`. It adds startup/audio diagnostics and
 pending-resume deduplication to the experimental fine-grain preview only.
-The package version remains 0.2.0. This is a verification candidate, not a
+This section records the 0.2.0 audio candidate now inherited unchanged by 0.2.1; the current package version is declared in package.json. This is a verification candidate, not a
 production release or a claim that performance acceptance has passed.
 
 The normal 96×144 entry, fine-grain physics, renderer, tone generation,

@@ -1,4 +1,4 @@
-import {Game, WIDTH, HEIGHT, BLOCK, SCALE} from './engine.js';
+import {Game, WIDTH, HEIGHT, BLOCK, SCALE, CONNECTIVITY} from './engine.js';
 import {GrainRenderer} from './renderer.js';
 import {InputState} from '../input.js';
 import {SessionMetrics} from '../metrics.js';
@@ -6,7 +6,7 @@ import {FrameDiagnostics} from './diagnostics.js';
 import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
 import {STANDARD_COLORS,ACCESSIBLE_COLORS,COLOR_NAMES,PATTERN_NAMES,textureOffset} from '../palette.js';
-const BUILD='grainform-fine-p8-audio-diagnostic-candidate';
+const BUILD='grainform-fine-0.2.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const game=new Game({seed:randomSeed()}),input=new InputState();
 const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas);
@@ -136,7 +136,7 @@ function frame(now){
   if(qaEnabled&&(shownAudioRevision!==audioUnlock.revision||shownStartRevision!==startDiagnostics.revision))diagnosticOutput.lastAt=-Infinity;
   const outputKind=diagnosticOutput.next(now,game.state,wasPlaying);
   if(outputKind){
-    const state=game.snapshot(),data={build:BUILD,diagnosticsMode,outputKind,game:state,audio:{enabled:prefs.sound,contextState:audioCtx?.state||'not-created',...audioStats},particleBalance:{present:state.grains,added:game.added,removed:game.removed,conserved:state.grains===game.added-game.removed},session:outputKind==='full'?sessionMetrics.snapshot(now):compactSession(sessionMetrics,now)};
+    const state=game.snapshot(),data={build:BUILD,rules:{connectivity:CONNECTIVITY,sameColor:true,requiredWalls:['left','right']},diagnosticsMode,outputKind,game:state,audio:{enabled:prefs.sound,contextState:audioCtx?.state||'not-created',...audioStats},particleBalance:{present:state.grains,added:game.added,removed:game.removed,conserved:state.grains===game.added-game.removed},session:outputKind==='full'?sessionMetrics.snapshot(now):compactSession(sessionMetrics,now)};
     // Keep adverse samples and observer records; serialize them only after playing has stopped.
     if(qaEnabled){data.audio.unlock=audioUnlock.snapshot({detail:outputKind==='full'});data.startup=startDiagnostics.snapshot({detail:outputKind==='full'});shownAudioRevision=audioUnlock.revision;shownStartRevision=startDiagnostics.revision;}
     if(outputKind==='full')data.timing=frameDiagnostics.snapshot();
