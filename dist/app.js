@@ -23,7 +23,12 @@ const sessionMetrics=new SessionMetrics(frameStart);
 const qaEnabled=new URLSearchParams(location.search).has('qa');
 $('#qaDiagnostics').hidden=!qaEnabled;
 function randomSeed(){try{return crypto.getRandomValues(new Uint32Array(1))[0];}catch{return Date.now()>>>0;}}
-function save(key,value){try{localStorage.setItem(key,value);}catch{storageOK=false;$('#storageNotice').textContent='浏览器禁止本地存储。本次仍可游戏，关闭后记录不会保留。';}}
+const storageFailure='本地存储暂时不可用，部分更改未保存。已有记录可能仍保留，本次仍可游戏。';
+const failedWrites=new Set();
+function save(key,value){
+  try{localStorage.setItem(key,value);failedWrites.delete(key);storageOK=true;$('#storageNotice').textContent=failedWrites.size?storageFailure:'设置与最高分仅保存在当前浏览器';return true;}
+  catch{failedWrites.add(key);storageOK=false;$('#storageNotice').textContent=storageFailure;return false;}
+}
 function setText(el,value){if(el.textContent!==String(value))el.textContent=value;}
 const compactScore=new Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1});
 function displayScore(node,value){
@@ -154,7 +159,20 @@ $('#settingsButton').addEventListener('click',()=>openDialog($('#settingsDialog'
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
 $$('dialog').forEach(d=>{d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});d.addEventListener('close',()=>{clearInput();$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;});});
 for(const [id,key] of [['soundToggle','sound'],['contrastToggle','contrast'],['motionToggle','motion']])$('#'+id).addEventListener('change',e=>{prefs[key]=e.target.checked;applyPrefs();save('grainform.preferences',JSON.stringify(prefs));if(key==='sound'&&prefs.sound){unlockAudio();tone(440,.1,.025);}});
-$('#resetBest').addEventListener('click',()=>{$('#resetConfirm').hidden=false;$('#resetBest').hidden=true;});$('#cancelReset').addEventListener('click',()=>{$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;});$('#confirmReset').addEventListener('click',()=>{best=0;newBest=false;save('grainform.best','0');uiDirty=true;$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;announce('本地最高分已清除');});
+function finishReset(){
+  $('#resetConfirm').hidden=true;$('#resetBest').hidden=false;$('#resetBest').focus({preventScroll:true});
+}
+$('#resetBest').addEventListener('click',()=>{$('#resetStatus').hidden=true;$('#resetConfirm').hidden=false;$('#resetBest').hidden=true;$('#cancelReset').focus({preventScroll:true});});
+$('#cancelReset').addEventListener('click',finishReset);
+$('#confirmReset').addEventListener('click',()=>{
+  const saved=save('grainform.best','0');
+  if(saved){best=0;newBest=false;lastSavedScore=game.score;}
+  else best=Math.max(best,readStoredBest(best));
+  uiDirty=true;finishReset();
+  const message=saved?'本地最高分已清除':'未能清除已保存记录。最高分仍保留，请稍后重试。';
+  $('#resetStatus').textContent=message;$('#resetStatus').hidden=false;
+  announce(message);
+});
 const keyMap={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'rotate',KeyW:'rotate',ArrowDown:'down',KeyS:'down',Space:'drop'};
 window.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
@@ -185,7 +203,7 @@ window.addEventListener('storage',event=>{
   if(current>best){best=current;newBest=false;uiDirty=true;}
 });
 window.addEventListener('pagehide',()=>{clearInput();pause();});
-if(!storageOK)$('#storageNotice').textContent='浏览器禁止本地存储。本次仍可游戏，关闭后记录不会保留。';
+if(!storageOK)$('#storageNotice').textContent=storageFailure;
 applyPrefs();updateUI();draw();rafId=requestAnimationFrame(frame);
 function readState(){return {...game.snapshot(),best,preferences:{...prefs},storageAvailable:storageOK};}
 // Progressive enhancement: no external agent SDK and no network access are needed.

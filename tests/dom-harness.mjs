@@ -16,10 +16,11 @@ class Element extends Target{
   setPointerCapture(id){this.captures.add(id);}
   replaceChildren(...children){this.children=children;}
   append(c){(this.children??=[]).push(c);}
-  closest(selector){for(let n=this;n;n=n.parent){if(selector[0]==='.'?n.classList.contains(selector.slice(1)):n.tagName.toLowerCase()===selector)return n;}return null;}
+  closest(selector){for(let n=this;n;n=n.parent){if(selector==='[hidden]'?n.hidden:selector[0]==='.'?n.classList.contains(selector.slice(1)):n.tagName.toLowerCase()===selector)return n;}return null;}
+  getClientRects(){for(let n=this;n;n=n.parent)if(n.hidden||n.layoutHidden)return [];return [{}];}
   getContext(){if(!this.context){const draws=[];const target={draws,createImageData:(w,h)=>({data:new Uint8ClampedArray(w*h*4)}),putImageData(image){this.lastImage=new Uint8ClampedArray(image.data);},fillRect(...args){draws.push({args,fillStyle:this.fillStyle});if(draws.length>5000)draws.splice(0,2500);}};this.context=new Proxy(target,{get:(t,p)=>t[p]||(()=>{}),set:(t,p,v)=>(t[p]=v,true)});}return this.context;}
 }
-export async function harness({initial={},denyRead=false,denyWrite=false,search='?qa',entry='base',AudioContext=null}={}){
+export async function harness({initial={},denyRead=false,denyWrite=false,search='?qa',entry='base',AudioContext=null,writeErrorName='QuotaExceededError'}={}){
   let now=0,pendingFrame;
   const document=new Target(),window=new Target(),storage=new Map(Object.entries(initial));
   const route=entry==='preview'?'../dist/preview/':'../dist/';
@@ -35,7 +36,7 @@ export async function harness({initial={},denyRead=false,denyWrite=false,search=
   document.body=elements.find(x=>x.tagName==='BODY');document.activeElement=document.body;document.hidden=false;
   document.querySelectorAll=s=>elements.filter(e=>s[0]==='#'?e.id===s.slice(1):s[0]==='['?s.slice(1,-1) in e.attrs:e.tagName.toLowerCase()===s);
   document.created=[];document.querySelector=s=>document.querySelectorAll(s)[0];document.createElement=tag=>{const e=new Element(tag);document.created.push(e);return e;};document.createTextNode=text=>({textContent:text});
-  Object.assign(globalThis,{document,window,location:{search},performance:{now:()=>now},matchMedia:()=>({matches:false}),requestAnimationFrame:cb=>{pendingFrame=cb;return 1;},localStorage:{getItem(k){if(denyRead)throw Error('Denied');return storage.get(k)??null;},setItem(k,v){if(denyWrite)throw Error('QuotaExceeded');storage.set(k,String(v));},removeItem(k){if(denyWrite)throw Error('Denied');storage.delete(k);}}});
+  Object.assign(globalThis,{document,window,location:{search},performance:{now:()=>now},matchMedia:()=>({matches:false}),requestAnimationFrame:cb=>{pendingFrame=cb;return 1;},localStorage:{getItem(k){if(denyRead)throw Error('Denied');return storage.get(k)??null;},setItem(k,v){if(denyWrite){const error=new Error('Write denied');error.name=writeErrorName;throw error;}storage.set(k,String(v));},removeItem(k){if(denyWrite)throw Error('Denied');storage.delete(k);}}});
   await import(`${new URL(route+'app.js',import.meta.url).href}?independent=${++run}`);
-  return {api:window.__grainform,window,document,storage,el:id=>document.querySelector('#'+id),control:action=>elements.find(e=>e.dataset.action===action),advance(ms){now+=ms;},frame(count=1){for(let i=0;i<count;i++){now+=1000/60+.0001;pendingFrame(now);}},key(code,props={}){return window.dispatch('keydown',{code,...props});},up(code){window.dispatch('keyup',{code});}};
+  return {setStorageAccess({read=denyRead,write=denyWrite}={}){denyRead=read;denyWrite=write;},api:window.__grainform,window,document,storage,el:id=>document.querySelector('#'+id),control:action=>elements.find(e=>e.dataset.action===action),advance(ms){now+=ms;},frame(count=1){for(let i=0;i<count;i++){now+=1000/60+.0001;pendingFrame(now);}},key(code,props={}){return window.dispatch('keydown',{code,...props});},up(code){window.dispatch('keyup',{code});}};
 }

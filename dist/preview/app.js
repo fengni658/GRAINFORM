@@ -7,7 +7,7 @@ import {FrameDiagnostics} from './diagnostics.js';
 import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
 import {STANDARD_COLORS,ACCESSIBLE_COLORS,COLOR_NAMES,PATTERN_NAMES,textureOffset} from '../palette.js';
-const BUILD='grainform-fine-0.2.1';
+const BUILD='grainform-fine-0.3.0';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const game=new Game({seed:randomSeed()}),input=new InputState();
 const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas);
@@ -33,7 +33,12 @@ if(frameDiagnostics){frameDiagnostics.instrument(game);frameDiagnostics.observe(
 const audioUnlock=new AudioUnlock({diagnostics:qaEnabled,activation:()=>window.navigator?.userActivation?.isActive??null,createContext:()=>new (window.AudioContext||window.webkitAudioContext)()});
 const startDiagnostics=new StartDiagnostics({enabled:qaEnabled});let shownAudioRevision=-1,shownStartRevision=-1;
 function randomSeed(){try{return crypto.getRandomValues(new Uint32Array(1))[0];}catch{return Date.now()>>>0;}}
-function save(key,value){try{localStorage.setItem(key,value);}catch{storageOK=false;$('#storageNotice').textContent='浏览器禁止本地存储。本次仍可游戏，关闭后记录不会保留。';}}
+const storageFailure='本地存储暂时不可用，部分更改未保存。已有记录可能仍保留，本次仍可游戏。';
+const failedWrites=new Set();
+function save(key,value){
+  try{localStorage.setItem(key,value);failedWrites.delete(key);storageOK=true;$('#storageNotice').textContent=failedWrites.size?storageFailure:'设置与最高分仅保存在当前浏览器';return true;}
+  catch{failedWrites.add(key);storageOK=false;$('#storageNotice').textContent=storageFailure;return false;}
+}
 function setText(el,value){if(el.textContent!==String(value))el.textContent=value;}
 const compactScore=new Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1});
 function displayScore(node,value){
@@ -57,14 +62,18 @@ function tone(freq,duration=.08,volume=.035,type='sine',delay=0){
 }
 function sound(type,chain=1){if(type==='land')tone(110,.1,.03,'triangle');if(type==='rotate')tone(340,.035,.015);if(type==='clear'){const notes=[440,554.37,659.25,880];notes.forEach((v,i)=>tone(v*Math.min(2,1+(chain-1)*.12),.18,.024,'sine',i*.055));}if(type==='over'){tone(220,.25,.03,'triangle');tone(146.83,.35,.025,'triangle',.15);}}
 function clearInput(){input.clear();$$('[data-action]').forEach(b=>b.classList.remove('held'));}
-function panel(name){$('#overlay').hidden=!name;for(const n of ['home','pause','over'])$('#'+n+'Panel').hidden=n!==name;}
+function panel(name){
+  $('#overlay').hidden=!name;for(const n of ['home','pause','over'])$('#'+n+'Panel').hidden=n!==name;
+  if(name)$('#overlay').setAttribute('aria-labelledby',{home:'overlayTitle',pause:'pauseTitle',over:'overTitle'}[name]);
+  canvas.setAttribute('tabindex',name?'-1':'0');
+}
 function start(event){
   if($('#settingsDialog').open||$('#helpDialog').open)return;
   const startup=startDiagnostics.begin(event,prefs.sound);startDiagnostics.beforeAudio(startup);unlockAudio('start');startDiagnostics.afterAudio(startup);clearInput();game.reset(randomSeed());game.start();lastSavedScore=-1;newBest=false;toastUntil=0;$('#toast').classList.remove('visible');panel(null);uiDirty=true;accumulator=0;lastTime=performance.now();announce('游戏开始。方向键移动和旋转，空格直接落下。');
   canvas.focus({preventScroll:true});startDiagnostics.finish(startup);
 }
-function pause(reason='游戏已暂停'){
-  if(game.pause()){clearInput();panel('pause');$('#pauseReason').textContent=reason;uiDirty=true;accumulator=0;announce(reason);return true;}return false;
+function pause(reason='游戏已暂停',moveFocus=true){
+  if(game.pause()){clearInput();panel('pause');$('#pauseReason').textContent=reason;uiDirty=true;accumulator=0;announce(reason);if(moveFocus)$('#resumeButton').focus({preventScroll:true});return true;}return false;
 }
 function resume(){if($('#settingsDialog').open||$('#helpDialog').open)return false;if(game.resume()){clearInput();panel(null);uiDirty=true;lastTime=performance.now();accumulator=0;canvas.focus({preventScroll:true});announce('游戏继续');return true;}return false;}
 function togglePause(){if(game.state==='playing')pause();else if(game.state==='paused')resume();}
@@ -76,12 +85,12 @@ function handleEvents(){for(const event of game.consumeEvents()){
   uiDirty=true;
   if(event.type==='land'||event.type==='rotate')sound(event.type);
   if(event.type==='clear'){
-    sound('clear',event.chain);showToast(event.chain>1?`${event.chain} 连锁`:'整片消除',`+${event.score.toLocaleString()} · ${event.count} 粒`);
-    announce(`${event.chain}连锁，消除${event.count}粒，增加${event.score}分`);
+    sound('clear',event.chain);showToast(event.chain>1?`${event.chain} 连锁`:'整片消除',`+${event.score.toLocaleString()} · ${event.rawCount.toLocaleString()} 粒`);
+    announce(`${event.chain}连锁，消除${event.rawCount.toLocaleString()}粒，增加${event.score}分`);
   }
   if(event.type==='over'){
     clearInput();sound('over');panel('over');const end=$('#endScore');end.textContent=game.score.toLocaleString();end.style.fontSize=`clamp(1rem, ${Math.min(3.25,10/(Math.max(1,end.textContent.length)*.62))}rem, 9vw)`;$('#endRecord').textContent=game.score>best?'新的本地最高纪录':`本地最高 ${best.toLocaleString()}`;
-    $('#endDetails').innerHTML=`<span><strong>${game.pieces}</strong>个方块</span><span><strong>${game.cleared.toLocaleString()}</strong>粒沙</span><span><strong>${game.maxChain}</strong>最高连锁</span>`;announce(`本局结束，得分${game.score}，消除${game.cleared}粒`);
+    $('#endDetails').innerHTML=`<span><strong>${game.pieces}</strong>个方块</span><span><strong>${game.rawCleared.toLocaleString()}</strong>粒沙</span><span><strong>${game.maxChain}</strong>最高连锁</span>`;announce(`本局结束，得分${game.score}，消除${game.rawCleared.toLocaleString()}粒`);$('#againButton').focus({preventScroll:true});
   }
 }}
 function showToast(title,subtitle){$('#toast').replaceChildren(document.createTextNode(title));const small=document.createElement('small');small.textContent=subtitle;$('#toast').append(small);$('#toast').classList.add('visible');toastUntil=performance.now()+1450;}
@@ -90,8 +99,8 @@ function readStoredBest(fallback=best){
 }
 function updateUI(){
   if(game.score!==lastSavedScore){const stored=readStoredBest();if(stored>best){best=stored;newBest=false;}if(game.score>best){best=game.score;newBest=true;save('grainform.preview.v1.best',String(best));}lastSavedScore=game.score;}
-  $$('[data-score]').forEach(n=>displayScore(n,game.score));$$('[data-best]').forEach(n=>displayScore(n,best));$$('[data-level]').forEach(n=>setText(n,String(game.level).padStart(2,'0')));$$('[data-cleared]').forEach(n=>setText(n,game.cleared.toLocaleString()));$$('[data-chain]').forEach(n=>setText(n,game.maxChain));
-  $('#levelProgress').style.width=`${(game.cleared%1800)/18}%`;
+  $$('[data-score]').forEach(n=>displayScore(n,game.score));$$('[data-best]').forEach(n=>displayScore(n,best));$$('[data-level]').forEach(n=>setText(n,String(game.level).padStart(2,'0')));$$('[data-cleared]').forEach(n=>setText(n,game.rawCleared.toLocaleString()));$$('[data-chain]').forEach(n=>setText(n,game.maxChain));
+  $('#levelProgress').style.width=`${(game.rawCleared%16200)/162}%`;
   $('#pauseButton').disabled=!['playing','paused'].includes(game.state);$('#pauseButton').setAttribute('aria-label',game.state==='paused'?'继续游戏':'暂停游戏');
   $('#pauseButton').innerHTML=game.state==='paused'?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>';
   const labels={ready:'准备就绪',playing:'流动中',paused:'已暂停',over:'本局结束'};setText($('#stateLabel'),labels[game.state]);$('#stateDot').classList.toggle('live',game.state==='playing');
@@ -154,12 +163,40 @@ function frame(now){
   callbackMetrics.finish(performance.now());
 }
 $('#startButton').addEventListener('click',start);$('#againButton').addEventListener('click',start);$('#resumeButton').addEventListener('click',resume);$('#restartButton').addEventListener('click',start);$('#pauseButton').addEventListener('click',togglePause);
-function openDialog(dialog){pause('关闭面板后，点击继续游戏');clearInput();dialog.showModal();}
-$('#settingsButton').addEventListener('click',()=>openDialog($('#settingsDialog')));for(const id of ['howButton','helpButton','endHowButton','footerHelp','landscapeHelp'])$('#'+id).addEventListener('click',()=>openDialog($('#helpDialog')));
+const dialogOpeners=new WeakMap();
+function openDialog(dialog,opener){
+  dialogOpeners.set(dialog,opener);pause('关闭面板后，点击继续游戏',false);clearInput();dialog.showModal();
+}
+$('#settingsButton').addEventListener('click',()=>openDialog($('#settingsDialog'),$('#settingsButton')));
+for(const id of ['howButton','helpButton','endHowButton','footerHelp','landscapeHelp'])$('#'+id).addEventListener('click',()=>openDialog($('#helpDialog'),$('#'+id)));
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
-$$('dialog').forEach(d=>{d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});d.addEventListener('close',()=>{clearInput();$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;});});
+$$('dialog').forEach(d=>{
+  d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});
+  d.addEventListener('close',()=>{
+    clearInput();$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;
+    const opener=dialogOpeners.get(d);
+    if(opener&&!opener.disabled&&!opener.closest('[hidden]')&&opener.getClientRects().length)opener.focus({preventScroll:true});
+    else {
+      const target={ready:'#startButton',paused:'#resumeButton',over:'#againButton'}[game.state];
+      (target?$(target):canvas).focus({preventScroll:true});
+    }
+  });
+});
 for(const [id,key] of [['soundToggle','sound'],['contrastToggle','contrast'],['motionToggle','motion']])$('#'+id).addEventListener('change',e=>{prefs[key]=e.target.checked;applyPrefs();save('grainform.preview.v1.preferences',JSON.stringify(prefs));if(key==='sound'&&prefs.sound){unlockAudio('sound-toggle');tone(440,.1,.025);}});
-$('#resetBest').addEventListener('click',()=>{$('#resetConfirm').hidden=false;$('#resetBest').hidden=true;});$('#cancelReset').addEventListener('click',()=>{$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;});$('#confirmReset').addEventListener('click',()=>{best=0;newBest=false;save('grainform.preview.v1.best','0');uiDirty=true;$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;announce('本地最高分已清除');});
+function finishReset(){
+  $('#resetConfirm').hidden=true;$('#resetBest').hidden=false;$('#resetBest').focus({preventScroll:true});
+}
+$('#resetBest').addEventListener('click',()=>{$('#resetStatus').hidden=true;$('#resetConfirm').hidden=false;$('#resetBest').hidden=true;$('#cancelReset').focus({preventScroll:true});});
+$('#cancelReset').addEventListener('click',finishReset);
+$('#confirmReset').addEventListener('click',()=>{
+  const saved=save('grainform.preview.v1.best','0');
+  if(saved){best=0;newBest=false;lastSavedScore=game.score;}
+  else best=Math.max(best,readStoredBest(best));
+  uiDirty=true;finishReset();
+  const message=saved?'本地最高分已清除':'未能清除已保存记录。最高分仍保留，请稍后重试。';
+  $('#resetStatus').textContent=message;$('#resetStatus').hidden=false;
+  announce(message);
+});
 const keyMap={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'rotate',KeyW:'rotate',ArrowDown:'down',KeyS:'down',Space:'drop'};
 window.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
@@ -178,7 +215,7 @@ $$('[data-action]').forEach(b=>{
   // Assistive technology / keyboard-generated click. Real pointer clicks already act on pointerdown.
   b.addEventListener('click',e=>{if(e.detail===0)action(b.dataset.action);});
 });
-window.addEventListener('blur',()=>{clearInput();pause('你刚刚离开了窗口，游戏已自动暂停');});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();pause('页面切到后台，游戏已自动暂停');}});
+window.addEventListener('blur',()=>{clearInput();pause('你刚刚离开了窗口，游戏已自动暂停',false);});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();pause('页面切到后台，游戏已自动暂停',false);}});
 window.addEventListener('storage',event=>{
   if(event.key!=='grainform.preview.v1.best'&&event.key!==null)return;
   const incoming=Number(event.newValue);
@@ -189,8 +226,8 @@ window.addEventListener('storage',event=>{
   if(current<best){save('grainform.preview.v1.best',String(best));return;}
   if(current>best){best=current;newBest=false;uiDirty=true;}
 });
-window.addEventListener('pagehide',()=>{clearInput();pause();});
-if(!storageOK)$('#storageNotice').textContent='浏览器禁止本地存储。本次仍可游戏，关闭后记录不会保留。';
+window.addEventListener('pagehide',()=>{clearInput();pause('游戏已暂停',false);});
+if(!storageOK)$('#storageNotice').textContent=storageFailure;
 applyPrefs();updateUI();draw();rafId=requestAnimationFrame(frame);
 function readState(){return {...game.snapshot(),best,preferences:{...prefs},storageAvailable:storageOK};}
 // Progressive enhancement: no external agent SDK and no network access are needed.
