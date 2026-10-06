@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121718"><meta name="description" content="粒序 GRAINFORM，一款让方块化为流沙的原创网页益智游戏。同色沙粒连接左右边界，即可整片消除。">
+<title>粒序 GRAINFORM · 流沙方块</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eec468'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%2358d4ca'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <a class="brand" href="./" aria-label="粒序 GRAINFORM 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-cn">粒序</span><span class="brand-en">GRAINFORM</span></a>
+  <div class="top-actions"><span class="edition">无尽模式 <span>01</span></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 · P" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg></button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 17h14M9 4v6M15 14v6"/></svg></button><button id="landscapeHelp" class="icon-button landscape-help" aria-label="查看玩法" title="玩法与操作">?</button></div>
+</header>
+<main class="game-layout">
+  <aside class="left-panel">
+    <div class="eyebrow">当前得分</div><div class="score big-score" data-score>0</div>
+    <div class="record-row"><span>本地最高</span><span class="mono" data-best>0</span></div>
+    <div class="level-block"><div class="record-row"><span>流速等级</span><span class="mono">LV. <span data-level>01</span></span></div><div class="level-track"><span id="levelProgress"></span></div><p class="subtle">每消除 1,800 粒，流速提升</p></div>
+    <div class="session-stats"><div><span data-cleared>0</span><small>已消除沙粒</small></div><div><span data-chain>0</span><small>最高连锁</small></div></div>
+    <div class="rule-note"><span class="tiny-label">连成一线</span><p>让同色沙粒<br>连通左右两侧<br><em>整片消除</em></p><div class="connection-line" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span></span></div></div>
+  </aside>
+  <section class="stage" aria-label="流沙方块游戏区域">
+    <div class="mobile-hud"><div><span>得分</span><strong data-score>0</strong></div><div><span>最高</span><strong data-best>0</strong></div><div class="mobile-next"><span>下一个</span><canvas id="nextMobile" width="112" height="64" aria-label="下一块预览"></canvas></div><div><span>流速</span><strong>LV.<b data-level>01</b></strong></div></div>
+    <div class="board-heading"><span><i id="stateDot"></i><span id="stateLabel">准备就绪</span></span><span class="mono">96 × 144</span></div>
+    <div class="board-shell" id="boardShell">
+      <canvas id="gameCanvas" width="384" height="576" tabindex="0" role="img" aria-label="流沙游戏棋盘，使用方向键移动和旋转，空格落下"></canvas>
+      <div class="board-edge left-edge" aria-hidden="true"></div><div class="board-edge right-edge" aria-hidden="true"></div>
+      <div id="toast" class="toast" aria-hidden="true"></div>
+      <section id="overlay" class="overlay" aria-labelledby="overlayTitle">
+        <div id="homePanel" class="overlay-panel">
+          <div class="mode-label">流沙方块 · 无尽</div>
+          <h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1>
+          <p class="intro">方块落地，化为沙粒<br>同色连通左右，整片消除</p>
+          <button id="startButton" class="primary-button">开始游戏 <span aria-hidden="true">↵</span></button>
+          <button id="howButton" class="text-button">怎么玩</button>
+          <span class="start-hint">耳机就绪，随时沉浸</span>
+        </div>
+        <div id="pausePanel" class="overlay-panel" hidden>
+          <div class="mode-label">TAKE A BREATH</div><h2>让沙粒等一等</h2><p id="pauseReason" class="intro">游戏已暂停</p><button id="resumeButton" class="primary-button">继续游戏 <span aria-hidden="true">▶</span></button><button id="restartButton" class="text-button">重新开始</button>
+        </div>
+        <div id="overPanel" class="overlay-panel" hidden>
+          <div class="mode-label">这一局，落定</div><h2>再来一场流动</h2><div class="end-score" id="endScore">0</div><p id="endRecord" class="intro"></p><div class="end-details" id="endDetails"></div><button id="againButton" class="primary-button">再玩一局 <span aria-hidden="true">↵</span></button><button id="endHowButton" class="text-button">查看玩法</button>
+        </div>
+      </section>
+    </div>
+    <div class="board-caption"><span>连接左右 · 释放空间</span><span id="chainCaption">每一粒，都算数</span></div>
+    <div class="touch-controls" id="touchControls" aria-label="触控操作">
+      <button data-action="left" aria-label="向左移动，长按连续移动"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+      <button data-action="right" aria-label="向右移动，长按连续移动"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+      <button data-action="rotate" aria-label="顺时针旋转"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a7 7 0 1 0 1 8M18 3v5h-5"/></svg><span>旋转</span></button>
+      <button data-action="down" aria-label="加速下落，长按持续加速"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 8 6 6 6-6"/></svg></button>
+      <button data-action="drop" class="drop-control" aria-label="直接落下"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 5 6 6 6-6M6 17h12M12 11v6"/></svg><span>落下</span></button>
+    </div>
+  </section>
+  <aside class="right-panel">
+    <div class="next-box"><div class="eyebrow">下一个</div><canvas id="nextCanvas" width="192" height="128" aria-label="下一块预览"></canvas><span id="nextColor" class="subtle">琥珀色</span></div>
+    <div class="controls-guide"><div class="eyebrow">操作</div><div><span><kbd>←</kbd><kbd>→</kbd></span><span>左右移动</span></div><div><span><kbd>↑</kbd></span><span>旋转方块</span></div><div><span><kbd>↓</kbd></span><span>加速下落</span></div><div><span><kbd class="wide">SPACE</kbd></span><span>直接落下</span></div><div><span><kbd>P</kbd></span><span>暂停 / 继续</span></div></div>
+    <div class="palette-note"><span class="color-swatch gold"></span><span class="color-swatch teal"></span><span class="color-swatch pink"></span><p>三种颜色<br>无数种可能</p></div>
+    <button id="helpButton" class="help-button">玩法与提示 <span aria-hidden="true">?</span></button>
+  </aside>
+</main>
+<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序</span><span>最高分与设置仅保存在此设备</span><button id="footerHelp" class="text-button">玩法</button></footer>
+</div>
+<dialog id="settingsDialog" aria-labelledby="settingsTitle">
+  <div class="dialog-top"><span class="tiny-label">偏好设置</span><button class="dialog-close icon-button" data-close aria-label="关闭设置">×</button></div>
+  <h2 id="settingsTitle">照你的节奏</h2>
+  <label class="setting-row"><span><strong>游戏音效</strong><small>原创合成音，无背景音乐</small></span><input id="soundToggle" type="checkbox" role="switch"></label>
+  <label class="setting-row"><span><strong>高辨识配色</strong><small>每色独立纹理，提高明度差异</small></span><input id="contrastToggle" type="checkbox" role="switch"></label>
+  <label class="setting-row"><span><strong>减少动态效果</strong><small>关闭光晕与消除动画</small></span><input id="motionToggle" type="checkbox" role="switch"></label>
+  <div class="storage-info"><span>本地最高分</span><strong data-best>0</strong></div><p id="storageNotice" class="subtle">设置与最高分仅保存在当前浏览器</p>
+  <button id="resetBest" class="danger-text">清除本地最高分</button><div id="resetConfirm" hidden><p class="confirm-copy">清除后无法恢复，确认清除？</p><div class="button-pair"><button id="cancelReset" class="secondary-button">保留记录</button><button id="confirmReset" class="secondary-button danger">确认清除</button></div></div>
+  <button class="primary-button dialog-done" data-close>完成</button>
+</dialog>
+<dialog id="helpDialog" aria-labelledby="helpTitle">
+  <div class="dialog-top"><span class="tiny-label">玩法指南</span><button class="dialog-close icon-button" data-close aria-label="关闭玩法">×</button></div>
+  <h2 id="helpTitle">让同色，彼此相连</h2>
+  <ol class="how-list"><li><span>01</span><div><strong>方块落下，沙粒流动</strong><p>移动、旋转方块。落地后会散成沙粒，向下和两侧堆积。</p></div></li><li><span>02</span><div><strong>连通两侧，整片消除</strong><p>同色沙粒通过上下左右连接，碰到左右两面墙时，整个连通区域消除。斜角相接不算。</p></div></li><li><span>03</span><div><strong>连续消除，连锁加分</strong><p>下一块落地前再次消除，触发连锁。得分 =（沙粒数 + 每片 100 分）× 流速等级 × 连锁倍数。</p></div></li></ol>
+  <p class="tip-note">留意「下一个」，把同色放在一起。每消除 1,800 粒会提升等级，方块落下得越多也会逐渐加速；顶部出生位置被堵住时，本局结束。</p>
+  <p class="subtle help-keyboard">方向键移动与旋转，空格直接落下，P 或 Esc 暂停。手机可长按左右键或下落键，松开即停。</p>
+  <button class="primary-button dialog-done" data-close>明白了</button>
+</dialog>
+<div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>QA 只读诊断</summary><p>仅测试地址可见。全会话指标保留全部帧，另列实际 playing 期间数据。JS 工作耗时 p95 为 0.05ms 分桶上界，帧间隔 p95 为 0.5ms 分桶上界；超过 100ms / 1,000ms 的溢出桶返回观测最大值。工作耗时包含 JS 更新与绘制，不含 GPU 合成。堆内存每 30 秒采样；不支持的浏览器返回空列表。无外部遥测。</p><pre id="qaOutput"></pre></details>
+<script type="module" src="app.js"></script>
+</body></html>

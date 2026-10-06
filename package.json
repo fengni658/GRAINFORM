@@ -1,0 +1,13 @@
+{
+  "name": "grainform",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:preview": "node --test tests/preview/*.test.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "license": "UNLICENSED"
+}

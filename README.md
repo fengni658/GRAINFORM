@@ -1,2 +1,85 @@
-# GRAINFORM
-GRAINFORM 0.2.0: original falling-sand block game with an experimental fine-grain preview
+# 粒序 / GRAINFORM 0.2.0
+
+原创流沙方块网页游戏，使用原生 JavaScript、ES Modules 和 Canvas 2D。
+
+这是源码快照。默认入口保留原版 **96×144** 网格；**288×432** 细沙版仍是独立实验预览。细沙版已有视觉与功能验证，但约一秒的长帧间隔仍未解决，不能据此宣称稳定 60 fps 或达到正式生产发行标准。详见 [验证说明](VALIDATION.md) 和 [预览说明](PREVIEW-NOTES.md)。
+
+## 本地运行
+
+需要 Node.js 20+。游戏与 Node 自动测试没有第三方依赖，无需执行 `npm install`，也无需构建。
+
+```sh
+npm start
+```
+
+默认打开 http://127.0.0.1:4173/ 。可通过 `PORT` 环境变量更改端口。开发服务器监听所有网络接口，请只在可信网络使用。
+
+入口：
+
+- `/` 或 `/index.html`：原版 96×144 游戏
+- `/preview/game.html`：实验性 288×432 细沙游戏
+- `/preview/ab.html`：三种场景的实时 A/B 对比
+- `/qa-viewports.html`：原版 CSS 视口模拟
+- `/preview/qa-viewports.html`：细沙版 CSS 视口模拟
+
+以上路径带 `.html`，可直接在自带服务器上运行。发布静态站点时提供 `dist/` 中的文件即可；运行时不需要 Node.js 后端。
+
+## 玩法
+
+- 左右方向键或 A/D：移动；上方向键或 W：顺时针旋转
+- 下方向键或 S：加速；空格：直接落下
+- P / Esc：暂停或继续
+- 手机布局提供独立触控键；左右与加速支持长按
+- 同色沙粒按上下左右四邻接连通，接触左右边界时整片消除
+- 新方块的顶部出生区被沙粒堵塞时结束
+
+## 自动测试
+
+```sh
+npm test
+npm run test:preview
+```
+
+根测试覆盖原版引擎、输入、界面、存储和跨标签页最高分同步。预览测试覆盖细沙物理、守恒、确定性、参考实现等价、渲染像素和诊断输出。Node 测试不能证明浏览器帧率、视觉体验或真机兼容性。
+
+### 可选浏览器回归
+
+`tests/browser.mjs` 使用 Playwright，对原版进行四种视口下的基础操作、布局、暂停、设置与存储不可用回归。它不执行 20 分钟耐久测试，也不验证实验预览的性能。
+
+可自行安装测试工具与 Chromium：
+
+```sh
+npm install --no-save --package-lock=false playwright
+npx playwright install chromium
+```
+
+先在另一个终端运行 `npm start`，再执行：
+
+```sh
+npm run test:browser
+```
+
+可选环境变量：
+
+- `PLAYWRIGHT_MODULE_URL`：已有 Playwright 模块的完整 `file:` URL；未设置时导入普通 `playwright` 包
+- `CHROMIUM_EXECUTABLE_PATH`：已有 Chromium 可执行文件路径；未设置时使用 Playwright 管理的浏览器
+- `QA_BASE_URL`：本地测试服务器地址，默认 `http://127.0.0.1:4173/`
+- `QA_OUTPUT_DIR`：截图与 JSON 结果目录，默认 `qa-output/`，脚本自动创建
+
+只对自己有权测试的实例运行此脚本；它会操作页面并修改该浏览器测试上下文内的本地设置。生成的截图、结果、浏览器与测试依赖不随源码快照分发。
+
+## 数据与隐私
+
+游戏仅在 `localStorage` 保存设置与本地最高分，不保存进行中的棋盘。原版与预览使用独立的本地存储键。存储不可用时仍可游戏，记录仅在页面生命周期内有效。切到后台会自动暂停，刷新后开始新局。
+
+随附游戏代码没有外部遥测、广告、支付、账号、排行榜、外部字体、外部图片、远程音频或后端 API。音效由 WebAudio 实时合成。静态托管提供方自行注入的代码与服务行为不属于此源码的运行时依赖。
+
+## 诊断与兼容边界
+
+在游戏 URL 加 `?qa` 可启用只用于测试的诊断接口；预览另支持 `?summary` 低干扰累计摘要。计时有自身开销，JS 工作耗时不等于完整浏览器渲染时间，`60 Hz` 固定模拟步长也不等于实际 60 fps。
+
+视口模拟不代表手机真机。手机硬件、Safari、Firefox、真实多指触控、主观音效与 WebMCP 兼容性尚未完整验证。工作名未进行商标检索。
+
+## 许可
+
+本项目未授予公众开源再分发许可，`package.json` 标记为 `UNLICENSED`。公开源码不等于授予复制、修改或再分发授权。来源与测试工具许可见 [LICENSES.md](LICENSES.md)。

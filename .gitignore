@@ -1,0 +1,12 @@
+node_modules/
+qa-output/
+test-results/
+playwright-report/
+.openai/
+.sites-runtime/
+.env
+.env.*
+*.log
+*.zip
+*.tar.gz
+.DS_Store
