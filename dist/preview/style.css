@@ -36,5 +36,5 @@
   .touch-controls button{min-width:44px;min-height:44px}
 }
 
-/* Persistent, readable first-run save boundary in both color modes. */
-.save-hint{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px}.save-help{line-height:1.8}
+/* Opaque backing keeps this hint readable over the bright ready-state dunes. */
+.save-hint{font-size:12px;color:var(--muted);background:#121718;padding:3px 6px;border-radius:3px;max-width:100%;flex-shrink:0;line-height:1.5;margin-top:8px}.save-help{line-height:1.8}
