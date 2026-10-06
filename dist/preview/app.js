@@ -3,9 +3,10 @@ import {GrainRenderer} from './renderer.js';
 import {InputState} from '../input.js';
 import {SessionMetrics} from '../metrics.js';
 import {FrameDiagnostics} from './diagnostics.js';
+import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
 import {STANDARD_COLORS,ACCESSIBLE_COLORS,COLOR_NAMES,PATTERN_NAMES,textureOffset} from '../palette.js';
-const BUILD='grainform-fine-p8';
+const BUILD='grainform-fine-p8-audio-diagnostic-candidate';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const game=new Game({seed:randomSeed()}),input=new InputState();
 const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas);
@@ -28,6 +29,8 @@ const diagnosticOutput=new DiagnosticOutput(diagnosticsMode);
 $('#qaDiagnostics').hidden=diagnosticsMode==='off';
 const frameDiagnostics=qaEnabled?new FrameDiagnostics():null;
 if(frameDiagnostics){frameDiagnostics.instrument(game);frameDiagnostics.observe();}
+const audioUnlock=new AudioUnlock({diagnostics:qaEnabled,activation:()=>window.navigator?.userActivation?.isActive??null,createContext:()=>new (window.AudioContext||window.webkitAudioContext)()});
+const startDiagnostics=new StartDiagnostics({enabled:qaEnabled});let shownAudioRevision=-1,shownStartRevision=-1;
 function randomSeed(){try{return crypto.getRandomValues(new Uint32Array(1))[0];}catch{return Date.now()>>>0;}}
 function save(key,value){try{localStorage.setItem(key,value);}catch{storageOK=false;$('#storageNotice').textContent='浏览器禁止本地存储。本次仍可游戏，关闭后记录不会保留。';}}
 function setText(el,value){if(el.textContent!==String(value))el.textContent=value;}
@@ -46,7 +49,7 @@ function applyPrefs(){
   shades=colors.map(c=>Array.from({length:7},(_,n)=>c.map(v=>Math.max(0,Math.min(255,v+(n-3)*4)))));
   lastNext=null;uiDirty=true;
 }
-function unlockAudio(){if(!prefs.sound)return;try{audioCtx??=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});}catch{}}
+function unlockAudio(source='input'){audioCtx=audioUnlock.unlock(prefs.sound,source,{retryPending:source==='start'||source==='sound-toggle'})||audioCtx;}
 function tone(freq,duration=.08,volume=.035,type='sine',delay=0){
   if(!prefs.sound||!audioCtx||audioCtx.state!=='running')return;
   try{const now=audioCtx.currentTime+delay,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(freq,now);o.frequency.exponentialRampToValueAtTime(freq*.7,now+duration);g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(volume,now+.006);g.gain.exponentialRampToValueAtTime(.0001,now+duration);o.connect(g);g.connect(audioCtx.destination);o.start(now);audioStats.notesStarted++;audioStats.activeVoices++;o.stop(now+duration+.02);o.onended=()=>{audioStats.activeVoices=Math.max(0,audioStats.activeVoices-1);o.disconnect();g.disconnect();};}catch{audioStats.errors++;}
@@ -54,10 +57,10 @@ function tone(freq,duration=.08,volume=.035,type='sine',delay=0){
 function sound(type,chain=1){if(type==='land')tone(110,.1,.03,'triangle');if(type==='rotate')tone(340,.035,.015);if(type==='clear'){const notes=[440,554.37,659.25,880];notes.forEach((v,i)=>tone(v*Math.min(2,1+(chain-1)*.12),.18,.024,'sine',i*.055));}if(type==='over'){tone(220,.25,.03,'triangle');tone(146.83,.35,.025,'triangle',.15);}}
 function clearInput(){input.clear();$$('[data-action]').forEach(b=>b.classList.remove('held'));}
 function panel(name){$('#overlay').hidden=!name;for(const n of ['home','pause','over'])$('#'+n+'Panel').hidden=n!==name;}
-function start(){
+function start(event){
   if($('#settingsDialog').open||$('#helpDialog').open)return;
-  unlockAudio();clearInput();game.reset(randomSeed());game.start();lastSavedScore=-1;newBest=false;toastUntil=0;$('#toast').classList.remove('visible');panel(null);uiDirty=true;accumulator=0;lastTime=performance.now();announce('游戏开始。方向键移动和旋转，空格直接落下。');
-  canvas.focus({preventScroll:true});
+  const startup=startDiagnostics.begin(event,prefs.sound);startDiagnostics.beforeAudio(startup);unlockAudio('start');startDiagnostics.afterAudio(startup);clearInput();game.reset(randomSeed());game.start();lastSavedScore=-1;newBest=false;toastUntil=0;$('#toast').classList.remove('visible');panel(null);uiDirty=true;accumulator=0;lastTime=performance.now();announce('游戏开始。方向键移动和旋转，空格直接落下。');
+  canvas.focus({preventScroll:true});startDiagnostics.finish(startup);
 }
 function pause(reason='游戏已暂停'){
   if(game.pause()){clearInput();panel('pause');$('#pauseReason').textContent=reason;uiDirty=true;accumulator=0;announce(reason);return true;}return false;
@@ -65,7 +68,7 @@ function pause(reason='游戏已暂停'){
 function resume(){if($('#settingsDialog').open||$('#helpDialog').open)return false;if(game.resume()){clearInput();panel(null);uiDirty=true;lastTime=performance.now();accumulator=0;canvas.focus({preventScroll:true});announce('游戏继续');return true;}return false;}
 function togglePause(){if(game.state==='playing')pause();else if(game.state==='paused')resume();}
 function action(name){
-  if(game.state!=='playing')return false;const actionStarted=frameDiagnostics?performance.now():0;unlockAudio();let result=false;
+  if(game.state!=='playing')return false;const actionStarted=frameDiagnostics?performance.now():0;unlockAudio('input:'+name);let result=false;
   if(name==='left')result=game.move(-4*SCALE);if(name==='right')result=game.move(4*SCALE);if(name==='rotate')result=game.rotate();if(name==='drop')result=game.hardDrop();if(name==='down')result=game.nudgeDown();uiDirty=true;handleEvents();if(frameDiagnostics)frameDiagnostics.inputAction(name,actionStarted,performance.now()-actionStarted);return result;
 }
 function handleEvents(){for(const event of game.consumeEvents()){
@@ -126,12 +129,16 @@ function frame(now){
     accumulator-=1000/60;n++;
   }if(n&&(game.next!==lastNext||game.score!==lastSavedScore))uiDirty=true;}else accumulator=0;
   if(uiDirty)updateUI();if(phases){const end=performance.now();phases.hud=end-at;at=end;}
-  draw();if(phases){const end=performance.now();phases.render=end-at;at=end;}
+  draw();if(phases){const end=performance.now();phases.render=end-at;at=end;if(game.state==='playing')startDiagnostics.noteDraw(now,begin,end);}
   if(toastUntil&&now>toastUntil){$('#toast').classList.remove('visible');toastUntil=0;}
+  // Audio/startup revisions are rare user-gesture transitions; publish their small
+  // current records promptly without exporting full live frame history.
+  if(qaEnabled&&(shownAudioRevision!==audioUnlock.revision||shownStartRevision!==startDiagnostics.revision))diagnosticOutput.lastAt=-Infinity;
   const outputKind=diagnosticOutput.next(now,game.state,wasPlaying);
   if(outputKind){
     const state=game.snapshot(),data={build:BUILD,diagnosticsMode,outputKind,game:state,audio:{enabled:prefs.sound,contextState:audioCtx?.state||'not-created',...audioStats},particleBalance:{present:state.grains,added:game.added,removed:game.removed,conserved:state.grains===game.added-game.removed},session:outputKind==='full'?sessionMetrics.snapshot(now):compactSession(sessionMetrics,now)};
     // Keep adverse samples and observer records; serialize them only after playing has stopped.
+    if(qaEnabled){data.audio.unlock=audioUnlock.snapshot({detail:outputKind==='full'});data.startup=startDiagnostics.snapshot({detail:outputKind==='full'});shownAudioRevision=audioUnlock.revision;shownStartRevision=startDiagnostics.revision;}
     if(outputKind==='full')data.timing=frameDiagnostics.snapshot();
     $('#qaOutput').textContent=JSON.stringify(data,null,2);
   }
@@ -146,14 +153,14 @@ function openDialog(dialog){pause('关闭面板后，点击继续游戏');clearI
 $('#settingsButton').addEventListener('click',()=>openDialog($('#settingsDialog')));for(const id of ['howButton','helpButton','endHowButton','footerHelp','landscapeHelp'])$('#'+id).addEventListener('click',()=>openDialog($('#helpDialog')));
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
 $$('dialog').forEach(d=>{d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});d.addEventListener('close',()=>{clearInput();$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;});});
-for(const [id,key] of [['soundToggle','sound'],['contrastToggle','contrast'],['motionToggle','motion']])$('#'+id).addEventListener('change',e=>{prefs[key]=e.target.checked;applyPrefs();save('grainform.preview.v1.preferences',JSON.stringify(prefs));if(key==='sound'&&prefs.sound){unlockAudio();tone(440,.1,.025);}});
+for(const [id,key] of [['soundToggle','sound'],['contrastToggle','contrast'],['motionToggle','motion']])$('#'+id).addEventListener('change',e=>{prefs[key]=e.target.checked;applyPrefs();save('grainform.preview.v1.preferences',JSON.stringify(prefs));if(key==='sound'&&prefs.sound){unlockAudio('sound-toggle');tone(440,.1,.025);}});
 $('#resetBest').addEventListener('click',()=>{$('#resetConfirm').hidden=false;$('#resetBest').hidden=true;});$('#cancelReset').addEventListener('click',()=>{$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;});$('#confirmReset').addEventListener('click',()=>{best=0;newBest=false;save('grainform.preview.v1.best','0');uiDirty=true;$('#resetConfirm').hidden=true;$('#resetBest').hidden=false;announce('本地最高分已清除');});
 const keyMap={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'rotate',KeyW:'rotate',ArrowDown:'down',KeyS:'down',Space:'drop'};
 window.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
   if($('#settingsDialog').open||$('#helpDialog').open)return;
   if(e.code==='KeyP'||e.code==='Escape'){e.preventDefault();if(!e.repeat)togglePause();return;}
-  if(e.code==='Enter'&&['ready','over'].includes(game.state)&&!['BUTTON','INPUT','A'].includes(document.activeElement.tagName)){e.preventDefault();if(!e.repeat)start();return;}
+  if(e.code==='Enter'&&['ready','over'].includes(game.state)&&!['BUTTON','INPUT','A'].includes(document.activeElement.tagName)){e.preventDefault();if(!e.repeat)start(e);return;}
   const name=keyMap[e.code];if(!name||game.state!=='playing')return;
   if(['BUTTON','INPUT','A'].includes(document.activeElement.tagName)&&e.code==='Space')return;
   e.preventDefault();if(!e.repeat&&input.press('key:'+e.code,name))action(name);
