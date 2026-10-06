@@ -2,6 +2,7 @@ import {Game, WIDTH, HEIGHT, BLOCK, SCALE, CONNECTIVITY} from './engine.js';
 import {GrainRenderer} from './renderer.js';
 import {InputState} from '../input.js';
 import {SessionMetrics} from '../metrics.js';
+import {CallbackMetrics} from './callback-metrics.js';
 import {FrameDiagnostics} from './diagnostics.js';
 import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
@@ -23,7 +24,7 @@ try{
 let colors,shades,toastUntil=0,lastTime=0,accumulator=0,uiDirty=true,lastSavedScore=-1,newBest=false,lastNext=null;
 const audioStats={notesStarted:0,activeVoices:0,errors:0};
 let audioCtx=null,rafId=0,frameIndex=0,frameTotal=0,frameWork=new Float32Array(3600),frameGap=new Float32Array(3600),frameStart=performance.now();
-const sessionMetrics=new SessionMetrics(frameStart);
+const sessionMetrics=new SessionMetrics(frameStart),callbackMetrics=new CallbackMetrics();
 const diagnosticsMode=diagnosticMode(location.search),qaEnabled=diagnosticsMode==='profile';
 const diagnosticOutput=new DiagnosticOutput(diagnosticsMode);
 $('#qaDiagnostics').hidden=diagnosticsMode==='off';
@@ -120,6 +121,7 @@ function drawNext(){
 }
 function draw(){sceneRenderer.draw(game,{contrast:prefs.contrast,motion:prefs.motion,profile:frameDiagnostics});}
 function frame(now){
+  const callbackBegin=performance.now();callbackMetrics.commitPending();
   const begin=performance.now(),gap=lastTime?now-lastTime:16.667,wasPlaying=game.state==='playing';lastTime=now;
   const phases=frameDiagnostics?{inputRepeat:0,simulation:0,events:0,hud:0,render:0,diagnostics:0}:null;let n=0,at=begin;
   if(game.state==='playing'&&!document.hidden){accumulator+=Math.min(gap,100);while(accumulator>=1000/60&&n<6){
@@ -137,6 +139,7 @@ function frame(now){
   const outputKind=diagnosticOutput.next(now,game.state,wasPlaying);
   if(outputKind){
     const state=game.snapshot(),data={build:BUILD,rules:{connectivity:CONNECTIVITY,sameColor:true,requiredWalls:['left','right']},diagnosticsMode,outputKind,game:state,audio:{enabled:prefs.sound,contextState:audioCtx?.state||'not-created',...audioStats},particleBalance:{present:state.grains,added:game.added,removed:game.removed,conserved:state.grains===game.added-game.removed},session:outputKind==='full'?sessionMetrics.snapshot(now):compactSession(sessionMetrics,now)};
+    data.callback=callbackMetrics.snapshot({detail:outputKind==='full'});
     // Keep adverse samples and observer records; serialize them only after playing has stopped.
     if(qaEnabled){data.audio.unlock=audioUnlock.snapshot({detail:outputKind==='full'});data.startup=startDiagnostics.snapshot({detail:outputKind==='full'});shownAudioRevision=audioUnlock.revision;shownStartRevision=startDiagnostics.revision;}
     if(outputKind==='full')data.timing=frameDiagnostics.snapshot();
@@ -144,9 +147,11 @@ function frame(now){
   }
   const end=performance.now(),work=end-begin;if(phases)phases.diagnostics=end-at;
   sessionMetrics.record(work,gap,wasPlaying,now,performance.memory);
-  if(frameDiagnostics)frameDiagnostics.recordFrame({now,begin,gap,work,playing:wasPlaying,steps:n,phases});
+  if(frameDiagnostics)frameDiagnostics.recordFrame({frameId:frameTotal+1,now,begin:callbackBegin,gap,work,playing:wasPlaying,steps:n,phases});
   frameWork[frameIndex]=work;frameGap[frameIndex]=gap;frameIndex=(frameIndex+1)%frameWork.length;frameTotal++;
+  callbackMetrics.prepare(frameTotal,now,wasPlaying,n,callbackBegin,begin,end,frameDiagnostics?.previousFrame);
   rafId=requestAnimationFrame(frame);
+  callbackMetrics.finish(performance.now());
 }
 $('#startButton').addEventListener('click',start);$('#againButton').addEventListener('click',start);$('#resumeButton').addEventListener('click',resume);$('#restartButton').addEventListener('click',start);$('#pauseButton').addEventListener('click',togglePause);
 function openDialog(dialog){pause('关闭面板后，点击继续游戏');clearInput();dialog.showModal();}
@@ -198,5 +203,5 @@ if(context?.registerTool){
   ])try{Promise.resolve(context.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}
 }
 if(qaEnabled){
-  window.__grainform={game,input,start,pause,resume,action,readState,render(){uiDirty=true;updateUI();draw();},metrics(){const count=Math.min(frameTotal,frameWork.length),a=Array.from(frameWork.slice(0,count)).sort((x,y)=>x-y),b=Array.from(frameGap.slice(0,count)).sort((x,y)=>x-y);return {session:sessionMetrics.snapshot(performance.now()),frames:frameTotal,elapsedMs:performance.now()-frameStart,sampleFrames:count,workP50:a[Math.floor(count*.5)]||0,workP95:a[Math.floor(count*.95)]||0,workMax:a[count-1]||0,frameGapP95:b[Math.floor(count*.95)]||0,heap:performance.memory?{used:performance.memory.usedJSHeapSize,total:performance.memory.totalJSHeapSize}:null};}};
+  window.__grainform={game,input,start,pause,resume,action,readState,render(){uiDirty=true;updateUI();draw();},metrics(){const count=Math.min(frameTotal,frameWork.length),a=Array.from(frameWork.slice(0,count)).sort((x,y)=>x-y),b=Array.from(frameGap.slice(0,count)).sort((x,y)=>x-y);return {session:sessionMetrics.snapshot(performance.now()),callback:callbackMetrics.snapshot({detail:true}),frames:frameTotal,elapsedMs:performance.now()-frameStart,sampleFrames:count,workP50:a[Math.floor(count*.5)]||0,workP95:a[Math.floor(count*.95)]||0,workMax:a[count-1]||0,frameGapP95:b[Math.floor(count*.95)]||0,heap:performance.memory?{used:performance.memory.usedJSHeapSize,total:performance.memory.totalJSHeapSize}:null};}};
 }

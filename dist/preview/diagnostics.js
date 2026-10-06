@@ -30,19 +30,19 @@ export class FrameDiagnostics{
   }
   rendered(phases,reused,playing){if(!playing)return;reused?this.reusedFrames++:this.presentedFrames++;for(const key of RENDER_STAGES)this.renderer[key].add(phases?.[key]||0);this.renderFrame={reused,phases};}
   inputAction(name,at,ms){this.input.add(ms);this.inputSinceFrame+=ms;this.inputCallsSinceFrame++;this.inputMaxSinceFrame=Math.max(this.inputMaxSinceFrame,ms);keepTop(this.inputTop,{name,atMs:at,durationMs:ms},'durationMs');}
-  recordFrame({now,begin,gap,work,playing,steps,phases}){
+  recordFrame({frameId,now,begin,gap,work,playing,steps,phases}){
     if(playing){for(const key of STAGES)this.stages[key].add(phases[key]||0);
       const highWork=this.topWork.length<6||work>this.topWork.at(-1).workMs,highGap=this.topGaps.length<6||gap>this.topGaps.at(-1).gapMs;
-      if(highWork||highGap){const entry={atMs:now,gapMs:gap,workMs:work,rafCallbackDelayMs:Math.max(0,begin-now),steps,phases,render:this.renderFrame,engine:this.engineFrame,inputSincePreviousFrame:{count:this.inputCallsSinceFrame,totalMs:this.inputSinceFrame,maxMs:this.inputMaxSinceFrame},previousFrame:this.previousFrame};
+      if(highWork||highGap){const entry={frameId,atMs:now,gapMs:gap,workMs:work,rafCallbackDelayMs:Math.max(0,begin-now),steps,phases,render:this.renderFrame,engine:this.engineFrame,inputSincePreviousFrame:{count:this.inputCallsSinceFrame,totalMs:this.inputSinceFrame,maxMs:this.inputMaxSinceFrame},previousFrame:this.previousFrame};
         if(highWork)keepTop(this.topWork,entry,'workMs');if(highGap)keepTop(this.topGaps,entry,'gapMs');}
 
     }
     // The arriving rAF gap follows the previous callback, not this frame's simulation.
-    this.previousFrame={atMs:now,workMs:work,playing,steps,phases};
+    this.previousFrame={frameId,atMs:now,workMs:work,playing,steps,phases,engine:this.engineFrame,render:this.renderFrame,inputCount:this.inputCallsSinceFrame,inputTotalMs:this.inputSinceFrame,inputMaxMs:this.inputMaxSinceFrame};
     this.engineFrame={};this.renderFrame=null;this.inputSinceFrame=0;this.inputCallsSinceFrame=0;this.inputMaxSinceFrame=0;
   }
   snapshot(){return{
-    scope:'Frame stage distributions are playing-only. Input and nested engine methods cover the complete session. Main work includes QA output generation; browser observer entries are independent. All times use performance time origin. GPU presentation is not measured.',
+    scope:'Frame stage distributions are playing-only. Input and nested engine methods cover the complete session. Legacy core work includes QA output generation but ends before statistics/ring/scheduling tail. The separate callback metric includes that tail and its own measured prelude; browser observer entries are independent. All times use performance time origin. GPU presentation is not measured.',
     phases:Object.fromEntries(Object.entries(this.stages).map(([k,v])=>[k,v.read()])),nestedEngineMethods:Object.fromEntries(Object.entries(this.engine).map(([k,v])=>[k,v.read()])),
     renderer:{presentedFrames:this.presentedFrames,reusedFrames:this.reusedFrames,phases:Object.fromEntries(Object.entries(this.renderer).map(([k,v])=>[k,v.read()]))},
     inputActions:{...this.input.read(),slowest:this.inputTop},slowestWorkFrames:this.topWork,longestFrameGaps:this.topGaps,

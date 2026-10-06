@@ -82,6 +82,6 @@
   <button class="primary-button dialog-done" data-close>明白了</button>
 </dialog>
 <div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-<details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>性能与 QA 只读摘要</summary><p>累计数据不重置、不上传。流动中每 10 秒仅更新小型摘要；暂停或结束后的下一帧才展开完整诊断，长帧和分阶段记录仍持续保留。?summary 使用普通游戏执行路径，没有分阶段计时或浏览器长任务观察器。JS 工作包含摘要生成，不含 GPU 呈现；所有阶段数值都是墙钟时间。工作 p95 为 0.05ms 分桶上界、帧间隔 p95 为 0.5ms 分桶上界；溢出百分位返回观测最大值。</p><pre id="qaOutput"></pre></details>
+<details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>性能与 QA 只读摘要</summary><p>累计数据不重置、不上传。流动中每 10 秒仅更新小型摘要；暂停或结束后的下一帧才展开完整诊断，长帧和分阶段记录仍持续保留。?summary 使用普通游戏执行路径，没有分阶段计时或浏览器长任务观察器。core 保留原 JS 工作口径（含摘要，不含后续统计尾部）；callback 另计正常完成回调到统计、环形记录及下一帧注册结束，仅不含最后固定提交及调用返回开销。统计汇总在下一回调入口完成并计入该回调。均为墙钟时间，不是 CPU 时间或 GPU 呈现。工作 p95 为 0.05ms 分桶上界、帧间隔 p95 为 0.5ms 分桶上界；溢出百分位返回观测最大值。</p><pre id="qaOutput"></pre></details>
 <script type="module" src="app.js"></script>
 </body></html>
