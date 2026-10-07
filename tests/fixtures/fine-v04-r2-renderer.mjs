@@ -1,7 +1,6 @@
-import{BLOCK,WIDTH,HEIGHT}from'./engine.js';
-import{textureOffset}from'../palette.js';
-import{RASTER_SCALE,grainPalette,grainIndex,grainAppearance,writeGrain}from'./grain-raster.js';
-import{dirtyBuild}from'./raster-cache.js';
+import{BLOCK,WIDTH,HEIGHT}from'../../dist/preview/engine.js';
+import{textureOffset}from'../../dist/palette.js';
+import{RASTER_SCALE,grainPalette,grainIndex,grainAppearance,buildAppearances,writeGrain}from'../../dist/preview/grain-raster.js';
 const NORMAL=[[12,17,19],[234,195,112],[79,192,179],[211,120,163]];
 const ACCESSIBLE=[[12,17,19],[255,218,120],[69,146,212],[241,114,182]];
 export class GrainRenderer{
@@ -60,8 +59,8 @@ export class GrainRenderer{
       }
       }else{
       const g=ready?this.readyGrid:game.grid,packed=grainPalette(contrast),words=this.words;
-      if(!ready){if(this.lastRevision<0)this.dirtyState=null;dirtyBuild(this,game,contrast,motion);}
-      else{this.dirtyState=null;words.fill(packed[0]);
+      if(!ready)buildAppearances(g,game.material,w,h,this.appearanceCodes,this.pairEligibility);
+      words.fill(packed[0]);
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){
         const i=y*w+x,c=g[i];if(!c)continue;let material=0,geometry=0,pattern=0,mask=0;
         if(c){
@@ -71,7 +70,6 @@ export class GrainRenderer{
         }
         const clearing=game.clearTimer&&game.clearMask[i]&&!motion;
         writeGrain(words,y*2*rw+x*2,rw,packed,grainIndex(c,material,geometry,pattern,clearing),mask);
-      }
       }
       }
       if(phases){const end=performance.now();phases.pixelBuild=end-at;at=end;}
