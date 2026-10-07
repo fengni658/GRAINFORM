@@ -70,6 +70,6 @@ void main(){
  uint m;int k=kernel(owner,cell,m);float best=texelFetch(uDistance,ivec2(k,int(m)),0)[q],face=texelFetch(uFace,ivec2(k,int(m)),0)[q],runner=16.0;uint second=texelFetch(uRunner,pixel,0).r;
  if(second!=0u){uint sm;int sk=kernel(second,cell,sm);runner=texelFetch(uDistance,ivec2(sk,int(sm)),0)[q];}
  float edge=runner-best,shade=face;if(edge<1.1&&face<-.8)shade-=7.0*(1.0-edge/1.1);int t=tone(m);vec3 base=matte(c,t);
- if(uContrast){base=c==1u?vec3(255,218,120):c==2u?vec3(69,146,212):vec3(241,114,182);float pat=c==1u?(pattern?3.0:-57.0):c==2u?(pattern?72.0:-9.0):(pattern?7.0:-69.0);const float tones[4]=float[4](-10,-4,1,7);shade+=pat*.6+tones[t];}
+ if(uContrast){base=c==1u?vec3(255,218,120):c==2u?vec3(69,146,212):vec3(241,114,182);float pat=c==1u?(pattern?3.0:-57.0):c==2u?(pattern?72.0:-9.0):(pattern?7.0:-69.0);const float tones[4]=float[4](-10.0,-4.0,1.0,7.0);shade+=pat*.6+tones[t];}
  if(clearing)shade+=24.0;vec3 rgb=roundEven(clamp(base+shade,vec3(0),vec3(255)));if(clipped)rgb=roundEven(rgb*.67+bg*.33);outColor=vec4(rgb/255.0,1);
 }`;

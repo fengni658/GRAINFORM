@@ -2,6 +2,15 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {gpuTables,SurfaceGPU} from '../../dist/preview/surface-gpu.js';
 import {SURFACE_MATERIALS} from '../../dist/preview/surface-grains.js';
 import {gpuOwnerOracle} from '../fixtures/surface-gpu-oracle.mjs';
+import * as shaders from '../../dist/preview/surface-gpu-shaders.js';
+test('GLSL scalar float-array literals use explicit float types (source regression, not shader compilation)',()=>{
+ let count=0;for(const source of Object.values(shaders))for(const match of source.matchAll(/\bfloat\s*\[\s*(\d+)\s*\]\s*\(([^()]*)\)/g)){
+  const values=match[2].split(',').map(value=>value.trim());assert.equal(values.length,Number(match[1]));
+  for(const value of values)assert.match(value,/^[+-]?(?:\d+\.\d*|\.\d+)(?:[eE][+-]?\d+)?$/,'Float array elements must be explicitly float literals');count++;
+ }
+ assert.equal(count,1,'Audit changes when another scalar float-array constructor is introduced');
+ assert.match(shaders.SHADE_FRAGMENT,/float\[4\]\(-10\.0,-4\.0,1\.0,7\.0\)/);
+});
 test('GPU kernels freeze Float32 distances, unchanged tones and enclosing instance bounds',()=>{
  const t=gpuTables();assert.equal(t,gpuTables());for(let m=0;m<256;m++){const d=SURFACE_MATERIALS[m];assert.equal(t.material[m*4],+d.anchor);assert.equal(t.material[m*4+1],d.tone);for(const f of d.footprint){assert(f.x>=t.material[m*4+2]-4&&f.x<t.material[(m+256)*4]-4);assert(f.y>=t.material[m*4+3]-4&&f.y<t.material[(m+256)*4+1]-4);for(let q=0;q<4;q++){const at=m*324+((f.y+4)*9+f.x+4)*4+q;assert.equal(t.distance[at],Number.isFinite(f.samples[q])?Math.fround(f.samples[q]):16);}}}
 });
