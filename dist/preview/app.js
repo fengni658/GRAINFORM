@@ -8,10 +8,10 @@ import {FrameDiagnostics} from './diagnostics.js';
 import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
 import {STANDARD_COLORS,ACCESSIBLE_COLORS,COLOR_NAMES,PATTERN_NAMES,textureOffset} from '../palette.js';
-const BUILD='grainform-fine-0.4.0';
+const BUILD='grainform-fine-0.4.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const game=new Game({seed:randomSeed()}),input=new InputState();
-const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas);
+const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas,{surfaceBackend:/(?:[?&])(?:qa|summary)(?:[=&]|$)/.test(location.search)&&/(?:[?&])renderer=cpu(?:&|$)/.test(location.search)?'cpu':'auto'});
 window.addEventListener('resize',()=>{sceneRenderer.resize();uiDirty=true;});
 if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{sceneRenderer.resize();uiDirty=true;}).observe(canvas.parentElement);
 const defaults={sound:true,contrast:false,motion:matchMedia('(prefers-reduced-motion: reduce)').matches};
@@ -170,6 +170,7 @@ function frame(now){
   if(outputKind){
     const state=game.snapshot(),data={build:BUILD,rules:{connectivity:CONNECTIVITY,sameColor:true,requiredWalls:['left','right']},diagnosticsMode,outputKind,game:state,audio:{enabled:prefs.sound,contextState:audioCtx?.state||'not-created',...audioStats},particleBalance:{present:state.grains,added:game.added,removed:game.removed,conserved:state.grains===game.added-game.removed},session:outputKind==='full'?sessionMetrics.snapshot(now):compactSession(sessionMetrics,now)};
     data.simulation=simulationState(outputKind==='full');
+    data.surface=sceneRenderer.backendSnapshot();
     data.callback=callbackMetrics.snapshot({detail:outputKind==='full'});
     // Keep adverse samples and observer records; serialize them only after playing has stopped.
     if(qaEnabled){data.audio.unlock=audioUnlock.snapshot({detail:outputKind==='full'});data.startup=startDiagnostics.snapshot({detail:outputKind==='full'});shownAudioRevision=audioUnlock.revision;shownStartRevision=startDiagnostics.revision;}
