@@ -20,3 +20,9 @@ test('The four-cell shading dependency stays inside the cache tile halo',()=>{
  const all=()=>Uint8Array.from(g,(c,i)=>c?grainAppearance(g,w,h,i%w,(i/w)|0,c,m[i],m):0);
  for(let n=0;n<50;n++){for(let i=0;i<g.length;i++){g[i]=next()%100<93?1+next()%3:0;m[i]=1+next()%255;}const before=all(),i=next()%g.length,x=i%w,y=(i/w)|0;g[i]=(g[i]+1)%4;m[i]=1+next()%255;const after=all();for(let j=0;j<g.length;j++)if(before[j]!==after[j]){assert(Math.abs(j%w-x)<=4);assert(Math.abs(((j/w)|0)-y)<=4);}}
 });
+
+test('Replacing a Game with the same dimensions and revision paints the new board',()=>{
+ const s=setup(12,12),first=s.g;first.grid[27]=1;first.material[27]=52;first.gridVersion=7;s.cached.draw(first,{ghost:false});const before=s.cached.im.data.slice();
+ const next=new Game({width:12,height:12});next.state=first.state;next.active=null;next.grid[88]=3;next.material[88]=101;next.gridVersion=7;
+ const expected=new GrainRenderer(canvas());expected.draw(next,{ghost:false});s.cached.draw(next,{ghost:false});assert.notDeepEqual(s.cached.im.data,before);assert.deepEqual(s.cached.im.data,expected.im.data);
+});

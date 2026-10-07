@@ -12,9 +12,9 @@ test('Release is bounded and grain-local, preserving mass and piece RNG while re
 });
 test('Five controlled scenes have equal initial geometry/material and conserve all injected or cleared grains',()=>{
  for(const key of Object.keys(FLOW_SCENES)){
-  const p=makeFlowComparison(key);assert.deepEqual(p.before.grid,p.after.grid);assert.deepEqual(p.before.material,p.after.material);assert.deepEqual(p.before.rigid,p.after.rigid);assert.equal(p.before.added,p.after.added);
+  const p=makeFlowComparison(key);assert.equal(p.baseline,'0.4-r3');assert.deepEqual(p.before.grid,p.after.grid);assert.deepEqual(p.before.material,p.after.material);assert.deepEqual(p.before.rigid,p.after.rigid);assert.equal(p.before.added,p.after.added);
   while(!p.finished){stepFlowComparison(p);if(p.tick%60===0){const s=flowState(p);assert(s.before.conserved&&s.after.conserved);assert.equal(p.before.added,p.after.added);}}
-  const s=flowState(p);assert(s.before.conserved&&s.after.conserved);assert.equal(s.before.activeChunks,0,key+' baseline sleep');assert.equal(s.after.activeChunks,0,key+' candidate sleep');
+  const s=flowState(p);assert.deepEqual(p.before.grid,p.after.grid);assert.deepEqual(p.before.material,p.after.material);assert.equal(p.before.physicsRng.state,p.after.physicsRng.state);assert(s.before.conserved&&s.after.conserved);assert.equal(s.before.activeChunks,0,key+' baseline sleep');assert.equal(s.after.activeChunks,0,key+' candidate sleep');
   if(key==='pour')assert.equal(s.equalEmitterCount,4320);
   if(key==='collapse'){assert.equal(s.before.removed,8640);assert.equal(s.after.removed,8640);assert.equal(s.before.score,1060);assert.equal(s.after.score,1060);}
   const grid=p.after.grid.slice();for(let i=0;i<120;i++)p.after.step();assert.deepEqual(p.after.grid,grid,key+' stable after sleep');

@@ -1,5 +1,6 @@
 import{Game as Before,SHAPES}from'./reference-0.3-engine.js';
 import{Game as FirstCandidate}from'./reference-0.4-r1-engine.js';
+import{Game as CachedReference}from'./reference-r3-engine.js';
 import{Game as After}from'./engine.js';
 export const FLOW_SEED=930241;
 export const FLOW_SCENES={
@@ -21,8 +22,8 @@ function fill(g,key){const w=g.width,h=g.height;
  if(key==='avalanche')for(let y=330;y<333;y++)for(let x=60;x<228;x++)g.rigid[y*w+x]=1;
  g.wakeAll();
 }
-export function makeFlowComparison(key='pour',baseline='0.3'){
- const spec=FLOW_SCENES[key];if(!spec)throw Error('Unknown flow fixture');const BeforeEngine=baseline==='0.4-r1'?FirstCandidate:Before;const before=new BeforeEngine({seed:FLOW_SEED}),after=new After({seed:FLOW_SEED});
+export function makeFlowComparison(key='pour',baseline='0.4-r3'){
+ const spec=FLOW_SCENES[key];if(!spec)throw Error('Unknown flow fixture');const BeforeEngine=baseline==='0.4-r3'?CachedReference:baseline==='0.4-r1'?FirstCandidate:Before;const before=new BeforeEngine({seed:FLOW_SEED}),after=new After({seed:FLOW_SEED});
  for(const g of[before,after]){g.state='playing';g.active=null;g.spawnDelay=1e9;g.connectionEnabled=false;fill(g,key);
   if(key==='settle'){g.active={shape:SHAPES[0].map(p=>p.slice()),color:1,x:120,y:384,materialSeed:412};g.lock();g.spawnDelay=1e9;}
   if(key==='slope'){g.active={shape:SHAPES[2].map(p=>p.slice()),color:1,x:60,y:174,materialSeed:412};g.lock();g.spawnDelay=1e9;}
@@ -42,4 +43,4 @@ export function stepFlowComparison(p){
 }
 function state(g){let active=0,edge=0;const w=g.width,h=g.height;for(let i=0;i<g.size;i++)if(g.grid[i]){if(g.sleep[i]<14)active++;const x=i%w,y=(i/w)|0;if(x===0||x===w-1||y===0||y===h-1||!g.grid[i-1]||!g.grid[i+1]||!g.grid[i-w]||!g.grid[i+w])edge++;}
  const grains=g.count();return {grains,added:g.added,removed:g.removed,conserved:grains===g.added-g.removed,activeGrains:active,edgeGrains:edge,activeChunks:g.activeChunkCount,score:g.score,rawCleared:g.rawCleared};}
-export function flowState(p){return {scene:p.key,baseline:p.baseline,seed:FLOW_SEED,seconds:p.tick/60,tick:p.tick,finished:p.finished,physicalGrid:[288,432],equalEmitterCount:p.addedByEmitter,schedule:'GF-FLOW-04 fixed cell coordinates, colors, material IDs and event ticks; no pre-roll',initialState:'Same geometry/material; release velocity and energy follow each version intentionally',before:state(p.before),after:state(p.after)};}
+export function flowState(p){return {scene:p.key,baseline:p.baseline,seed:FLOW_SEED,seconds:p.tick/60,tick:p.tick,finished:p.finished,physicalGrid:[288,432],equalEmitterCount:p.addedByEmitter,schedule:'GF-FLOW-04 fixed cell coordinates, colors, material IDs and event ticks; no pre-roll',initialState:p.baseline==='0.4-r3'?'Identical R3 physics, seed, geometry and material state; rendering only differs':'Same initial geometry/material; release velocity and energy follow each older version intentionally',before:state(p.before),after:state(p.after)};}

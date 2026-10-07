@@ -1,7 +1,7 @@
-import{BLOCK,WIDTH,HEIGHT}from'./engine.js';
+import{BLOCK,WIDTH,HEIGHT}from'./reference-r3-engine.js';
 import{textureOffset}from'../palette.js';
-import{RASTER_SCALE,grainPalette,grainIndex,grainAppearance,writeGrain}from'./grain-raster.js';
-import{dirtyBuild}from'./raster-cache.js';
+import{RASTER_SCALE,grainPalette,grainIndex,grainAppearance,writeGrain}from'./reference-r3-raster.js';
+import{dirtyBuild}from'./reference-r3-cache.js';
 const NORMAL=[[12,17,19],[234,195,112],[79,192,179],[211,120,163]];
 const ACCESSIBLE=[[12,17,19],[255,218,120],[69,146,212],[241,114,182]];
 export class GrainRenderer{
@@ -41,7 +41,7 @@ export class GrainRenderer{
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){const wx=x/(w/96),wy=y/(h/144),floor=128-Math.sin(wx/18)*8-Math.cos(wx/10)*4;if(wy>floor)this.readyGrid[y*w+x]=wy>136+Math.sin(wx/9)*3?2:wx<51?1:3;}
       this.lastRevision=-1;
     }
-    if(game!==this.lastGame||revision!==this.lastRevision||contrast!==this.lastPalette||game.state!==this.lastState||game.clearTimer){
+    if(revision!==this.lastRevision||contrast!==this.lastPalette||game.state!==this.lastState||game.clearTimer){
       if(this.baseline){
       const data=this.im.data,g=game.grid;
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){
@@ -75,7 +75,7 @@ export class GrainRenderer{
       }
       }
       if(phases){const end=performance.now();phases.pixelBuild=end-at;at=end;}
-      this.pctx.putImageData(this.im,0,0);if(phases){const end=performance.now();phases.pixelUpload=end-at;at=end;}this.lastGame=game;this.lastRevision=revision;this.lastPalette=contrast;this.lastState=game.state;
+      this.pctx.putImageData(this.im,0,0);if(phases){const end=performance.now();phases.pixelUpload=end-at;at=end;}this.lastRevision=revision;this.lastPalette=contrast;this.lastState=game.state;
     }
     const ctx=this.ctx,s=this.canvas.width/w;ctx.imageSmoothingEnabled=!this.baseline;ctx.imageSmoothingQuality='high';ctx.drawImage(this.buffer,0,0,this.canvas.width,this.canvas.height);if(phases){const end=performance.now();phases.boardComposite=end-at;at=end;}
     if(game.active){const a=game.active,b=this.baseline?8:BLOCK;
