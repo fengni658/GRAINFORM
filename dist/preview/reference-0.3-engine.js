@@ -159,13 +159,14 @@ export class Game {
   wakeAll(){this.sleep.fill(0);this.activeChunks.fill(2);this.nextChunks.fill(2);this.dirty=true;this.gridVersion++;this.rebuildSurface();}
   lock(){
     if(!this.active)return;const a=this.active;
+    const center=a.shape.reduce((sum,p)=>sum+(p[0]+.5)*BLOCK,0)/4;
     for(const [bx,by]of a.shape)for(let gy=0;gy<BLOCK;gy++)for(let gx=0;gx<BLOCK;gx++){
       const x=a.x+bx*BLOCK+gx,y=a.y+by*BLOCK+gy,i=y*this.width+x;
       if(this.grid[i])throw new Error('Particle overlap');
+      const local=bx*BLOCK+gx-center,dir=local<0?-1:1;
       this.grid[i]=a.color;this.material[i]=this.materialFor(bx*BLOCK+gx,by*BLOCK+gy,a.materialSeed||this.seed);
-      // Release jitter is small and grain-local, not a coherent outward burst of the whole shape.
-      this.vx[i]=Math.round((this.physicsRng.next()-.5)*.5*Q);
-      this.vy[i]=8;this.fx[i]=0;this.fy[i]=0;this.energy[i]=8;this.sleep[i]=0;this.movedAt[i]=0;
+      this.vx[i]=Math.round(dir*(.35+Math.min(.7,Math.abs(local)/BLOCK*.6)+this.physicsRng.next()*.3)*Q);
+      this.vy[i]=8;this.fx[i]=0;this.fy[i]=0;this.energy[i]=32;this.sleep[i]=0;this.movedAt[i]=0;
       this.surface[x]=Math.min(this.surface[x],y);this.wakeChunk(x,y,true,this.activeChunks);this.added++;
     }
     this.pieces++;this.chain=0;this.active=null;this.spawnDelay=22;this.dirty=true;this.gridVersion++;this.rigidKey='';
@@ -241,13 +242,12 @@ export class Game {
             const dir=vx!==0?Math.sign(vx):(rng.int(2)?1:-1);
             for(let pass=0;pass<2;pass++){
               const d=pass?-dir:dir;
-              // Sample local contact space; a distant airborne grain is not supporting this grain.
-              const slopeX=x+4*d,drop=this.free(slopeX,y)?(this.free(slopeX,y+1)?2:1):0;
+              const slopeX=x+4*d,drop=slopeX>=0&&slopeX<w?surface[slopeX]-surface[x]:0;
               if((energy>0||drop>=((matA[i]%3===0)?1:2))&&!rigid[y*w+x+d]&&this.free(x+d,y+1)){nx=x+d;ny=y+1;vy=8;vx=Math.trunc(vx*.65);fx=0;break;}
               // Sand is a point-grain lattice: diagonal packing is allowed; rigid corners remain impermeable.
               // Material-dependent friction gates rolling; only exposed grains take a longer surface step.
-              const far=x+3*d,slope=this.free(far,y)&&this.free(far,y+1)?2:0;
-              if((matA[i]&1)===0&&(y===0||!g[i-w])&&drop>=2&&slope>1&&this.free(x+d,y)&&this.free(x+2*d,y+1)&&!(rigid[y*w+x+2*d]&&rigid[(y+1)*w+x+d])){
+              const far=x+3*d,slope=far>=0&&far<w?surface[far]-y:0;
+              if((matA[i]&1)===0&&y<=surface[x]+1&&drop>=2&&slope>1&&this.free(x+d,y)&&this.free(x+2*d,y+1)&&!(rigid[y*w+x+2*d]&&rigid[(y+1)*w+x+d])){
                 nx=x+2*d;ny=y+1;vx=d*12;vy=4;fx=0;break;
               }
               // Brief landing impulse can roll along a free supported surface, then friction stops it.

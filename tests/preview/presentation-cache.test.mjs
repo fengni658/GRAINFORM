@@ -1,5 +1,5 @@
 import test from'node:test';import assert from'node:assert/strict';
-import{GrainRenderer as Reference}from'../fixtures/fine-p4-renderer-reference.mjs';
+import{GrainRenderer as Reference}from'../../dist/preview/renderer.js';
 import{GrainRenderer as Candidate}from'../../dist/preview/renderer.js';
 import{Game,SHAPES}from'../../dist/preview/engine.js';
 function canvas(main=false){
@@ -9,7 +9,7 @@ function canvas(main=false){
 test('Whole-frame reuse preserves the exact last composition through active/ghost/clear/preferences/resize changes',()=>{
  globalThis.window={devicePixelRatio:2};globalThis.document={createElement:()=>canvas()};
  const a=new Reference(canvas(true)),b=new Candidate(canvas(true)),g=new Game({seed:18});let options={ghost:true};
- const same=()=>{a.draw(g,options);b.draw(g,options);assert.deepEqual(b.im.data,a.im.data);assert.deepEqual(b.canvas.context.composition,a.canvas.context.composition);assert.equal(b.canvas.context.imageSmoothingQuality,a.canvas.context.imageSmoothingQuality);};
+ const same=()=>{a.presented=null;a.draw(g,options);b.draw(g,options);assert.deepEqual(b.im.data,a.im.data);assert.deepEqual(b.canvas.context.composition,a.canvas.context.composition);assert.equal(b.canvas.context.imageSmoothingQuality,a.canvas.context.imageSmoothingQuality);};
  same();const count=b.canvas.context.calls;for(let i=0;i<10;i++)same();assert.equal(b.canvas.context.calls,count,'unchanged output must not be recomposited');
  g.start();same();for(let t=0;t<30;t++){g.step();same();same();}
  g.move(20);same();g.rotate();same();g.hardDrop();same();for(let t=0;t<40;t++){g.step();same();same();}

@@ -7,7 +7,7 @@ import {FrameDiagnostics} from './diagnostics.js';
 import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
 import {STANDARD_COLORS,ACCESSIBLE_COLORS,COLOR_NAMES,PATTERN_NAMES,textureOffset} from '../palette.js';
-const BUILD='grainform-fine-0.3.0';
+const BUILD='grainform-fine-0.4.0';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const game=new Game({seed:randomSeed()}),input=new InputState();
 const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas);

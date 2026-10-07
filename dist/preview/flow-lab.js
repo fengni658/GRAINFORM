@@ -1,0 +1,19 @@
+import{GrainRenderer as BeforeRenderer}from'./reference-0.3-renderer.js';import{GrainRenderer as AfterRenderer}from'./renderer.js';
+import{FLOW_SCENES,makeFlowComparison,stepFlowComparison,flowState}from'./flow-fixtures.js';
+const $=s=>document.querySelector(s),beforeCanvas=$('#before'),afterCanvas=$('#after'),beforeRenderer=new BeforeRenderer(beforeCanvas),afterRenderer=new AfterRenderer(afterCanvas),motionRenderer=new BeforeRenderer(afterCanvas),renderers=[beforeRenderer,afterRenderer,motionRenderer];
+let supportKeys=new WeakMap();
+let scene='pour',pair=makeFlowComparison(scene),paused=false,mode='combined',contrast=false,last=0,acc=0,lastOutput=0,frames=0,totalWork=0,maxWork=0;
+function restart(key=scene){scene=key;pair=makeFlowComparison(key);paused=false;acc=0;last=performance.now();lastOutput=0;frames=totalWork=maxWork=0;$('#pause').textContent='暂停';$('#description').textContent=FLOW_SCENES[key].description;for(const b of document.querySelectorAll('[data-scene]'))b.setAttribute('aria-pressed',String(b.dataset.scene===key));invalidate();}
+function invalidate(){supportKeys=new WeakMap();for(const r of renderers){r.lastRevision=-1;r.presented=null;}}
+for(const b of document.querySelectorAll('[data-scene]'))b.addEventListener('click',()=>restart(b.dataset.scene));$('#replay').addEventListener('click',()=>restart());$('#pause').addEventListener('click',()=>{paused=!paused;$('#pause').textContent=paused?'继续':'暂停';last=performance.now();acc=0;});$('#step').addEventListener('click',()=>{paused=true;$('#pause').textContent='继续';stepFlowComparison(pair);lastOutput=0;});$('#mode').addEventListener('change',e=>{mode=e.target.value;invalidate();lastOutput=0;});$('#contrast').addEventListener('change',e=>{contrast=e.target.checked;invalidate();lastOutput=0;});
+window.addEventListener('resize',()=>{for(const r of renderers)r.resize();invalidate();});document.addEventListener('visibilitychange',()=>{if(document.hidden){paused=true;$('#pause').textContent='继续';}last=performance.now();acc=0;});
+function supportLine(canvas,game){if(scene!=='avalanche')return;const key=[game.gridVersion,pair.tick<120,canvas.width,canvas.height,contrast,mode].join(':');if(supportKeys.get(canvas)===key)return;supportKeys.set(canvas,key);const c=canvas.getContext('2d'),s=canvas.width/288;c.strokeStyle='#cad2c7';c.lineWidth=Math.max(1,s);c.beginPath();c.moveTo(60*s,333*s);c.lineTo((pair.tick<120?228:144)*s,333*s);c.stroke();}
+function frame(now){const begin=performance.now(),dt=last?Math.min(100,Math.max(0,now-last)):0;last=now;
+ if(!paused&&!pair.finished){acc+=dt;let n=0;while(acc>=1000/60&&n++<6){stepFlowComparison(pair);acc-=1000/60;}}
+ beforeRenderer.draw(mode==='material'?pair.after:pair.before,{ghost:false,contrast});(mode==='motion'?motionRenderer:afterRenderer).draw(pair.after,{ghost:false,contrast});supportLine(beforeCanvas,mode==='material'?pair.after:pair.before);supportLine(afterCanvas,pair.after);
+ $('#time').textContent=`${(pair.tick/60).toFixed(1)} / ${pair.spec.seconds} 秒${pair.finished?' · 完成':paused?' · 已暂停':''}`;
+ const work=performance.now()-begin;frames++;totalWork+=work;maxWork=Math.max(maxWork,work);
+ if(now-lastOutput>=250||!lastOutput){lastOutput=now;const data=flowState(pair),show=s=>`沙粒 ${s.grains.toLocaleString()} · 守恒 ${s.conserved?'通过':'异常'}\n活动 ${s.activeGrains} · 分块 ${s.activeChunks}`;$('#beforeStats').textContent=show(mode==='material'?data.after:data.before);$('#afterStats').textContent=show(data.after);$('#labDiagnostics').textContent=JSON.stringify({build:'grainform-fine-0.4.0-prototype',mode,contrast,...data,renderScale:mode==='motion'?[1,1]:[1,2],work:{frames,meanMs:totalWork/frames,maxMs:maxWork,scope:'Both simulations and drawings before visible stats; not a gameplay performance acceptance'}},null,2);}
+ requestAnimationFrame(frame);
+}
+restart();requestAnimationFrame(frame);
