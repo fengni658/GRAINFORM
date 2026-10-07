@@ -4,15 +4,16 @@ import{RASTER_SCALE,grainPalette,grainIndex,grainAppearance,writeGrain}from'./gr
 import{dirtyBuild}from'./raster-cache.js';
 import{buildSurfaceRegion}from'./surface-grains.js';
 import{SurfaceGPU}from'./surface-gpu.js';
+import{drawSurfaceLayers}from'./surface-layer.js';
 const NORMAL=[[12,17,19],[234,195,112],[79,192,179],[211,120,163]];
 const ACCESSIBLE=[[12,17,19],[255,218,120],[69,146,212],[241,114,182]];
 export class GrainRenderer{
-  constructor(canvas,{baseline=false,surfaceBackend='auto'}={}){
-    this.canvas=canvas;this.baseline=baseline;this.surfaceBackend=surfaceBackend;this.surfaceGPU=null;this.gpuAttempted=false;this.boardSource=null;this.lastBackendEpoch=-1;this.ctx=canvas.getContext('2d',{alpha:false});
+  constructor(canvas,{baseline=false,surfaceBackend='auto',directDisplay=false}={}){
+    this.canvas=canvas;this.baseline=baseline;this.directDisplay=!!directDisplay&&!baseline;this.surfaceBackend=surfaceBackend;this.surfaceGPU=null;this.gpuAttempted=false;this.boardSource=null;this.lastBackendEpoch=-1;this.ctx=canvas.getContext('2d',{alpha:this.directDisplay});
     this.buffer=document.createElement('canvas');this.sprite=document.createElement('canvas');this.lastRevision=-1;this.lastPalette=null;this.spriteKey='';this.lastState='';this.presented=null;
     canvas.style.imageRendering=baseline?'pixelated':'auto';this.resize();
   }
-  backendSnapshot(){return this.surfaceGPU?this.surfaceGPU.snapshot():{backend:'cpu',reason:this.surfaceBackend==='cpu'?'requested-cpu-reference':'not-initialized',scope:'CPU reference preserves the larger surface; dense full rebuild cost remains a known limitation.'};}
+  backendSnapshot(){return this.surfaceGPU?{...this.surfaceGPU.snapshot(),displayMode:this.layerMounted?'direct-webgl-plus-2d':'offscreen-copy',gpuLayerVisible:!!this.layerVisible,coveredRevision:this.layerVisible?null:this.layerCoveredRevision,visualSession:this.layerSession||0}:{backend:'cpu',reason:this.surfaceBackend==='cpu'?'requested-cpu-reference':'not-initialized',scope:'CPU reference preserves the larger surface; dense full rebuild cost remains a known limitation.'};}
   resize(){const r=this.canvas.getBoundingClientRect?this.canvas.getBoundingClientRect():{width:384,height:576},dpr=this.baseline?1:Math.min(2,Math.max(1,window.devicePixelRatio||1));
     const w=this.baseline?384:Math.max(1,Math.round(r.width*dpr)),h=this.baseline?576:Math.max(1,Math.round(r.height*dpr));
     if(this.canvas.width!==w||this.canvas.height!==h){this.canvas.width=w;this.canvas.height=h;this.presented=null;}
@@ -32,13 +33,13 @@ export class GrainRenderer{
     if(!this.baseline){buildSurfaceRegion({words,im},grid,material,w,h,contrast);for(let i=0;i<grid.length;i++)if(!grid[i]){const x=i%w,y=(i/w)|0,p=y*2*w*2+x*2;words[p]=words[p+1]=words[p+w*2]=words[p+w*2+1]=0;}}
     ctx.putImageData(im,0,0);
   }
-  draw(game,{contrast=false,motion=false,ghost=true,profile=null}={}){
+  draw(game,{contrast=false,motion=false,ghost=true,profile=null,generation=game.generation??0}={}){
     if(!this.baseline&&!this.gpuAttempted&&this.surfaceBackend!=='cpu'){this.gpuAttempted=true;this.surfaceGPU=new SurfaceGPU();}
-    this.surfaceGPU?.poll();const backendEpoch=this.surfaceGPU?.epoch||0;
+    this.surfaceGPU?.poll();if(this.directDisplay&&drawSurfaceLayers(this,game,{contrast,motion,ghost,profile,generation}))return;const backendEpoch=this.surfaceGPU?.epoch||0;
     const w=game.width,h=game.height,colors=contrast?ACCESSIBLE:NORMAL,revision=this.baseline?game.tick:game.gridVersion,ready=game.state==='ready',active=game.active,p=this.presented;
     // An opaque board plus the same ghost/sprite produces exactly the same final pixels.
     // Reuse only when every visual input and canvas backing size is unchanged.
-    if(!this.baseline&&p&&p.backendEpoch===backendEpoch&&this.lastRevision===revision&&p.game===game&&p.revision===revision&&p.state===game.state&&p.contrast===contrast&&p.motion===motion&&p.ghost===ghost&&p.clearing===!!game.clearTimer&&p.width===this.canvas.width&&p.height===this.canvas.height&&p.active===!!active&&(!active||(p.x===active.x&&p.y===active.y&&p.shape===active.shape&&p.color===active.color&&p.materialSeed===active.materialSeed))){
+    if(!this.baseline&&!this.gpuDeferred&&p&&p.backendEpoch===backendEpoch&&this.lastRevision===revision&&p.game===game&&p.revision===revision&&p.state===game.state&&p.contrast===contrast&&p.motion===motion&&p.ghost===ghost&&p.clearing===!!game.clearTimer&&p.width===this.canvas.width&&p.height===this.canvas.height&&p.active===!!active&&(!active||(p.x===active.x&&p.y===active.y&&p.shape===active.shape&&p.color===active.color&&p.materialSeed===active.materialSeed))){
       if(profile)profile.rendered(null,true,game.state==='playing');return;
     }
     const phases=profile?{pixelBuild:0,pixelUpload:0,boardComposite:0,ghost:0,spriteBuild:0,spriteComposite:0}:null;let at=phases?performance.now():0;
@@ -49,13 +50,13 @@ export class GrainRenderer{
       this.lastRevision=-1;
     }
     if(this.lastBackendEpoch!==backendEpoch||game!==this.lastGame||revision!==this.lastRevision||contrast!==this.lastPalette||game.state!==this.lastState||game.clearTimer){
-      let gpuCanvas=null;
+      let gpuCanvas=null,gpuDeferred=false;
       if(!this.baseline&&this.surfaceGPU?.ready){
        if(ready&&!this.readyMaterial){this.readyMaterial=new Uint8Array(w*h);for(let y=0;y<h;y++)for(let x=0;x<w;x++)this.readyMaterial[y*w+x]=((Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>8)&255;}
-       gpuCanvas=this.surfaceGPU.draw(ready?this.readyGrid:game.grid,ready?this.readyMaterial:game.material,w,h,{contrast,clearMask:game.clearTimer&&!motion?game.clearMask:null,revision,playing:game.state==='playing'});
+       gpuCanvas=this.surfaceGPU.draw(ready?this.readyGrid:game.grid,ready?this.readyMaterial:game.material,w,h,{contrast,clearMask:game.clearTimer&&!motion?game.clearMask:null,revision,playing:game.state==='playing',generation,tick:game.tick});gpuDeferred=this.surfaceGPU.lastOutcome==='deferred';
       }
       if(gpuCanvas){this.dirtyState=null;this.boardSource=gpuCanvas;}
-      else{this.boardSource=this.buffer;
+      else if(!gpuDeferred){this.boardSource=this.buffer;
       if(this.baseline){
       const data=this.im.data,g=game.grid;
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){
@@ -82,8 +83,8 @@ export class GrainRenderer{
       }
       }
       if(phases){const end=performance.now();phases.pixelBuild=end-at;at=end;}
-      if(!gpuCanvas)this.pctx.putImageData(this.im,0,0);if(phases){const end=performance.now();phases.pixelUpload=end-at;at=end;}this.lastBackendEpoch=this.surfaceGPU?.epoch||0;this.lastGame=game;this.lastRevision=revision;this.lastPalette=contrast;this.lastState=game.state;
-    }
+      if(!gpuDeferred&&!gpuCanvas)this.pctx.putImageData(this.im,0,0);if(phases){const end=performance.now();phases.pixelUpload=end-at;at=end;}this.gpuDeferred=gpuDeferred;if(!gpuDeferred){this.lastBackendEpoch=this.surfaceGPU?.epoch||0;this.lastGame=game;this.lastRevision=revision;this.lastPalette=contrast;this.lastState=game.state;}
+    }else this.gpuDeferred=false;
     const ctx=this.ctx,s=this.canvas.width/w;ctx.imageSmoothingEnabled=!this.baseline;ctx.imageSmoothingQuality='high';ctx.drawImage(this.boardSource||this.buffer,0,0,this.canvas.width,this.canvas.height);if(phases){const end=performance.now();phases.boardComposite=end-at;at=end;}
     if(game.active){const a=game.active,b=this.baseline?8:BLOCK;
       if(ghost){ctx.strokeStyle=`rgba(${colors[a.color].join(',')},.2)`;ctx.lineWidth=Math.max(1,s*.6);ctx.setLineDash([3*s,3*s]);const gy=game.ghostY();for(const[x,y]of a.shape)ctx.strokeRect((a.x+x*b)*s+s,(gy+y*b)*s+s,(b-2)*s,(b-2)*s);ctx.setLineDash([]);}

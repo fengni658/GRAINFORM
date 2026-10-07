@@ -2,9 +2,11 @@
 
 原创流沙方块网页游戏，使用原生 JavaScript、ES Modules 和 Canvas 2D。
 
-这是0.4.1可见砂砾原型。默认入口保留原版 **96×144**；细沙游戏物理网格仍为 **288×432**。新增颗粒受光与暴露角覆盖，修正空中粒子干扰坡面判断的问题。当前原型以0.4.0整粒色阶版为对照，固定288×432物理网格，仅让可见砂砾覆盖多个细格。静态粒形获准进入验证；CPU密集重画成本未通过，现已准备WebGL2显示后端，实际shader/readback、动态和浏览器性能仍待验证。旧版检查不代表本版通过。详见 [设计与成本](validation/grains-flow-0.4.0/DESIGN.md) 和 [验证协议](validation/grains-flow-0.4.0/VALIDATION.md)。
+这是0.4.1可见砂砾原型。默认入口保留原版 **96×144**；细沙游戏物理网格仍为 **288×432**。新增颗粒受光与暴露角覆盖，修正空中粒子干扰坡面判断的问题。当前原型以0.4.0整粒色阶版为对照，固定288×432物理网格，仅让可见砂砾覆盖多个细格。静态粒形获准进入验证；CPU密集重画成本未通过，现已准备WebGL2显示后端，实际SwiftShader的shader/readback已通过，但GPU与CPU密集性能未通过；WAIT_FAILED回退修复及剩余动态/硬件表现待验证。旧版检查不代表本版通过。详见 [设计与成本](validation/grains-flow-0.4.0/DESIGN.md) 和 [验证协议](validation/grains-flow-0.4.0/VALIDATION.md)。
 
 ## 0.4.1 可见砂砾原型
+
+最新隔离实验将普通游戏改为可见WebGL棋盘与透明2D活动块层，并把GPU表面限制为最多一条在途任务；CPU和旧SwiftShader性能失败仍保留。原始粒形不变，真实合成、画面节奏和输入可见延迟尚待复验。见 [直接显示与有界提交](validation/surface-grains-0.4.1/DIRECT-DISPLAY.md)。
 
 本轮通过随真实材料粒子移动的局部锚点，形成约3–5 CSS px的连续颗粒面。空格保持背景，颜色与物理连通性不变；这是一种可变形表面表示，不是新增刚性大粒子的碰撞模拟。设计和未通过成本见 [范围与验证](validation/surface-grains-0.4.1/README.md)，GPU实现及实际浏览器门槛见 [GPU复验协议](validation/surface-grains-0.4.1/GPU-VALIDATION.md)。
 

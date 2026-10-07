@@ -6,24 +6,8 @@ import {SurfaceGPU} from '../../dist/preview/surface-gpu.js';
 import {GrainRenderer} from '../../dist/preview/renderer.js';
 import {Game} from '../../dist/preview/engine.js';
 
-class FakeGL {
- constructor(){let e=1;for(const key of 'VERSION RENDERER HIGH_FLOAT RENDERBUFFER_DEPTH_SIZE VERTEX_SHADER FRAGMENT_SHADER COMPILE_STATUS LINK_STATUS RGBA32F RGBA FLOAT RGBA8UI RGBA_INTEGER UNSIGNED_BYTE R32UI RED_INTEGER UNSIGNED_INT TEXTURE_2D TEXTURE_MIN_FILTER TEXTURE_MAG_FILTER TEXTURE_WRAP_S TEXTURE_WRAP_T NEAREST CLAMP_TO_EDGE ARRAY_BUFFER RENDERBUFFER DEPTH_COMPONENT32F FRAMEBUFFER COLOR_ATTACHMENT0 DEPTH_ATTACHMENT FRAMEBUFFER_COMPLETE DYNAMIC_DRAW BLEND DITHER CULL_FACE SCISSOR_TEST DEPTH_TEST LESS COLOR DEPTH TRIANGLES SYNC_GPU_COMMANDS_COMPLETE ALREADY_SIGNALED CONDITION_SATISFIED WAIT_FAILED TIMEOUT_EXPIRED QUERY_RESULT_AVAILABLE QUERY_RESULT'.split(' '))this[key]=e++;this.TEXTURE0=1000;this.NO_ERROR=0;this.INVALID_OPERATION=1282;this.OUT_OF_MEMORY=1285;this.unit=0;this.textures=new Map();this.trace=[];this.livePrograms=new Set();this.serial=0;this.error=0;this.lost=false;this.signaled=false;this.feedback=0;this.doubleEnd=0;this.ext={TIME_ELAPSED_EXT:3000,GPU_DISJOINT_EXT:3001};}
- object(kind){return {kind,id:++this.serial};}
- createShader(kind){return {...this.object('Shader'),shaderKind:kind};} shaderSource(s,text){s.source=text;} compileShader(){} getShaderParameter(s){return !(this.failShadeCompile&&s.source.includes('vec3 matte('));} getShaderInfoLog(){return 'mock shade compilation rejected';} deleteShader(){}
- createProgram(){const p={...this.object('Program'),shaders:[],values:new Map()};this.livePrograms.add(p);return p;} attachShader(p,s){p.shaders.push(s);} linkProgram(p){p.source=p.shaders.map(s=>s.source).join('\n');} getProgramParameter(){return true;} deleteProgram(p){this.livePrograms.delete(p);} getProgramInfoLog(){return '';}
- getUniformLocation(p,name){return new RegExp('uniform[^;]*\\b'+name+'\\s*;').test(p.source)?{p,name}:null;} uniform1i(u,v){if(u)u.p.values.set(u.name,v);} uniform2i(u,...v){if(u)u.p.values.set(u.name,v);} useProgram(p){this.program=p;}
- getParameter(key){if(key===this.VERSION)return 'WebGL 2.0 mock';if(key===this.RENDERER)return 'Mock only, no shader execution';if(key===this.ext.GPU_DISJOINT_EXT)return !!this.disjoint;return 0;} getExtension(){return this.noTimer?null:this.ext;} getShaderPrecisionFormat(){return {precision:this.precision??23,rangeMin:127,rangeMax:127};} getRenderbufferParameter(){return this.depthBits??32;} getError(){const e=this.error;this.error=0;return e;} isContextLost(){return this.lost;}
- createTexture(){return this.object('Texture');} deleteTexture(){} activeTexture(unit){this.unit=unit-this.TEXTURE0;} bindTexture(_,t){this.textures.set(this.unit,t);} texParameteri(){} texImage2D(){} texSubImage2D(){if(this.injectUpload)this.error=this.injectUpload;}
- createVertexArray(){return this.object('VertexArray');} deleteVertexArray(){} bindVertexArray(){} createBuffer(){return this.object('Buffer');} deleteBuffer(){} bindBuffer(){} enableVertexAttribArray(){} vertexAttribIPointer(){} vertexAttribDivisor(){} bufferData(_,data){this.instances=data.slice();}
- createRenderbuffer(){return this.object('Renderbuffer');} deleteRenderbuffer(){} bindRenderbuffer(){} renderbufferStorage(){}
- createFramebuffer(){return this.object('Framebuffer');} deleteFramebuffer(){} bindFramebuffer(_,fbo){this.fbo=fbo;} framebufferTexture2D(_a,_b,_c,t){this.fbo.color=t;} framebufferRenderbuffer(_a,_b,_c,r){this.fbo.depth=r;} checkFramebufferStatus(){return this.FRAMEBUFFER_COMPLETE;}
- viewport(){} disable(){} enable(){} depthMask(){} depthFunc(value){this.depth=value;} clearBufferuiv(_a,_b,data){(this.clears??=[]).push({kind:'owner',framebuffer:this.fbo,value:[...data]});} clearBufferfv(_a,_b,data){(this.clears??=[]).push({kind:'depth',framebuffer:this.fbo,value:[...data]});}
- checkFeedback(){if(this.fbo){for(const match of this.program.source.matchAll(/uniform\s+(?:highp\s+)?(?:u?sampler2D)\s+(\w+)\s*;/g)){const unit=this.program.values.get(match[1]);if(this.textures.get(unit)===this.fbo.color){this.feedback++;this.error=this.INVALID_OPERATION;}}}}
- drawArraysInstanced(_a,_b,_c,count){this.checkFeedback();this.trace.push({pass:this.program.values.get('uSecond'),depth:this.depth,count,framebuffer:this.fbo});if(this.injectSites)this.error=this.injectSites;}
- drawArrays(){this.checkFeedback();this.trace.push({pass:'shade'});if(this.injectShade)this.error=this.injectShade;}
- createQuery(){return this.object('Query');} beginQuery(){this.queryActive=true;} endQuery(){if(!this.queryActive)this.doubleEnd++;this.queryActive=false;} deleteQuery(){} getQueryParameter(_q,key){return key===this.QUERY_RESULT_AVAILABLE?this.signaled:2e6;}
- fenceSync(){if(this.injectFence)this.error=this.injectFence;return this.nullFence?null:this.object('Sync');} deleteSync(){} clientWaitSync(){return this.signaled?this.CONDITION_SATISFIED:this.TIMEOUT_EXPIRED;} flush(){}
-}
+import {FakeGL} from './helpers/fake-gl.mjs';
+
 const canvases=[];
 function canvas(){const handlers={},context={calls:[],uploads:0,createImageData:(w,h)=>({data:new Uint8ClampedArray(w*h*4)}),putImageData(im){this.uploads++;this.pixels=im.data.slice();},drawImage(source){this.calls.push(source);},strokeRect(){},setLineDash(){}};const c={style:{},width:0,height:0,context,handlers,getBoundingClientRect:()=>({width:352,height:528}),addEventListener(name,f){handlers[name]=f;},getContext(type){if(type==='webgl2')return this.gl??=new FakeGL();return context;},fire(name){handlers[name]?.({preventDefault(){}});}};canvases.push(c);return c;}
 globalThis.document={createElement:canvas};globalThis.window={devicePixelRatio:2};
@@ -41,7 +25,7 @@ test('Owner passes have no active sampler feedback and share cleared strict-LESS
 });
 
 test('A failing GPU frame is replaced by exact CPU pixels and cached as the new backend epoch',()=>{
- const g=makeGame(),r=new GrainRenderer(canvas()),reference=new GrainRenderer(canvas(),{surfaceBackend:'cpu'});r.draw(g,{ghost:false});assert.equal(r.boardSource,r.surfaceGPU.canvas);r.surfaceGPU.gl.injectShade=r.surfaceGPU.gl.INVALID_OPERATION;g.gridVersion++;r.draw(g,{ghost:false});reference.draw(g,{ghost:false});assert.equal(r.boardSource,r.buffer);assert.deepEqual(r.im.data,reference.im.data);assert.equal(r.presented.backendEpoch,r.surfaceGPU.epoch);const draws=r.canvas.context.calls.length;r.draw(g,{ghost:false});assert.equal(r.canvas.context.calls.length,draws);
+ const g=makeGame(),r=new GrainRenderer(canvas()),reference=new GrainRenderer(canvas(),{surfaceBackend:'cpu'});r.draw(g,{ghost:false});assert.equal(r.boardSource,r.surfaceGPU.canvas);r.surfaceGPU.gl.signaled=true;r.surfaceGPU.gl.injectShade=r.surfaceGPU.gl.INVALID_OPERATION;g.gridVersion++;r.draw(g,{ghost:false});reference.draw(g,{ghost:false});assert.equal(r.boardSource,r.buffer);assert.deepEqual(r.im.data,reference.im.data);assert.equal(r.presented.backendEpoch,r.surfaceGPU.epoch);const draws=r.canvas.context.calls.length;r.draw(g,{ghost:false});assert.equal(r.canvas.context.calls.length,draws);
 });
 
 test('Context loss falls back immediately and restoration repaints even at the same game revision',()=>{
@@ -50,6 +34,28 @@ test('Context loss falls back immediately and restoration repaints even at the s
 
 test('Missing or failed fences are accounted for and cannot silently drop completion evidence',()=>{
  const g=makeGame();for(const config of[{nullFence:true},{injectFence:1285}]){const gpu=configuredGPU(config);assert.equal(gpu.draw(g.grid,g.material,g.width,g.height,{revision:11}),null);const s=gpu.snapshot();assert.equal(s.backend,'cpu-fallback');assert.equal(s.submissions,1);assert.equal(s.completed,0);assert.equal(s.pending,0);assert.equal(s.cancelledMeasurements,1);assert.match(s.reason,/completion fence failed/);assert.equal(gpu.gl.doubleEnd,0);}
+});
+
+test('Native WAIT_FAILED status releases pending work once and repaints CPU at the unchanged revision',()=>{
+ for(const disjoint of[false,true]){
+  const g=makeGame(),r=new GrainRenderer(canvas()),reference=new GrainRenderer(canvas(),{surfaceBackend:'cpu'});r.draw(g,{ghost:false});
+  const gpu=r.surfaceGPU,gl=gpu.gl;gl.signaled=true;r.draw(g,{ghost:false});assert.equal(gpu.snapshot().completed,1);assert.equal(gpu.snapshot().pending,0);
+  gl.signaled=false;g.gridVersion++;r.draw(g,{ghost:false});
+  // Retain one unavailable optional query after its fence completes, then
+  // submit the next frame: two records, but only one live command fence.
+  const getQueryParameter=gl.getQueryParameter.bind(gl);gl.getQueryParameter=(q,key)=>key===gl.QUERY_RESULT_AVAILABLE?false:getQueryParameter(q,key);gl.signaled=true;gpu.poll();gl.signaled=false;g.gridVersion++;r.draw(g,{ghost:false});assert.equal(gpu.pending.length,2);assert.equal(gpu.pending.filter(p=>p.fence).length,1);
+  const revision=g.gridVersion,before=gpu.snapshot(),expected=[...gpu.resources,...gpu.targets,...gpu.pending.flatMap(p=>[['Sync',p.fence],['Query',p.query]])].filter(([,handle])=>handle),deleted=new Map();
+  for(const kind of new Set(expected.map(([kind])=>kind))){const name='delete'+kind,original=gl[name].bind(gl);gl[name]=handle=>{const count=(deleted.get(handle)||0)+1;deleted.set(handle,count);assert.equal(count,1,`${name} must release each handle only once`);return original(handle);};}
+  // Match native failure semantics: return WAIT_FAILED without throwing,
+  // setting a GL error, changing the context state or advancing the game.
+  let waits=0;gl.disjoint=disjoint;gl.clientWaitSync=()=>{waits++;return gl.WAIT_FAILED;};assert.equal(gl.getError(),gl.NO_ERROR);assert.equal(gl.isContextLost(),false);
+  r.draw(g,{ghost:false});reference.draw(g,{ghost:false});const after=r.backendSnapshot();
+  assert.equal(waits,1,'poll must stop immediately after fail releases the whole queue');assert.equal(after.backend,'cpu-fallback');assert.match(after.reason,/WAIT_FAILED/);assert.equal(after.epoch,before.epoch+1);assert.equal(after.pending,0);assert.equal(after.cancelledMeasurements,before.cancelledMeasurements+2);
+  assert.equal(after.completed,before.completed);assert.equal(after.gpuElapsed.count,before.gpuElapsed.count);assert.equal(after.completionObservedWall.count,before.completionObservedWall.count);assert.equal(after.lastCompletedRevision,before.lastCompletedRevision);assert.equal(after.playing.completionObservedWall.count,before.playing.completionObservedWall.count);
+  for(const[,handle]of expected)assert.equal(deleted.get(handle),1,'all pending fence/query and GL resource handles must be released');assert.equal(gpu.resources.length,0);assert.equal(gpu.targets.length,0);assert.equal(gl.livePrograms.size,0);
+  assert.equal(g.gridVersion,revision);assert.equal(r.boardSource,r.buffer);assert.deepEqual(r.im.data,reference.im.data);assert.equal(r.presented.backendEpoch,after.epoch);assert.equal(gl.isContextLost(),false);assert.equal(gl.getError(),gl.NO_ERROR);
+  const draws=r.canvas.context.calls.length,deletes=deleted.size;r.draw(g,{ghost:false});assert.equal(r.canvas.context.calls.length,draws);assert.equal(deleted.size,deletes);assert.equal(waits,1,'cached CPU redraw must not poll or delete the failed backend again');
+ }
 });
 
 test('Insufficient fragment precision or depth precision explicitly rejects the GPU backend',()=>{
@@ -65,6 +71,16 @@ test('Missing timer queries and disjoint timing never manufacture GPU elapsed re
  const disjoint=new SurfaceGPU();assert(disjoint.draw(g.grid,g.material,g.width,g.height));disjoint.gl.disjoint=true;disjoint.gl.signaled=true;disjoint.poll();assert.equal(disjoint.snapshot().completed,1);assert.equal(disjoint.snapshot().gpuElapsed.count,0);assert.equal(disjoint.snapshot().disjointQueries,1);
 });
 
-test('Pending timing measurements are bounded and overflow is disclosed',()=>{
- const g=makeGame(),gpu=new SurfaceGPU();for(let i=0;i<65;i++)assert(gpu.draw(g.grid,g.material,g.width,g.height,{revision:i}));const s=gpu.snapshot();assert.equal(s.submissions,65);assert.equal(s.pending,64);assert.equal(s.skippedMeasurements,1);gpu.gl.signaled=true;gpu.poll();assert.equal(gpu.snapshot().completed,64);assert.equal(gpu.snapshot().pending,0);assert.equal(gpu.snapshot().lastCompletedRevision,63);
+test('Pending surface commands are bounded before upload and deferred requests keep only latest metadata',()=>{
+ const g=makeGame(),gpu=new SurfaceGPU();assert(gpu.draw(g.grid,g.material,g.width,g.height,{revision:0}));const trace=gpu.gl.trace.length,data=gpu.gridData.slice();
+ for(let i=1;i<=100;i++){g.grid[0]=i%4;assert.equal(gpu.draw(g.grid,g.material,g.width,g.height,{revision:i,tick:i}),null);assert.equal(gpu.lastOutcome,'deferred');}
+ const s=gpu.snapshot();assert.equal(s.submissions,1);assert.equal(s.pending,1);assert.equal(s.inFlightSubmissions,1);assert.equal(s.maxInFlightSubmissions,1);assert.equal(s.deferredRequests,100);assert.equal(s.coalescedVisualRequests,99);assert.equal(s.lastRequested.revision,100);assert.equal(gpu.gl.trace.length,trace);assert.deepEqual(gpu.gridData,data);
+ gpu.gl.signaled=true;assert(gpu.draw(g.grid,g.material,g.width,g.height,{revision:100,tick:100}));assert.equal(gpu.snapshot().submissions,2);assert.equal(gpu.snapshot().completed,1);assert.equal(gpu.gridData[0],g.grid[0]);gpu.poll();assert.equal(gpu.snapshot().completed,2);assert.equal(gpu.snapshot().pending,0);assert.equal(gpu.snapshot().lastCompletedRevision,100);
+});
+
+test('Unavailable optional timer queries stay bounded without blocking mandatory completion fences',()=>{
+ const g=makeGame(),gpu=new SurfaceGPU(),gl=gpu.gl;gl.signaled=true;gl.getQueryParameter=()=>false;
+ for(let i=0;i<100;i++){assert(gpu.draw(g.grid,g.material,g.width,g.height,{revision:i}));assert.equal(gpu.pending.filter(p=>p.fence).length,1);assert(gpu.pending.filter(p=>p.query).length<=64);assert(gpu.pending.length<=65);}
+ let s=gpu.snapshot();assert.equal(s.submissions,100);assert.equal(s.completed,99);assert.equal(s.inFlightSubmissions,1);assert.equal(s.maxInFlightSubmissions,1);assert.equal(s.skippedMeasurements,36);assert.equal(s.gpuElapsed.count,0);gpu.poll();s=gpu.snapshot();assert.equal(s.completed,100);assert.equal(s.inFlightSubmissions,0);assert.equal(s.pending,64);assert.equal(s.lastCompletedRevision,99);
+ gl.disjoint=true;gpu.poll();assert.equal(gpu.snapshot().pending,0);assert.equal(gpu.snapshot().disjointQueries,64);assert.equal(gpu.snapshot().gpuElapsed.count,0);
 });

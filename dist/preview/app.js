@@ -11,7 +11,7 @@ import {STANDARD_COLORS,ACCESSIBLE_COLORS,COLOR_NAMES,PATTERN_NAMES,textureOffse
 const BUILD='grainform-fine-0.4.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const game=new Game({seed:randomSeed()}),input=new InputState();
-const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas,{surfaceBackend:/(?:[?&])(?:qa|summary)(?:[=&]|$)/.test(location.search)&&/(?:[?&])renderer=cpu(?:&|$)/.test(location.search)?'cpu':'auto'});
+const canvas=$('#gameCanvas'),sceneRenderer=new GrainRenderer(canvas,{directDisplay:true,surfaceBackend:/(?:[?&])(?:qa|summary)(?:[=&]|$)/.test(location.search)&&/(?:[?&])renderer=cpu(?:&|$)/.test(location.search)?'cpu':'auto'});
 window.addEventListener('resize',()=>{sceneRenderer.resize();uiDirty=true;});
 if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{sceneRenderer.resize();uiDirty=true;}).observe(canvas.parentElement);
 const defaults={sound:true,contrast:false,motion:matchMedia('(prefers-reduced-motion: reduce)').matches};
@@ -147,7 +147,7 @@ function drawNext(){
     for(const [x,y]of shape){c.fillStyle=cssColor(game.next.color);c.fillRect(ox+x*size,oy+y*size,size-2,size-2);drawPattern(c,game.next.color,ox+x*size,oy+y*size,size-2);c.fillStyle='#ffffff22';c.fillRect(ox+x*size,oy+y*size,size-2,2);}
   }setText($('#nextColor'),COLOR_NAMES[game.next.color]+(prefs.contrast?' · '+PATTERN_NAMES[game.next.color]:''));
 }
-function draw(){sceneRenderer.draw(committedView.capture(),{contrast:prefs.contrast,motion:prefs.motion,profile:frameDiagnostics});}
+function draw(){sceneRenderer.draw(committedView.capture(),{contrast:prefs.contrast,motion:prefs.motion,profile:frameDiagnostics,generation:game.generation});}
 function frame(now){
   const callbackBegin=performance.now();callbackMetrics.commitPending();
   const begin=performance.now(),gap=lastTime?now-lastTime:16.667,wasPlaying=game.state==='playing';lastTime=now;
