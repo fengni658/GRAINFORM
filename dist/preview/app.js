@@ -3,6 +3,7 @@ import {GrainRenderer} from './renderer.js';
 import {InputState} from '../input.js';
 import {SessionMetrics} from '../metrics.js';
 import {CallbackMetrics} from './callback-metrics.js';
+import {SimulationBudget,CommittedView} from './simulation-budget.js';
 import {FrameDiagnostics} from './diagnostics.js';
 import {AudioUnlock,StartDiagnostics} from './audio-unlock.js';
 import {diagnosticMode,DiagnosticOutput,compactSession} from './diagnostic-output.js';
@@ -21,7 +22,7 @@ try{
   const n=Number(localStorage.getItem('grainform.preview.v1.best'));if(Number.isSafeInteger(n)&&n>=0)best=n;
   localStorage.setItem('grainform.preview.v1.storageCheck','1');localStorage.removeItem('grainform.preview.v1.storageCheck');
 }catch{storageOK=false;}
-let colors,shades,toastUntil=0,lastTime=0,accumulator=0,uiDirty=true,lastSavedScore=-1,newBest=false,lastNext=null;
+let colors,shades,toastUntil=0,lastTime=0,uiDirty=true,lastSavedScore=-1,newBest=false,lastNext=null;
 const audioStats={notesStarted:0,activeVoices:0,errors:0};
 let audioCtx=null,rafId=0,frameIndex=0,frameTotal=0,frameWork=new Float32Array(3600),frameGap=new Float32Array(3600),frameStart=performance.now();
 const sessionMetrics=new SessionMetrics(frameStart),callbackMetrics=new CallbackMetrics();
@@ -30,6 +31,8 @@ const diagnosticOutput=new DiagnosticOutput(diagnosticsMode);
 $('#qaDiagnostics').hidden=diagnosticsMode==='off';
 const frameDiagnostics=qaEnabled?new FrameDiagnostics():null;
 if(frameDiagnostics){frameDiagnostics.instrument(game);frameDiagnostics.observe();}
+const simulationBudget=new SimulationBudget(),committedView=new CommittedView(game),deferredInput=[];
+const inputLatency={received:0,applied:0,cancelled:0,maxLatencyMs:0,maxQueueWaitMs:0,maxDispatchDelayMs:0,slowest:[]};
 const audioUnlock=new AudioUnlock({diagnostics:qaEnabled,activation:()=>window.navigator?.userActivation?.isActive??null,createContext:()=>new (window.AudioContext||window.webkitAudioContext)()});
 const startDiagnostics=new StartDiagnostics({enabled:qaEnabled});let shownAudioRevision=-1,shownStartRevision=-1;
 function randomSeed(){try{return crypto.getRandomValues(new Uint32Array(1))[0];}catch{return Date.now()>>>0;}}
@@ -61,7 +64,7 @@ function tone(freq,duration=.08,volume=.035,type='sine',delay=0){
   try{const now=audioCtx.currentTime+delay,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(freq,now);o.frequency.exponentialRampToValueAtTime(freq*.7,now+duration);g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(volume,now+.006);g.gain.exponentialRampToValueAtTime(.0001,now+duration);o.connect(g);g.connect(audioCtx.destination);o.start(now);audioStats.notesStarted++;audioStats.activeVoices++;o.stop(now+duration+.02);o.onended=()=>{audioStats.activeVoices=Math.max(0,audioStats.activeVoices-1);o.disconnect();g.disconnect();};}catch{audioStats.errors++;}
 }
 function sound(type,chain=1){if(type==='land')tone(110,.1,.03,'triangle');if(type==='rotate')tone(340,.035,.015);if(type==='clear'){const notes=[440,554.37,659.25,880];notes.forEach((v,i)=>tone(v*Math.min(2,1+(chain-1)*.12),.18,.024,'sine',i*.055));}if(type==='over'){tone(220,.25,.03,'triangle');tone(146.83,.35,.025,'triangle',.15);}}
-function clearInput(){input.clear();$$('[data-action]').forEach(b=>b.classList.remove('held'));}
+function clearInput(){inputLatency.cancelled+=deferredInput.length;deferredInput.length=0;input.clear();$$('[data-action]').forEach(b=>b.classList.remove('held'));}
 function panel(name){
   $('#overlay').hidden=!name;for(const n of ['home','pause','over'])$('#'+n+'Panel').hidden=n!==name;
   if(name)$('#overlay').setAttribute('aria-labelledby',{home:'overlayTitle',pause:'pauseTitle',over:'overTitle'}[name]);
@@ -69,18 +72,34 @@ function panel(name){
 }
 function start(event){
   if($('#settingsDialog').open||$('#helpDialog').open)return;
-  const startup=startDiagnostics.begin(event,prefs.sound);startDiagnostics.beforeAudio(startup);unlockAudio('start');startDiagnostics.afterAudio(startup);clearInput();game.reset(randomSeed());game.start();lastSavedScore=-1;newBest=false;toastUntil=0;$('#toast').classList.remove('visible');panel(null);uiDirty=true;accumulator=0;lastTime=performance.now();announce('游戏开始。方向键移动和旋转，空格直接落下。');
+  const startup=startDiagnostics.begin(event,prefs.sound);startDiagnostics.beforeAudio(startup);unlockAudio('start');startDiagnostics.afterAudio(startup);clearInput();game.reset(randomSeed());game.start();simulationBudget.reset();committedView.capture(true);sceneRenderer.lastRevision=-1;sceneRenderer.presented=null;lastSavedScore=-1;newBest=false;toastUntil=0;$('#toast').classList.remove('visible');panel(null);uiDirty=true;lastTime=performance.now();announce('游戏开始。方向键移动和旋转，空格直接落下。');
   canvas.focus({preventScroll:true});startDiagnostics.finish(startup);
 }
 function pause(reason='游戏已暂停',moveFocus=true){
-  if(game.pause()){clearInput();panel('pause');$('#pauseReason').textContent=reason;uiDirty=true;accumulator=0;announce(reason);if(moveFocus)$('#resumeButton').focus({preventScroll:true});return true;}return false;
+  if(game.pause()){clearInput();panel('pause');$('#pauseReason').textContent=reason;uiDirty=true;announce(reason);if(moveFocus)$('#resumeButton').focus({preventScroll:true});return true;}return false;
 }
-function resume(){if($('#settingsDialog').open||$('#helpDialog').open)return false;if(game.resume()){clearInput();panel(null);uiDirty=true;lastTime=performance.now();accumulator=0;canvas.focus({preventScroll:true});announce('游戏继续');return true;}return false;}
+function resume(){if($('#settingsDialog').open||$('#helpDialog').open)return false;if(game.resume()){clearInput();panel(null);uiDirty=true;lastTime=performance.now();canvas.focus({preventScroll:true});announce('游戏继续');return true;}return false;}
 function togglePause(){if(game.state==='playing')pause();else if(game.state==='paused')resume();}
-function action(name){
-  if(game.state!=='playing')return false;const actionStarted=frameDiagnostics?performance.now():0;unlockAudio('input:'+name);let result=false;
-  if(name==='left')result=game.move(-4*SCALE);if(name==='right')result=game.move(4*SCALE);if(name==='rotate')result=game.rotate();if(name==='drop')result=game.hardDrop();if(name==='down')result=game.nudgeDown();uiDirty=true;handleEvents();if(frameDiagnostics)frameDiagnostics.inputAction(name,actionStarted,performance.now()-actionStarted);return result;
+function action(name,event=null){
+  if(game.state!=='playing')return false;
+  const handlerAt=performance.now(),eventAt=Number.isFinite(event?.timeStamp)&&event.timeStamp>=0&&event.timeStamp<=handlerAt+1?event.timeStamp:handlerAt;
+  const item={name,handlerAt,eventAt,eventTimeSource:eventAt===handlerAt?'handler-clock':'event-timestamp'};inputLatency.received++;
+  // Audio unlock remains inside the actual user gesture; it is not moved out of latency measurements.
+  unlockAudio('input:'+name);let result;
+  if(game.stepPending||deferredInput.length){item.queuedAt=performance.now();deferredInput.push(item);result=true;}else result=applyAction(item);
+  if(frameDiagnostics)frameDiagnostics.inputAction(name,handlerAt,performance.now()-handlerAt);return result;
 }
+function applyAction(item){
+  const {name}=item,applyAt=performance.now();let result=false;
+  if(name==='left')result=game.move(-4*SCALE);if(name==='right')result=game.move(4*SCALE);if(name==='rotate')result=game.rotate();if(name==='drop')result=game.hardDrop();if(name==='down')result=game.nudgeDown();
+  uiDirty=true;handleEvents();committedView.capture();
+  const appliedAt=performance.now(),latency=Math.max(0,appliedAt-item.eventAt),wait=item.queuedAt===undefined?0:Math.max(0,applyAt-item.queuedAt);
+  inputLatency.applied++;inputLatency.maxLatencyMs=Math.max(inputLatency.maxLatencyMs,latency);inputLatency.maxQueueWaitMs=Math.max(inputLatency.maxQueueWaitMs,wait);inputLatency.maxDispatchDelayMs=Math.max(inputLatency.maxDispatchDelayMs,item.handlerAt-item.eventAt);
+  if(qaEnabled){inputLatency.slowest.push({...item,appliedAt,latencyMs:latency,queueWaitMs:wait,result});inputLatency.slowest.sort((a,b)=>b.latencyMs-a.latencyMs);inputLatency.slowest.length=Math.min(6,inputLatency.slowest.length);}return result;
+}
+function flushInput(){while(deferredInput.length&&game.state==='playing'&&!game.stepPending)applyAction(deferredInput.shift());}
+function simulationState(detail=false){const {slowest,...counts}=inputLatency;return{...simulationBudget.snapshot(game),renderedTick:committedView.view.tick,input:{scope:'Discrete movement, rotate, drop and accelerate only. Pause/restart/settings are immediate; GPU presentation and audible sound are not measured here.',...counts,pending:deferredInput.length,oldestPendingMs:deferredInput.length?Math.max(0,performance.now()-deferredInput[0].eventAt):0,...(detail?{slowest}:{} )},inputPolicy:'Ordered application at completed-step boundaries. Pause, restart, blur or dialog input clearing cancels unapplied requests and counts cancellations; no slowdown-based dropping.'};}
+
 function handleEvents(){for(const event of game.consumeEvents()){
   uiDirty=true;
   if(event.type==='land'||event.type==='rotate')sound(event.type);
@@ -128,17 +147,19 @@ function drawNext(){
     for(const [x,y]of shape){c.fillStyle=cssColor(game.next.color);c.fillRect(ox+x*size,oy+y*size,size-2,size-2);drawPattern(c,game.next.color,ox+x*size,oy+y*size,size-2);c.fillStyle='#ffffff22';c.fillRect(ox+x*size,oy+y*size,size-2,2);}
   }setText($('#nextColor'),COLOR_NAMES[game.next.color]+(prefs.contrast?' · '+PATTERN_NAMES[game.next.color]:''));
 }
-function draw(){sceneRenderer.draw(game,{contrast:prefs.contrast,motion:prefs.motion,profile:frameDiagnostics});}
+function draw(){sceneRenderer.draw(committedView.capture(),{contrast:prefs.contrast,motion:prefs.motion,profile:frameDiagnostics});}
 function frame(now){
   const callbackBegin=performance.now();callbackMetrics.commitPending();
   const begin=performance.now(),gap=lastTime?now-lastTime:16.667,wasPlaying=game.state==='playing';lastTime=now;
   const phases=frameDiagnostics?{inputRepeat:0,simulation:0,events:0,hud:0,render:0,diagnostics:0}:null;let n=0,at=begin;
-  if(game.state==='playing'&&!document.hidden){accumulator+=Math.min(gap,100);while(accumulator>=1000/60&&n<6){
-    input.step(dx=>game.move(dx*SCALE));if(phases){const end=performance.now();phases.inputRepeat+=end-at;at=end;}
-    game.step({softDrop:input.has('down')});if(phases){const end=performance.now();phases.simulation+=end-at;at=end;}
-    handleEvents();if(phases){const end=performance.now();phases.events+=end-at;at=end;}
-    accumulator-=1000/60;n++;
-  }if(n&&(game.next!==lastNext||game.score!==lastSavedScore))uiDirty=true;}else accumulator=0;
+  if(game.state==='playing'&&!document.hidden){
+    const result=simulationBudget.run(game,gap,{
+      beforeStep(){flushInput();input.step(dx=>game.move(dx*SCALE));committedView.capture();if(phases){const end=performance.now();phases.inputRepeat+=end-at;at=end;}return{softDrop:input.has('down')};},
+      onChunk(){if(phases){const end=performance.now();phases.simulation+=end-at;at=end;}},
+      afterStep(){handleEvents();committedView.capture();if(phases){const end=performance.now();phases.events+=end-at;at=end;}}
+    });n=result.steps;
+    if(n&&(game.next!==lastNext||game.score!==lastSavedScore))uiDirty=true;
+  }
   if(uiDirty)updateUI();if(phases){const end=performance.now();phases.hud=end-at;at=end;}
   draw();if(phases){const end=performance.now();phases.render=end-at;at=end;if(game.state==='playing')startDiagnostics.noteDraw(now,begin,end);}
   if(toastUntil&&now>toastUntil){$('#toast').classList.remove('visible');toastUntil=0;}
@@ -148,6 +169,7 @@ function frame(now){
   const outputKind=diagnosticOutput.next(now,game.state,wasPlaying);
   if(outputKind){
     const state=game.snapshot(),data={build:BUILD,rules:{connectivity:CONNECTIVITY,sameColor:true,requiredWalls:['left','right']},diagnosticsMode,outputKind,game:state,audio:{enabled:prefs.sound,contextState:audioCtx?.state||'not-created',...audioStats},particleBalance:{present:state.grains,added:game.added,removed:game.removed,conserved:state.grains===game.added-game.removed},session:outputKind==='full'?sessionMetrics.snapshot(now):compactSession(sessionMetrics,now)};
+    data.simulation=simulationState(outputKind==='full');
     data.callback=callbackMetrics.snapshot({detail:outputKind==='full'});
     // Keep adverse samples and observer records; serialize them only after playing has stopped.
     if(qaEnabled){data.audio.unlock=audioUnlock.snapshot({detail:outputKind==='full'});data.startup=startDiagnostics.snapshot({detail:outputKind==='full'});shownAudioRevision=audioUnlock.revision;shownStartRevision=startDiagnostics.revision;}
@@ -205,15 +227,15 @@ window.addEventListener('keydown',e=>{
   if(e.code==='Enter'&&['ready','over'].includes(game.state)&&!['BUTTON','INPUT','A'].includes(document.activeElement.tagName)){e.preventDefault();if(!e.repeat)start(e);return;}
   const name=keyMap[e.code];if(!name||game.state!=='playing')return;
   if(['BUTTON','INPUT','A'].includes(document.activeElement.tagName)&&e.code==='Space')return;
-  e.preventDefault();if(!e.repeat&&input.press('key:'+e.code,name))action(name);
+  e.preventDefault();if(!e.repeat&&input.press('key:'+e.code,name))action(name,e);
 });
 function releaseInput(id){input.release(id);$$('[data-action]').forEach(button=>button.classList.toggle('held',input.has(button.dataset.action)));}
 window.addEventListener('keyup',e=>{releaseInput('key:'+e.code);});
 $$('[data-action]').forEach(b=>{
-  b.addEventListener('pointerdown',e=>{if(game.state!=='playing')return;e.preventDefault();b.setPointerCapture(e.pointerId);const name=b.dataset.action;const trigger=input.press('pointer:'+e.pointerId,name);b.classList.add('held');if(trigger)action(name);});
+  b.addEventListener('pointerdown',e=>{if(game.state!=='playing')return;e.preventDefault();b.setPointerCapture(e.pointerId);const name=b.dataset.action;const trigger=input.press('pointer:'+e.pointerId,name);b.classList.add('held');if(trigger)action(name,e);});
   const release=e=>{releaseInput('pointer:'+e.pointerId);};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);
   // Assistive technology / keyboard-generated click. Real pointer clicks already act on pointerdown.
-  b.addEventListener('click',e=>{if(e.detail===0)action(b.dataset.action);});
+  b.addEventListener('click',e=>{if(e.detail===0)action(b.dataset.action,e);});
 });
 window.addEventListener('blur',()=>{clearInput();pause('你刚刚离开了窗口，游戏已自动暂停',false);});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();pause('页面切到后台，游戏已自动暂停',false);}});
 window.addEventListener('storage',event=>{
@@ -240,5 +262,5 @@ if(context?.registerTool){
   ])try{Promise.resolve(context.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}
 }
 if(qaEnabled){
-  window.__grainform={game,input,start,pause,resume,action,readState,render(){uiDirty=true;updateUI();draw();},metrics(){const count=Math.min(frameTotal,frameWork.length),a=Array.from(frameWork.slice(0,count)).sort((x,y)=>x-y),b=Array.from(frameGap.slice(0,count)).sort((x,y)=>x-y);return {session:sessionMetrics.snapshot(performance.now()),callback:callbackMetrics.snapshot({detail:true}),frames:frameTotal,elapsedMs:performance.now()-frameStart,sampleFrames:count,workP50:a[Math.floor(count*.5)]||0,workP95:a[Math.floor(count*.95)]||0,workMax:a[count-1]||0,frameGapP95:b[Math.floor(count*.95)]||0,heap:performance.memory?{used:performance.memory.usedJSHeapSize,total:performance.memory.totalJSHeapSize}:null};}};
+  window.__grainform={game,input,start,pause,resume,action,readState,render(){uiDirty=true;committedView.capture(true);sceneRenderer.lastRevision=-1;sceneRenderer.presented=null;updateUI();draw();},metrics(){const count=Math.min(frameTotal,frameWork.length),a=Array.from(frameWork.slice(0,count)).sort((x,y)=>x-y),b=Array.from(frameGap.slice(0,count)).sort((x,y)=>x-y);return {simulation:simulationState(true),session:sessionMetrics.snapshot(performance.now()),callback:callbackMetrics.snapshot({detail:true}),frames:frameTotal,elapsedMs:performance.now()-frameStart,sampleFrames:count,workP50:a[Math.floor(count*.5)]||0,workP95:a[Math.floor(count*.95)]||0,workMax:a[count-1]||0,frameGapP95:b[Math.floor(count*.95)]||0,heap:performance.memory?{used:performance.memory.usedJSHeapSize,total:performance.memory.totalJSHeapSize}:null};}};
 }

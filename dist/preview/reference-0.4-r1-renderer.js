@@ -1,6 +1,6 @@
-import{BLOCK,WIDTH,HEIGHT}from'./engine.js';
+import{BLOCK,WIDTH,HEIGHT}from'./reference-0.4-r1-engine.js';
 import{textureOffset}from'../palette.js';
-import{RASTER_SCALE,grainPalette,grainIndex,grainAppearance,buildAppearances,writeGrain}from'./grain-raster.js';
+import{RASTER_SCALE,grainPalette,cornerMask,writeGrain}from'./reference-0.4-r1-raster.js';
 const NORMAL=[[12,17,19],[234,195,112],[79,192,179],[211,120,163]];
 const ACCESSIBLE=[[12,17,19],[255,218,120],[69,146,212],[241,114,182]];
 export class GrainRenderer{
@@ -22,7 +22,7 @@ export class GrainRenderer{
       const gx=bx*b+x,gy=by*b+y,p=(gy*w+gx)*4,mat=this.baseline?((gx*3+gy*5)%7)*30:game.materialFor(gx,gy,a.materialSeed||game.seed);
       const shade=(this.baseline?0:(mat%15-7)*.65+(y===0?7:0))+(contrast?textureOffset(a.color,gx,gy)*.6:0);
       if(this.baseline){for(let c=0;c<3;c++)im.data[p+c]=colors[a.color][c]+shade;im.data[p+3]=255;}
-      else{const geometry=y===0?1:0,pattern=contrast&&textureOffset(a.color,gx,gy)>0?1:0,index=grainIndex(a.color,mat,geometry,pattern);writeGrain(words,(gy*2)*(w*2)+gx*2,w*2,packed,index);}
+      else{const lights=y===0?1:0,pattern=contrast&&textureOffset(a.color,gx,gy)>0?1:0,index=((a.color*32+mat%32)*16+lights*2+pattern)*8;writeGrain(words,(gy*2)*(w*2)+gx*2,w*2,packed,index);}
     }
     ctx.putImageData(im,0,0);
   }
@@ -36,7 +36,7 @@ export class GrainRenderer{
     const phases=profile?{pixelBuild:0,pixelUpload:0,boardComposite:0,ghost:0,spriteBuild:0,spriteComposite:0}:null;let at=phases?performance.now():0;
 
     const raster=this.baseline?1:RASTER_SCALE,rw=w*raster,rh=h*raster;
-    if(this.buffer.width!==rw||this.buffer.height!==rh){this.buffer.width=rw;this.buffer.height=rh;this.pctx=this.buffer.getContext('2d',{alpha:false});this.im=this.pctx.createImageData(rw,rh);this.words=new Uint32Array(this.im.data.buffer,this.im.data.byteOffset,this.im.data.byteLength/4);this.readyGrid=new Uint8Array(w*h);this.appearanceCodes=new Uint8Array(w*h);this.pairEligibility=new Uint8Array(w*h);
+    if(this.buffer.width!==rw||this.buffer.height!==rh){this.buffer.width=rw;this.buffer.height=rh;this.pctx=this.buffer.getContext('2d',{alpha:false});this.im=this.pctx.createImageData(rw,rh);this.words=new Uint32Array(this.im.data.buffer,this.im.data.byteOffset,this.im.data.byteLength/4);this.readyGrid=new Uint8Array(w*h);
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){const wx=x/(w/96),wy=y/(h/144),floor=128-Math.sin(wx/18)*8-Math.cos(wx/10)*4;if(wy>floor)this.readyGrid[y*w+x]=wy>136+Math.sin(wx/9)*3?2:wx<51?1:3;}
       this.lastRevision=-1;
     }
@@ -59,17 +59,18 @@ export class GrainRenderer{
       }
       }else{
       const g=ready?this.readyGrid:game.grid,packed=grainPalette(contrast),words=this.words;
-      if(!ready)buildAppearances(g,game.material,w,h,this.appearanceCodes,this.pairEligibility);
       words.fill(packed[0]);
       for(let y=0;y<h;y++)for(let x=0;x<w;x++){
-        const i=y*w+x,c=g[i];if(!c)continue;let material=0,geometry=0,pattern=0,mask=0;
+        const i=y*w+x,c=g[i];if(!c)continue;let m=0,lights=0,pattern=0,mask=0;
         if(c){
-          const mat=ready?((Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>8)&255:game.material[i];material=mat;
-          const appearance=ready?grainAppearance(g,w,h,x,y,c,mat):this.appearanceCodes[i];geometry=appearance>>>4;mask=appearance&15;
+          const mat=ready?((Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>8)&255:game.material[i];m=mat%32;
+          const top=y===0||!g[i-w],side=x===0||!g[i-1]||x===w-1||!g[i+1];
+          if(top)lights|=1;if(side)lights|=2;
+          if(top||side||y===h-1||!g[i+w])mask=cornerMask(g,w,h,x,y,c);
           if(contrast)pattern=textureOffset(c,x,y)>0?1:0;
         }
-        const clearing=game.clearTimer&&game.clearMask[i]&&!motion;
-        writeGrain(words,y*2*rw+x*2,rw,packed,grainIndex(c,material,geometry,pattern,clearing),mask);
+        if(game.clearTimer&&game.clearMask[i]&&!motion)lights|=4;
+        writeGrain(words,y*2*rw+x*2,rw,packed,((c*32+m)*16+lights*2+pattern)*8,mask);
       }
       }
       if(phases){const end=performance.now();phases.pixelBuild=end-at;at=end;}

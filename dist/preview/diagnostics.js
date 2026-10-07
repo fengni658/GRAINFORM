@@ -9,7 +9,7 @@ class Distribution{
 function keepTop(list,item,key,limit=6){list.push(item);list.sort((a,b)=>b[key]-a[key]);if(list.length>limit)list.length=limit;}
 export class FrameDiagnostics{
   constructor({clock=()=>performance.now()}={}){
-    this.clock=clock;this.stages=Object.fromEntries(STAGES.map(s=>[s,new Distribution()]));this.engine=Object.fromEntries(['sandStep','findConnections','finishClear','lock'].map(s=>[s,new Distribution()]));
+    this.clock=clock;this.stages=Object.fromEntries(STAGES.map(s=>[s,new Distribution()]));this.engine=Object.fromEntries(['sandStep','advanceStep','findConnections','finishClear','lock'].map(s=>[s,new Distribution()]));
     this.renderer=Object.fromEntries(RENDER_STAGES.map(s=>[s,new Distribution()]));this.renderFrame=null;this.presentedFrames=0;this.reusedFrames=0;
     this.engineFrame={};this.input=new Distribution();this.inputSinceFrame=0;this.inputCallsSinceFrame=0;this.inputMaxSinceFrame=0;this.inputTop=[];
     this.topWork=[];this.topGaps=[];this.previousFrame=null;this.longTasks=[];this.longTaskCount=0;this.longTaskMax=0;this.longAnimationFrames=[];this.loafCount=0;
@@ -42,7 +42,7 @@ export class FrameDiagnostics{
     this.engineFrame={};this.renderFrame=null;this.inputSinceFrame=0;this.inputCallsSinceFrame=0;this.inputMaxSinceFrame=0;
   }
   snapshot(){return{
-    scope:'Frame stage distributions are playing-only. Input and nested engine methods cover the complete session. Legacy core work includes QA output generation but ends before statistics/ring/scheduling tail. The separate callback metric includes that tail and its own measured prelude; browser observer entries are independent. All times use performance time origin. GPU presentation is not measured.',
+    scope:'Frame stage distributions are playing-only. Input and nested engine methods cover the complete session. advanceStep measures each cooperative physics chunk and final step work; simulation includes scheduler bookkeeping. events also includes committing the completed board. Deferred user input latency is separately reported under simulation.input. Legacy core work includes QA output generation but ends before statistics/ring/scheduling tail. The separate callback metric includes that tail and its own measured prelude; browser observer entries are independent. All times use performance time origin. GPU presentation is not measured.',
     phases:Object.fromEntries(Object.entries(this.stages).map(([k,v])=>[k,v.read()])),nestedEngineMethods:Object.fromEntries(Object.entries(this.engine).map(([k,v])=>[k,v.read()])),
     renderer:{presentedFrames:this.presentedFrames,reusedFrames:this.reusedFrames,phases:Object.fromEntries(Object.entries(this.renderer).map(([k,v])=>[k,v.read()]))},
     inputActions:{...this.input.read(),slowest:this.inputTop},slowestWorkFrames:this.topWork,longestFrameGaps:this.topGaps,

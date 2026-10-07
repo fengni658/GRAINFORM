@@ -51,14 +51,13 @@ export class Game {
     this.clearCells=new Int32Array(this.size);this.clearMask=new Uint8Array(this.size);
     this.material=new Uint8Array(this.size);this.vx=new Int16Array(this.size);this.vy=new Int16Array(this.size);
     this.fx=new Int16Array(this.size);this.fy=new Int16Array(this.size);this.energy=new Uint8Array(this.size);this.sleep=new Uint8Array(this.size);this.movedAt=new Uint32Array(this.size);this.departureDrop=new Uint8Array(this.size);
-    this.surfaceWindowTick=new Uint32Array(width);this.insideSandStep=false;this.stepCursor=null;this.surface=new Uint16Array(width);this.tileCols=Math.ceil(width/TILE);this.tileRows=Math.ceil(height/TILE);
+    this.surface=new Uint16Array(width);this.tileCols=Math.ceil(width/TILE);this.tileRows=Math.ceil(height/TILE);
     this.cellChunk=new Uint16Array(this.size);
     for(let y=0;y<height;y++)for(let x=0;x<width;x++)this.cellChunk[y*width+x]=((y/TILE)|0)*this.tileCols+((x/TILE)|0);
     this.activeChunks=new Uint8Array(this.tileCols*this.tileRows);this.nextChunks=new Uint8Array(this.activeChunks.length);
     this.reset(seed);
   }
   reset(seed=1){
-    this.generation=(this.generation||0)+1;this.stepCursor=null;this.insideSandStep=false;this.surfaceWindowTick.fill(0);
     this.grid.fill(0);this.rigid.fill(0);this.visited.fill(0);this.clearMask.fill(0);
     this.pieceRng=new RNG(seed);this.physicsRng=new RNG((seed^0x9e3779b9)>>>0);this.rng=this.physicsRng;this.seed=seed>>>0;this.stamp=0;this.tick=0;this.physicsTick=0;this.pieceSerial=0;
     for(const a of [this.material,this.vx,this.vy,this.fx,this.fy,this.energy,this.sleep,this.movedAt,this.departureDrop,this.activeChunks,this.nextChunks])a.fill(0);
@@ -95,7 +94,7 @@ export class Game {
     }return true;
   }
   move(dx){
-    if(this.state!=='playing'||this.stepCursor||!this.active||this.clearTimer)return false;
+    if(this.state!=='playing'||!this.active||this.clearTimer)return false;
     // Check each grain-column between positions, so movement cannot tunnel through sand.
     const sign=Math.sign(dx);let moved=false;
     for(let i=0;i<Math.abs(dx);i++){
@@ -104,7 +103,7 @@ export class Game {
     }return moved;
   }
   rotate(){
-    if(this.state!=='playing'||this.stepCursor||!this.active||this.clearTimer)return false;
+    if(this.state!=='playing'||!this.active||this.clearTimer)return false;
     const shape=rotateShape(this.active.shape);
     for(const kick of [0,-BLOCK,BLOCK,-2*BLOCK,2*BLOCK]){
       if(this.canPlace(this.active.x+kick,this.active.y,shape)){
@@ -113,7 +112,7 @@ export class Game {
     }return false;
   }
   nudgeDown(distance=12){
-    if(this.state!=='playing'||this.stepCursor||!this.active||this.clearTimer)return false;
+    if(this.state!=='playing'||!this.active||this.clearTimer)return false;
     for(let n=0;n<distance&&this.active;n++){
       if(n===0?this.canPlace(this.active.x,this.active.y+1):this.canShiftValidated(this.active.x,this.active.y+1,'down'))this.active.y++;
       else this.lock();
@@ -121,7 +120,7 @@ export class Game {
     return true;
   }
   hardDrop(){
-    if(this.state!=='playing'||this.stepCursor||!this.active||this.clearTimer)return false;
+    if(this.state!=='playing'||!this.active||this.clearTimer)return false;
     let n=0;while(n===0?this.canPlace(this.active.x,this.active.y+1):this.canShiftValidated(this.active.x,this.active.y+1,'down')){this.active.y++;n++;}
     this.score+=Math.floor(n/BLOCK)*2;this.lock();return true;
   }
@@ -150,12 +149,10 @@ export class Game {
       const nx=x+dx,ny=y+dy;if(nx<0||nx>=w||ny<0||ny>=h)continue;
       const n=ny*w+nx;if(g[n]){sl[n]=0;const t=map[n];if(!next[t])next[t]=1;if(!current[t])current[t]=1;}
     }
-    if(this.insideSandStep){if(this.surfaceWindowTick[x]===this.physicsTick)return;this.surfaceWindowTick[x]=this.physicsTick;}
     for(let nx=Math.max(0,x-4);nx<=Math.min(w-1,x+4);nx++){
       const sy=this.surface[nx];if(sy<h){const n=sy*w+nx;sl[n]=0;const t=map[n];if(!next[t])next[t]=1;if(!current[t])current[t]=1;}
     }
   }
-  invalidateSurfaceWindow(x){for(let nx=Math.max(0,x-4),end=Math.min(this.width-1,x+4);nx<=end;nx++)this.surfaceWindowTick[nx]=0;}
   rebuildSurface(){
     this.surface.fill(this.height);for(let y=0;y<this.height;y++)for(let x=0;x<this.width;x++)if(this.grid[y*this.width+x]&&y<this.surface[x])this.surface[x]=y;
   }
@@ -197,15 +194,15 @@ export class Game {
     this.grid[j]=this.grid[i];this.material[j]=this.material[i];this.vx[j]=vx;this.vy[j]=vy;this.fx[j]=fx;this.fy[j]=fy;this.energy[j]=energy;this.sleep[j]=0;this.movedAt[j]=this.physicsTick;
     this.departureDrop[i]=Math.max(0,ny-y);
     this.grid[i]=0;this.material[i]=0;this.vx[i]=0;this.vy[i]=0;this.fx[i]=0;this.fy[i]=0;this.energy[i]=0;this.sleep[i]=0;
-    if(this.surface[x]===y){let sy=y+1;while(sy<this.height&&!this.grid[sy*w+x])sy++;this.surface[x]=sy;this.invalidateSurfaceWindow(x);}
-    if(ny<this.surface[nx]){this.surface[nx]=ny;this.invalidateSurfaceWindow(nx);}
+    if(this.surface[x]===y){let sy=y+1;while(sy<this.height&&!this.grid[sy*w+x])sy++;this.surface[x]=sy;}
+    if(ny<this.surface[nx])this.surface[nx]=ny;
     this.wakeAround(i,x,y);const tile=this.cellChunk[j];if(!this.nextChunks[tile])this.nextChunks[tile]=1;
   }
-  *sandRows(generation=this.generation){
-    if(this.generation!==generation)return 0;this.insideSandStep=true;this.physicsTick++;this.markRigid();const w=this.width,g=this.grid,h=this.height,chunks=this.activeChunks;this.nextChunks.fill(0);let moved=0,anyActive=false;
+  sandStep(){
+    this.physicsTick++;this.markRigid();const w=this.width,g=this.grid,h=this.height,chunks=this.activeChunks;this.nextChunks.fill(0);let moved=0,anyActive=false;
     const vxA=this.vx,vyA=this.vy,fxA=this.fx,fyA=this.fy,energyA=this.energy,sleepA=this.sleep,stampA=this.movedAt,matA=this.material,departureA=this.departureDrop,rigid=this.rigid,surface=this.surface,rng=this.physicsRng,next=this.nextChunks,cellChunk=this.cellChunk;
     for(let t=0;t<chunks.length;t++)if(chunks[t]){anyActive=true;break;}
-    if(!anyActive){this.activeChunks=this.nextChunks;this.nextChunks=chunks;this.activeChunkCount=0;this.insideSandStep=false;return 0;}
+    if(!anyActive){this.activeChunks=this.nextChunks;this.nextChunks=chunks;this.activeChunkCount=0;return 0;}
     for(let y=h-1;y>=0;y--){
       const row=y*w,reverse=(this.physicsTick+y)&1,tileRow=((y/TILE)|0)*this.tileCols;
       for(let c=0;c<this.tileCols;c++){
@@ -217,7 +214,7 @@ export class Game {
           stampA[i]=this.physicsTick;
           // Exactly equivalent stationary-interior shortcut; preserve the one directional RNG draw.
           if(energyA[i]<=1&&vyA[i]<=45&&x>0&&x<w-1&&y<h-1&&(g[i+w]||rigid[i+w])&&(g[i-1]||rigid[i-1])&&(g[i+1]||rigid[i+1])&&(g[i+w-1]||rigid[i+w-1])&&(g[i+w+1]||rigid[i+w+1])){
-            rng.int(2);vxA[i]=0;vyA[i]=0;fxA[i]=0;fyA[i]=0;energyA[i]=0;sleepA[i]=Math.min(255,sleepA[i]+1);if(surface[x]===y)this.invalidateSurfaceWindow(x);
+            rng.int(2);vxA[i]=0;vyA[i]=0;fxA[i]=0;fyA[i]=0;energyA[i]=0;sleepA[i]=Math.min(255,sleepA[i]+1);
             if(sleepA[i]<REST){const tile=cellChunk[i];if(!next[tile])next[tile]=1;}continue;
           }
           let vx=vxA[i],vy=Math.min(112,vyA[i]+3),energy=Math.max(0,energyA[i]-1);
@@ -227,10 +224,7 @@ export class Game {
           if(energy===0&&!this.free(x,y+1)){vx=0;fxA[i]=0;}
           let tx=fxA[i]+vx,ty=fyA[i]+vy,dx=Math.trunc(tx/(Q*2)),dy=Math.floor(ty/(Q*2)),fx=tx-dx*Q*2,fy=ty-dy*Q*2;
           let nx=x,ny=y,blocked=false;const steps=Math.max(Math.abs(dx),dy);
-          if(dx===0){
-            const stop=Math.min(dy,h-1-y);for(let n=1;n<=stop;n++){const j=i+n*w;if(g[j]||rigid[j]){blocked=true;break;}ny++;}
-            if(!blocked&&stop<dy)blocked=true;
-          }else for(let n=1;n<=steps;n++){
+          for(let n=1;n<=steps;n++){
             const px=x+Math.round(dx*n/steps),py=y+Math.floor(dy*n/steps);
             if(px===nx&&py===ny)continue;
             if(!this.free(px,py)||(px!==nx&&py!==ny&&rigid[ny*w+px]&&rigid[py*w+nx])){blocked=true;break;}nx=px;ny=py;
@@ -266,18 +260,15 @@ export class Game {
           if(nx!==x||ny!==y){this.transfer(i,ny*w+nx,vx,vy,fx,fy,energy,x,y,nx,ny);moved++;}
           else{
             vxA[i]=vx;vyA[i]=vy;fxA[i]=fx;fyA[i]=fy;energyA[i]=energy;
-            sleepA[i]=supported&&energy===0&&vx===0?Math.min(255,sleepA[i]+1):0;if(sleepA[i]>0&&surface[x]===y)this.invalidateSurfaceWindow(x);
+            sleepA[i]=supported&&energy===0&&vx===0?Math.min(255,sleepA[i]+1):0;
             if(sleepA[i]<REST){const tile=cellChunk[i];if(!next[tile])next[tile]=1;}
           }
         }
       }
-      // Fixed eight-row work units preserve traversal/RNG exactly across yields.
-      if((y&7)===0){yield;if(this.generation!==generation)return 0;}
     }
     this.activeChunks=this.nextChunks;this.nextChunks=chunks;this.activeChunkCount=0;for(const f of this.activeChunks)if(f)this.activeChunkCount++;
-    if(moved){this.dirty=true;this.gridVersion++;}this.insideSandStep=false;return moved;
+    if(moved){this.dirty=true;this.gridVersion++;}return moved;
   }
-  sandStep(){const cursor=this.sandRows();let result;do{result=cursor.next();}while(!result.done);return result.value;}
   findConnections(){
     const g=this.grid,w=this.width,h=this.height,v=this.visited,q=this.queue;
     if(++this.stamp===0xffffffff){v.fill(0);this.stamp=1;}
@@ -319,12 +310,12 @@ export class Game {
     this.clearCount=0;this.clearMask.fill(0);this.dirty=true;this.spawnDelay=Math.max(this.spawnDelay,18);this.gridVersion++;this.rebuildSurface();
     for(let i=0;i<this.activeChunks.length;i++)this.activeChunks[i]=Math.max(this.activeChunks[i],this.nextChunks[i]);
   }
-  *stepRows({softDrop=false}={},generation=this.generation){
-    if(this.state!=='playing'||this.generation!==generation)return;
+  step({softDrop=false}={}){
+    if(this.state!=='playing')return;
     this.tick++;
     if(this.clearTimer){if(--this.clearTimer===0)this.finishClear();return;}
     // Two 120 Hz granular half-steps inside the unchanged 60 Hz game/input clock.
-    for(let sub=0;sub<PHYSICS_SUBSTEPS;sub++){yield* this.sandRows(generation);if(this.generation!==generation)return;}
+    for(let sub=0;sub<PHYSICS_SUBSTEPS;sub++)this.sandStep();
     if(this.connectionEnabled&&this.dirty&&this.tick%10===0){this.beginClear();if(this.clearTimer)return;}
     if(this.active){
       this.fall+=softDrop?7.8:SCALE*Math.min(1.45,0.24+(this.level-1)*0.065+Math.min(0.4,this.pieces*0.002));
@@ -336,13 +327,6 @@ export class Game {
     }else if(this.spawnDelay>0)this.spawnDelay--;
     else this.spawn();
   }
-  get stepPending(){return this.stepCursor!==null;}
-  beginStep(options={}){if(this.state!=='playing'||this.stepCursor)return false;this.stepCursor=this.stepRows(options,this.generation);return true;}
-  advanceStep(){
-    if(!this.stepCursor)return true;if(this.state!=='playing')return false;
-    const cursor=this.stepCursor,done=cursor.next().done;if(done&&this.stepCursor===cursor)this.stepCursor=null;return done;
-  }
-  step(options={}){if(this.state!=='playing')return;if(!this.stepCursor)this.beginStep(options);while(this.stepCursor)this.advanceStep();}
   consumeEvents(){const events=this.events;this.events=[];return events;}
   count(){let count=0;for(const cell of this.grid)if(cell)count++;return count;}
   snapshot(){const grains=this.count();return {state:this.state,score:this.score,level:this.level,pieces:this.pieces,cleared:this.cleared,regions:this.lines,chain:this.chain,maxChain:this.maxChain,grains,rawCleared:this.rawCleared,normalizedGrains:grains/AREA_SCALE,activeChunks:this.activeChunkCount,physicsTick:this.physicsTick,physicsSubsteps:PHYSICS_SUBSTEPS,gridVersion:this.gridVersion,seed:this.seed,tick:this.tick};}
