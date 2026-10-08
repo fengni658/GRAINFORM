@@ -1,0 +1,31 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grainform-gpu-physics-probe@0.4.6 test
+> node --test tests/*.test.mjs
+
+✔ every normal grid cell roundtrips without world-F32 loss (22.034102ms)
+✔ signed codes retain dead positions and exact range endpoints (1.809015ms)
+✔ invalid packed code decodes as unusable rather than another cell (0.304442ms)
+✔ GLSL positions stay local and contact strength is continuous (8.684ms)
+{"passed":true,"kind":"mock GL API and shader source contract only","realShaderCompile":false,"realGPUNumerics":false,"passes":[16,32,64],"stableArraySlots":true,"noReadbackDuringStep":true,"noFramebufferFeedback":true}
+✔ tests/gpu-contract.test.mjs (180.331196ms)
+✔ physical harness local gate accepts a perfect implementation and does not require nonexistent energy fields (20.425088ms)
+✔ analytical harness checks discrete gravity and energy without using reference positions as expected (124.217918ms)
+✔ local-coordinate F32 freefall matches independent discrete gravity oracle for120steps (119.44576ms)
+✔ continuous activation + local F32 solves the original16stack removal precision failure (335.86199ms)
+✔ same-input one-step storage error is bounded in144crowded scene without inheriting long-trajectory pass (736.761159ms)
+✔ two coincident circles remain finite and separate deterministically (7.071557ms)
+✔ K/K+1 bucket capacity is explicit rather than silently filtered (5.042956ms)
+✔ bucket ordering uses stable array slots even with reverse business IDs (1.713173ms)
+✔ negative y crossing is represented and domain escape explicitly fails (3.4968ms)
+✔ nonfinite states cannot pass geometry audit; unsupported input speed rejected (0.610826ms)
+✔ live support deletion keeps IDs, removes one grain and causes real fall (246.607373ms)
+✔ all float texture samplers explicitly use highp for state and bucket IDs (1.440639ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1303.788753

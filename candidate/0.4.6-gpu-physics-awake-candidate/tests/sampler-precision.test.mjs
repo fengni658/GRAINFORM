@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+test('all float texture samplers explicitly use highp for state and bucket IDs',()=>{const root=new URL('../shaders/',import.meta.url);for(const name of fs.readdirSync(root)){const source=fs.readFileSync(new URL(name,root),'utf8');if(source.includes('sampler2D'))assert.match(source,/precision highp sampler2D;/,name);}});

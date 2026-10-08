@@ -1,0 +1,17 @@
+{
+  "version": "v1 failed, preserved not relabeled",
+  "sourceCommit": "ffc70213a4b7bcea27b2888fc8003d06d82f3879",
+  "fixture": "16-stack settle10 steps,remove bottom,then30 steps",
+  "firstGateFailure": {
+    "tick": 12,
+    "maxPosition": 0.006007731122792848,
+    "maxVelocity": 1.6955568792072881
+  },
+  "final": {
+    "maxPosition": 0.80517578125,
+    "maxVelocity": 2.993774175643921
+  },
+  "geometryPassed": true,
+  "trajectoryGatePassed": false,
+  "rootCause": "Absolute Float32 texture storage toggled binary touched25percent common-mode damping."
+}

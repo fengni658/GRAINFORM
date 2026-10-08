@@ -1,0 +1,83 @@
+--- a/gpu-solver.mjs
++++ b/gpu-solver.mjs
+@@ -13,6 +13,14 @@
+   codeFormula: '(cellY + 1024) * 256 + (cellX + 128) + 1',
+   alive: 'signedCellCode > 0; negative is removed; zero is padding',
+   worldFormula: '(28,-16) + cell * 4 + local',
++});
++// This specialization is valid only while every solver-owned velocity.z remains zero.
++// Before adding real sleep, restore the general neighbor weight/displacement path.
++export const GPU_KERNEL_INVARIANTS = Object.freeze({
++  allActive: true,
++  acceptsSleepingInputs: false,
++  externalVelocityTextureWritesSupported: false,
++  requiresStockShaderSources: true,
+ });
+ export const GPU_CONTRACT = Object.freeze({
+   version: '0.4.6-gpu-physics-local-continuous-v2',
+@@ -119,6 +127,8 @@
+   const ids = new Set();
+   return particles.map((p, index) => {
+     if (!p || !Number.isFinite(p.x) || !Number.isFinite(p.y)) throw new TypeError(`Particle ${index} requires finite x/y`);
++    if (p.sleep !== undefined && p.sleep !== false) throw new TypeError(`All-active kernel rejects particle ${index}: sleep must be false or omitted`);
++    if (p.quiet !== undefined && p.quiet !== 0) throw new TypeError(`All-active kernel rejects particle ${index}: quiet must be 0 or omitted`);
+     encodeGPUPosition(p.x, p.y, p.alive !== false); // Reject packing overflow before allocating GPU state.
+     const id = p.id ?? index;
+     if (ids.has(id)) throw new TypeError(`Duplicate particle id: ${id}`);
+@@ -133,6 +143,9 @@
+ 
+ export class GPUWorld {
+   constructor(gl, particles, { passes = 64, shock = true, sources, stateWidth } = {}) {
++    if (!GPU_KERNEL_INVARIANTS.allActive || GPU_CONTRACT.sleepImplemented) {
++      throw new Error('Restore the general sleeping-neighbor projection kernel before enabling sleep.');
++    }
+     if (!gl || typeof gl.drawBuffers !== 'function' || typeof gl.texStorage2D !== 'function') throw new TypeError('A WebGL2 context is required');
+     if (!GPU_CONTRACT.validPasses.includes(passes)) throw new RangeError('passes must be 16, 32, or 64');
+     if (typeof shock !== 'boolean') throw new TypeError('shock must be a boolean');
+@@ -315,7 +328,7 @@
+       this._target([output, nextDiagnostics]);
+       this._use(this.programs.project, [
+         ['uPosition', input], ['uGridPosition', this.gridPosition],
+-        ['uVelocity', this.currentVelocity], ['uEvenBuckets', this.buckets[0]],
++        ['uEvenBuckets', this.buckets[0]],
+         ['uOddBuckets', this.buckets[1]], ['uDiagnostics', this.currentDiagnostics], ['uPrevious', this.previousPosition],
+       ], { ...this._gridUniforms(), uDiameter: ['f', c.diameter], uContactSkin: ['f', c.contactSkin], uContactActivationDepth: ['f', c.contactActivationDepth], uIterationCap: ['f', c.iterationCap], uContactDivisor: ['f', c.contactDivisor], uTangentialFriction: ['f', c.tangentialFriction], uShock: ['i', this.shock && iteration >= c.shockStartIteration ? 1 : 0], uShockHeightBias: ['f', c.shockHeightBias] });
+       this._drawFullscreen();
+@@ -381,7 +394,8 @@
+     return { removedIds, preservedSlots: true, readback: false, gpuCompletionVerified: false };
+   }
+ 
+-  /** GPU-resident handles for a renderer in the same context. No synchronization. */
++  /** Read-only GPU texture handles for rendering. External velocity writes are unsupported
++   * and violate the allActive specialization. No synchronization or mutation permission. */
+   getGPUState() {
+     this._assertUsable();
+     return { positionEncoding: POSITION_ENCODING, previousPositionTexture: this.previousPosition, positionTexture: this.currentPosition, velocityTexture: this.currentVelocity, diagnosticsTexture: this.currentDiagnostics, gridPositionTexture: this.gridPosition, bucketTextures: this.buckets.slice(), width: this.width, height: this.height, count: this.count, metadata: this.metadata.map(({ id, color }) => ({ id, color })), steps: this.steps, substeps: this.substeps };
+--- a/shaders/project.frag.glsl
++++ b/shaders/project.frag.glsl
+@@ -2,9 +2,10 @@
+ precision highp float;
+ precision highp sampler2D;
+ precision highp int;
++// AWAKE_ONLY: stock constructor/reconstruction keep velocity.z zero; removal copies it.
++// Restore sleep-aware neighbor weight and relative displacement before enabling sleep.
+ uniform sampler2D uPosition;
+ uniform sampler2D uGridPosition;
+-uniform sampler2D uVelocity;
+ uniform sampler2D uEvenBuckets;
+ uniform sampler2D uOddBuckets;
+ uniform sampler2D uDiagnostics;
+@@ -95,11 +96,10 @@
+           if (distanceSquared >= target * target) continue;
+           float distance = sqrt(max(0.0, distanceSquared));
+           vec2 normal = distance > 1e-9 ? separation / distance : vec2(id < other ? -1.0 : 1.0, 0.0);
+-          bool neighborSleeping = texelFetch(uVelocity, otherAt, 0).z > 0.5;
+           float dynamicWeight = uShock == 1 ? 1.0 / (1.0 + exp(separation.y * uShockHeightBias)) : 0.5;
+-          float weight = neighborSleeping ? 1.0 : dynamicWeight;
++          float weight = dynamicWeight;
+           float error = target - distance;
+-          vec2 relative = positionDifference(p, texelFetch(uPrevious, at, 0)) - (neighborSleeping ? vec2(0.0) : positionDifference(q, texelFetch(uPrevious, otherAt, 0)));
++          vec2 relative = positionDifference(p, texelFetch(uPrevious, at, 0)) - positionDifference(q, texelFetch(uPrevious, otherAt, 0));
+           float tangent = -relative.x * normal.y + relative.y * normal.x;
+           float friction = clamp(tangent, -uTangentialFriction * error, uTangentialFriction * error) * weight;
+           correction += normal * weight * error + vec2(normal.y, -normal.x) * friction;

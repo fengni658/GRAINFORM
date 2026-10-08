@@ -1,0 +1,31 @@
+{
+  "baselineCoreManifest": "991c1d0af503ea4d3bec0f7eac4315fa2b0f3a8a39dc7dfd83fb6627acc9f830",
+  "baselineFileHashes": {
+    "README-GPU.md": "c6ead7e21eaf2c71db9414ce4a03afa12def99273660336a472129676a3a3818",
+    "README.md": "12392eddb40eea2f3a3ca9a6f7fa92149e9a8066b30020516d39f980a2e913aa",
+    "SOURCES.md": "09adcd0ae16d005947a9422fc56e6a9152131706ee937fa240e2ee01c66c705f",
+    "fixtures.mjs": "467efae3f4e4d49b891f5f542a751c69da9163616953876a487a288ec9c4cc74",
+    "gpu-solver.mjs": "5a277ff081de4fa6db60ebbb29989fb839e6b0d66ab22f8b377d094847bf5370",
+    "index.html": "ace6356c0b96fb6bbe17bbaa66f39af1789e1bf34821defe891881f906203fa1",
+    "package.json": "3bbd34a0cc4c1c8361dc51494eae4ffa1ea37b6078ef53465d3636753b7e9480",
+    "physical-gates.mjs": "b183713364a8f20fad94e8d46c91ba3e0651f299db2a3ae0dcfd7dacc83e74c3",
+    "probe.mjs": "ff23b37c12a69cdf61140514d9b1a07f550b02554c8200b59421102f961a3f4d",
+    "reference.mjs": "3605c990512f435db845b56ccd4d6a4b6115ab5678ead6d04b1d5991c4985355",
+    "server.mjs": "2146ba99841cf3f35be891abd7565162305a7581cf51916278cac0e0f4d4a7eb",
+    "shaders/bucket.frag.glsl": "78fe93f0bb68670d37386b79594aac1a892d1898682fe275b74ddec0f3154dcb",
+    "shaders/bucket.vert.glsl": "a32bcc038c2902d7892b1a008fe674788773c8702e97289504ca3ca7936d7aa5",
+    "shaders/fullscreen.vert.glsl": "16b2fc20c76230d3316fabe814cf1a335e693454d9e6af32a357e02966addc47",
+    "shaders/predict.frag.glsl": "2d66b3f5111d96b555a8393ecb760f959fed1935af3db2da423f93fd682d67e7",
+    "shaders/project.frag.glsl": "83787d1f2884a6e2a27144f27e731c233f9a87c6124bdffc9cb51f2dd5971909",
+    "shaders/remove.frag.glsl": "1a575f081656dbe429a004f695ea84aa34d762a93d5fdd103a7e6e019b89ff53",
+    "shaders/velocity.frag.glsl": "76d42af9b92e708912b89b69c8e989b0172e9390e02766b1465d38010c39fbeb",
+    "tests/gpu-contract-browser.mjs": "62cf2dbe3a556dd7813e126821011319ecac411e6fa38b2eaf5ef4d8d834a7f0",
+    "tests/gpu-contract-encoding.test.mjs": "450cb3cf3884a7372860db0acbc85c5dda50e762d346b1807837e5ea2621cdd3",
+    "tests/gpu-contract.mjs": "20381a99830ed1378d2b7bcd9f2607736c3b39657a3e70a8367241c9c17170e1",
+    "tests/gpu-contract.test.mjs": "324e25b0e411d873460db2dfcae46f626a383419837a5a40257b489a04c0b657",
+    "tests/physical-harness.test.mjs": "f2c96fe626247398282e4c4d914d1dbe96efd658aef004ddbca4a58a91e12f26",
+    "tests/precision-v2.test.mjs": "5a55442cd0548235f3484d618f9d9b764ae2917fe87e0c831bb668ff7aff589f",
+    "tests/reference.test.mjs": "8d3f5100a2e3117f2bd680661da324b03bffe4c16d5d24598ef6332bd5c6694e",
+    "tests/sampler-precision.test.mjs": "7bd95e4b291902b28df119bed9ae02be33988f85feb6c4f150f2f4e4603915d7"
+  }
+}

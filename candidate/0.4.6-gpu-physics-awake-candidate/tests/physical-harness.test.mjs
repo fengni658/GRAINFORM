@@ -1,0 +1,4 @@
+import test from'node:test';import assert from'node:assert/strict';import{ReferenceWorld}from'../reference.mjs';import{runLocalGPU,runAnalyticalGPU}from'../physical-gates.mjs';
+const fake=async(gl,p,opts)=>{const w=new ReferenceWorld(p,opts);return {step(){w.step();},readback(){return {particles:w.bs.map(b=>({...b})),diagnostics:{invalid:false}};},dispose(){}};};
+test('physical harness local gate accepts a perfect implementation and does not require nonexistent energy fields',async()=>{const r=await runLocalGPU(null,fake,'pair',{steps:2});assert.equal(r.passed,true);assert.equal(r.rows[0].gpuVsF64.maxPosition,0);});
+test('analytical harness checks discrete gravity and energy without using reference positions as expected',async()=>{const r=await runAnalyticalGPU(null,fake,{steps:120});assert.equal(r.passed,true);assert.ok(r.rows.every(x=>x.energyAboveInitial<=.001));});
