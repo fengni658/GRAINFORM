@@ -1,0 +1,51 @@
+{
+  "version": "0.4.5",
+  "candidate": "2026-10-08-0258Z",
+  "entry": "index.html",
+  "runtimeFiles": [
+    {
+      "path": "index.html",
+      "bytes": 11377,
+      "sha256": "2bdbc133ef4300dbf4a603fcef4ed746dae0a126f3a7491d220c2e8d2223a190"
+    },
+    {
+      "path": "style.css",
+      "bytes": 15253,
+      "sha256": "c8886c9b45a0e7c8b0c3c278fb3d1d36fbbd3ab83d520dd7009dae1be70c1873"
+    },
+    {
+      "path": "app.mjs",
+      "bytes": 27796,
+      "sha256": "d64704c26e4454c483f47431c402aec0b69442b33db67b29a81d2b594b896833"
+    },
+    {
+      "path": "simulation-worker.mjs",
+      "bytes": 6259,
+      "sha256": "83cd3cfa8a1eb7c95042ff86813321270ad0418275391ad8d4aba9dcd9624d94"
+    },
+    {
+      "path": "game.mjs",
+      "bytes": 7558,
+      "sha256": "3eac5c1cfd9ee5f7f283c0ae9a609ebc23c778b709978dc29a9b0a701009ae60"
+    },
+    {
+      "path": "legacy-preview.js",
+      "bytes": 23414,
+      "sha256": "b3982dc917baf1ef452e005e88598fe3f6caee7530a681c3f6aa384fac115430"
+    },
+    {
+      "path": "physics/fast.mjs",
+      "bytes": 11191,
+      "sha256": "1b0021155bef14ebac131d7e8ac1ed511b3d3239a14613b8c20e0eb93867b193"
+    },
+    {
+      "path": "physics/adaptive.mjs",
+      "bytes": 12294,
+      "sha256": "3020f9e96a80564f6c719a2e91ca4546f061cc66d7d4350041ac82f510e53f23"
+    }
+  ],
+  "defaultSolver": "baseline",
+  "optionalSolver": "?solver=adaptive",
+  "browserVerification": "Pending independent Codex browser QA",
+  "notes": "Do not copy evidence or tests into production route. Preserve old routes."
+}
