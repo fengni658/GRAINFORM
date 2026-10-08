@@ -1,0 +1,18 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GRAINFORM GPU 物理完成成本检查</title><style>body{font:16px system-ui;max-width:850px;margin:32px auto;padding:0 18px;background:#131622;color:#f0f2fa}button,select{font:inherit;padding:8px;margin:6px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#202637;padding:16px}canvas{display:none}</style>
+<h1>GPU 物理完成成本检查</h1><p>默认不执行；点击按钮，或带有明确有效 run=1 测试参数的地址，只执行一轮。每次最多 12 个固定物理步；结果包括指令提交、驱动排队和等待完成，不是纯 GPU 时间或游戏帧率。当前没有休眠或完整游戏。</p>
+<label>场景<select id="scene"><option value="144">144 粒</option><option value="4056">真实游戏保存态 4056 粒（全部唤醒）</option></select></label>
+<label>投影轮数<select id="passes"><option>64</option><option>32</option></select></label><button id="run">运行一次有界检查</button><p id="status">尚未运行</p><canvas id="gpu" width="64" height="64"></canvas><pre id="result">无结果</pre>
+<script type="module">
+import {createGPUWorld} from '../gpu-solver.mjs';
+import {fixture} from '../fixtures.mjs';
+import {runCompletedCost} from '../scale/gates.mjs';
+const button=document.querySelector('#run'),status=document.querySelector('#status'),out=document.querySelector('#result');
+window.__GRAINFORM_HARDWARE_REPORT={status:'not-run',runs:[]};
+async function runOnce(){if(button.disabled)return;button.disabled=true;status.textContent='运行中，请等待本次有界检查结束';const scene=document.querySelector('#scene').value,passes=Number(document.querySelector('#passes').value);let report;
+try{const gl=document.querySelector('#gpu').getContext('webgl2',{antialias:false});if(!gl)throw Error('WebGL2 不可用');const debug=gl.getExtension('WEBGL_debug_renderer_info');const renderer=debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):'unavailable';const vendor=debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):'unavailable';const particles=scene==='4056'?(await(await fetch('../scale/fixtures/actual-4056-t8.json')).json()).particles:fixture('crowded');const result=await runCompletedCost(gl,createGPUWorld,particles,{name:scene==='4056'?'actual4056-all-awake':'crowded144',passes,steps:12,wallBudgetMs:60000,stepBudgetMs:5000});report={status:'completed',timestamp:new Date().toISOString(),userAgent:navigator.userAgent,renderer,vendor,hardwareIdentityVerified:false,visibility:document.visibilityState,scope:'Physics completion cost only. No display FPS, sleep or whole-game certification.',result};status.textContent=result.qualityPassed?'完成；末态几何通过，详情见报告':'完成；质量检查未通过';}catch(error){report={status:'failed-or-incomplete',timestamp:new Date().toISOString(),message:String(error),scene,passes};status.textContent='检查失败或未完成，不能视为通过';}
+window.__GRAINFORM_HARDWARE_REPORT.status=report.status;window.__GRAINFORM_HARDWARE_REPORT.runs.push(report);out.textContent=JSON.stringify(window.__GRAINFORM_HARDWARE_REPORT,null,2);button.disabled=false;}
+button.addEventListener('click',runOnce);
+const query=new URLSearchParams(location.search);
+const explicitRun=query.getAll('run').length===1&&query.get('run')==='1'&&query.getAll('scene').length===1&&['144','4056'].includes(query.get('scene'))&&query.getAll('passes').length===1&&['32','64'].includes(query.get('passes'));
+if(explicitRun){document.querySelector('#scene').value=query.get('scene');document.querySelector('#passes').value=query.get('passes');void runOnce();}else if(query.has('run')){status.textContent='启动参数无效，本页未运行测试';}
+</script></html>

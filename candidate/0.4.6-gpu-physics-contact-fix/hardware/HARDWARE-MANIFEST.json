@@ -1,0 +1,15 @@
+{
+  "scope": "Explicit bounded physics check; default URL never runs",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 3814,
+      "sha256": "157273d526143e97e3d09880c40e9713769c14822dd2f324fa7c6325f965cfc5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3748,
+      "sha256": "8886fe756a148a929476b2c1c411b76c5cd063284896515d69aa83244a0cfbdc"
+    }
+  ]
+}
