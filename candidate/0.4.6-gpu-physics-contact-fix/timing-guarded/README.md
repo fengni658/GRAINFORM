@@ -1,0 +1,7 @@
+# Visibility-guarded bounded timing
+
+Deploy as `timing-guarded/` beside unchanged verified core and scale. Explicit URL: index.html?run=1&scene=144&passes=32. Default URL never runs. Valid explicit request while hidden waits for the first naturally visible event; it runs at most once per page lifetime. No retries. If visibility becomes hidden during the run, mark timing invalid and stop further groups. Already-submitted work receives bounded fence cleanup; hiding cannot cancel GPU commands already queued. It is not a workaround for background throttling.
+
+Same19-step plan:1 warmup,4 zero-work fences,12-step batch,3 groups of2;5s/group and60s total bounds. Reports include visibility event history, timer delays and completion polling. If EXT_disjoint_timer_query_webgl2 is unavailable, GPU elapsed is explicitly unsupported/null. If available and query results are ready, report hardware timer elapsed separately. Any observed disjoint invalidates all recorded query elapsed values. Completion cost remains submission+queue+scheduler, never pure GPU time. Query availability does not establish hardware identity or whole-game FPS.
+
+CPU tests/mock checks do not replace actual browser execution. No core/source, material, radius, particle count, iterations or overflow guard changed. Core manifest991c1d0af503ea4d3bec0f7eac4315fa2b0f3a8a39dc7dfd83fb6627acc9f830;scale747defb3d4499c133a9c2202640f5801b4e83ce73f52200257689f20cc0899f1.

@@ -1,0 +1,25 @@
+{
+  "scope": "Visibility-guarded bounded timing; no automatic retry",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1440,
+      "sha256": "72926c6f53aaca2fb384c801b8408eea3449a675ce69c05994d62dffc908ff12"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4285,
+      "sha256": "5d2fac0fab68b1ee1c1349a65f6d04199caa814f9f716c9405a3b5982c3640cd"
+    },
+    {
+      "path": "timing.mjs",
+      "bytes": 4342,
+      "sha256": "14ce9dc819a5aa7974a66f682f5abc0bf7f555523215143984baf69fcf53d782"
+    },
+    {
+      "path": "timing.test.mjs",
+      "bytes": 2787,
+      "sha256": "5090ab38947bd6218591f9abcaa0d7a15940b2a4cf2da0ab04165685995d1626"
+    }
+  ]
+}
