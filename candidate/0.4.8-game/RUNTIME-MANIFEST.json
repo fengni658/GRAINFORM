@@ -1,0 +1,44 @@
+{
+  "version": "0.4.8",
+  "candidate": "contact-compaction-grid-v3",
+  "entry": "index.html",
+  "scope": "Private revision2; dense2s and frame-spike gates remain open",
+  "runtimeFiles": [
+    {
+      "path": "index.html",
+      "bytes": 11517,
+      "sha256": "2ab352b8078bfce9cb1ee37982f5dd3cbfe4ae4913dbf98af3c26133ab08adb5"
+    },
+    {
+      "path": "style.css",
+      "bytes": 15512,
+      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9"
+    },
+    {
+      "path": "app.mjs",
+      "bytes": 42121,
+      "sha256": "6678b477d098dd31ea9cd7ff98f541c200ad1ba420c7c67437173fa620d8a87b"
+    },
+    {
+      "path": "simulation-worker.mjs",
+      "bytes": 10712,
+      "sha256": "56475220f8e16ff98907b812d3608747328d029acc690e7b4a84df4f0431e8ca"
+    },
+    {
+      "path": "game.mjs",
+      "bytes": 10239,
+      "sha256": "b814afabdb92729dda076bf9d98131ba796f83fd836e1e8d248b9a36de53fe7c"
+    },
+    {
+      "path": "grid-world.mjs",
+      "bytes": 2978,
+      "sha256": "525a98f78aa732fbef6d8f51b5aa249a522840d4bc6828cf700fa98eacb6c9f6"
+    },
+    {
+      "path": "local-sand.mjs",
+      "bytes": 15600,
+      "sha256": "e1307b06b5223b7507fc9721593751c6e33e0230e8396f517d33742df6f55f4b"
+    }
+  ],
+  "revision": 2
+}
