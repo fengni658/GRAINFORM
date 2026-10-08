@@ -1,0 +1,11 @@
+{
+  "name": "grainform-gpu-physics-local-continuous-v2",
+  "version": "0.4.6",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "reference": "node --test tests/precision-v2.test.mjs"
+  }
+}
