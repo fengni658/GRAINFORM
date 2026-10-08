@@ -1,0 +1,40 @@
+{
+  "scope": "renderer-only0.4.6 research probe",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 726,
+      "sha256": "10e3bf953d87708b0b53430fb838bb06d34ad8a885cc158ddbd3c342f25147ba"
+    },
+    {
+      "path": "fixtures/replay-4056.json",
+      "bytes": 324456,
+      "sha256": "e26d1983728e3e448b7e08cc5a2338dfff896303f2139809bb38b03be0f68bbb"
+    },
+    {
+      "path": "index.html",
+      "bytes": 7076,
+      "sha256": "7fcdce6d5e3064341947c573c160226966f0cb1f4f8060aeab251e7e4302c3c2"
+    },
+    {
+      "path": "package.json",
+      "bytes": 183,
+      "sha256": "fb9a9dced530d2fadd0410579e0926b526f3132bfb024a7c967cfa312a3e2a8b"
+    },
+    {
+      "path": "renderer-gpu.mjs",
+      "bytes": 17738,
+      "sha256": "56c195d3395e4f024a6a8c57c03b88d4c977ecddeeb3efb0141f6602baf07edd"
+    },
+    {
+      "path": "server.mjs",
+      "bytes": 1941,
+      "sha256": "729d86dd804f2dc2cac878d7e5370e5ff880e4db9186c6d4bfea5c02bf548535"
+    },
+    {
+      "path": "tests/render-gpu.test.mjs",
+      "bytes": 13999,
+      "sha256": "8001df18657b2e4b4c6b3436719c518b9837c3845d92bb902fb378a5c81f43ee"
+    }
+  ]
+}
