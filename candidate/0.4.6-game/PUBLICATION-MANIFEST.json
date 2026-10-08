@@ -1,0 +1,103 @@
+{
+  "version": "0.4.6",
+  "scope": "Reduced public reproduction candidate; full private source archive remains separate",
+  "totalBytes": 174411,
+  "excludedRegenerableSnapshots": [
+    "evidence-grid/six-blocks.json",
+    "evidence-grid/dense-eighteen-blocks.json"
+  ],
+  "reproduction": "npm test; npm run verify regenerates the omitted snapshots",
+  "authority": "This manifest is authoritative for this reduced transfer. SOURCE-MANIFEST.json is deliberately excluded because it describes the full private archive.",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 11517,
+      "sha256": "c757e374b0bef4f6b1f0f1c543c1a9e5847408779c82c1b7b6672b6c8c86c494"
+    },
+    {
+      "path": "style.css",
+      "bytes": 15512,
+      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9"
+    },
+    {
+      "path": "app.mjs",
+      "bytes": 41395,
+      "sha256": "bcf4a7181d6bf340623e4a659fb139622460896709c69855885858ff4cde463b"
+    },
+    {
+      "path": "simulation-worker.mjs",
+      "bytes": 10008,
+      "sha256": "dbb73620ed0af2e67a18d874b4ef0a0292f0f9953790228e305122ba6b071cc8"
+    },
+    {
+      "path": "game.mjs",
+      "bytes": 9869,
+      "sha256": "f3a15a89e25d794e487cccb0f635179a33e7223561b52baff8209c6242b106b2"
+    },
+    {
+      "path": "grid-world.mjs",
+      "bytes": 2978,
+      "sha256": "525a98f78aa732fbef6d8f51b5aa249a522840d4bc6828cf700fa98eacb6c9f6"
+    },
+    {
+      "path": "local-sand.mjs",
+      "bytes": 13303,
+      "sha256": "dafd04ff81bb02d3f98b2d91e6bc8306c33629ff81cf53caa8f541e3718fd75f"
+    },
+    {
+      "path": "package.json",
+      "bytes": 239,
+      "sha256": "48591759f50f9e2c21a407a8a03f69c0b411e236ee61733ec0fddd9871916e8e"
+    },
+    {
+      "path": "server.mjs",
+      "bytes": 2195,
+      "sha256": "d2b3151d6df28a54cd56290cdf03ef95b0bdb664f4956da9d83857b610320049"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2563,
+      "sha256": "411dc08371e97bb153ca4edb83328edf2849b0cc3b754ce20fdbf7f771a8bf03"
+    },
+    {
+      "path": "CLOUD-VERIFY.md",
+      "bytes": 3285,
+      "sha256": "cebb32c443586ee527e56c49f7d783051efc1c91ab6fb8058d7ab2a53e9e9cd8"
+    },
+    {
+      "path": "tests/grid-game.test.mjs",
+      "bytes": 13874,
+      "sha256": "be4b8982e9ac2127e82dad0a5c0e3fcce47bb9aa612fdf40162b6f3275a444b1"
+    },
+    {
+      "path": "tests/grid-replay.mjs",
+      "bytes": 2638,
+      "sha256": "2f1c0f81a5e1b6cb5486409ce81b0a8686653b743edefa14b50ac84347983ecf"
+    },
+    {
+      "path": "tests/ui-grid-boot.test.mjs",
+      "bytes": 6838,
+      "sha256": "dbadcb55c81b717a3cacb7699babe5a8f39861fc73f2d5c5cb48e9954718ca90"
+    },
+    {
+      "path": "tests/ui-grid-clock.test.mjs",
+      "bytes": 9366,
+      "sha256": "6a8f115908714956cfa311bdb07250cb868e84518e4ff65aeb7af04fc601e7d3"
+    },
+    {
+      "path": "tests/ui-grid-renderer.test.mjs",
+      "bytes": 7442,
+      "sha256": "c50e4449a37f6bc4619d0336e7aa5190a6e68c37cb6fb5eee851c1b65c1943f4"
+    },
+    {
+      "path": "evidence-grid/replay-summary.json",
+      "bytes": 20184,
+      "sha256": "fc5a2833fcd8fe5784b80c959871855ed06a4aeaf593cf3c1b4b6846e0086168"
+    },
+    {
+      "path": "RUNTIME-MANIFEST.json",
+      "bytes": 1205,
+      "sha256": "3169462f5640b93087982d5592444ebf7bdbe90cbb141673a27eb5547f7f3d6b"
+    }
+  ]
+}

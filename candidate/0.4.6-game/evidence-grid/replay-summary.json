@@ -1,0 +1,997 @@
+{
+  "sourceHashes": {
+    "game.mjs": "f3a15a89e25d794e487cccb0f635179a33e7223561b52baff8209c6242b106b2",
+    "grid-world.mjs": "525a98f78aa732fbef6d8f51b5aa249a522840d4bc6828cf700fa98eacb6c9f6",
+    "local-sand.mjs": "dafd04ff81bb02d3f98b2d91e6bc8306c33629ff81cf53caa8f541e3718fd75f"
+  },
+  "summaries": [
+    {
+      "name": "six-blocks",
+      "scope": "Actual game move/rotate/drop/fixed-step inputs; Node throughput only, not browser FPS",
+      "requestedDrops": 6,
+      "inputs": [
+        {
+          "tick": 0,
+          "move": -100,
+          "rotate": false,
+          "color": 1,
+          "shape": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 0
+        },
+        {
+          "tick": 120,
+          "move": 65,
+          "rotate": true,
+          "color": 4,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 173,
+          "y": 27
+        },
+        {
+          "tick": 240,
+          "move": -25,
+          "rotate": false,
+          "color": 2,
+          "shape": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 83,
+          "y": 27
+        },
+        {
+          "tick": 360,
+          "move": 100,
+          "rotate": true,
+          "color": 3,
+          "shape": [
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 188,
+          "y": 28
+        },
+        {
+          "tick": 480,
+          "move": -100,
+          "rotate": false,
+          "color": 4,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 28
+        },
+        {
+          "tick": 600,
+          "move": 30,
+          "rotate": true,
+          "color": 2,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 138,
+          "y": 28
+        }
+      ],
+      "actualPieces": 6,
+      "added": 4056,
+      "rawCleared": 0,
+      "live": 4056,
+      "active": 75,
+      "gameTick": 960,
+      "state": "playing",
+      "stateHash": "ab54bb9ce73c86483d7f9966a5a5da37783463b9de4440d28d7bead897de85bb",
+      "audits": [
+        {
+          "tick": 120,
+          "passed": true,
+          "aliveCount": 676,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 2797
+        },
+        {
+          "tick": 240,
+          "passed": true,
+          "aliveCount": 1352,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 4967
+        },
+        {
+          "tick": 360,
+          "passed": true,
+          "aliveCount": 2028,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 8032
+        },
+        {
+          "tick": 480,
+          "passed": true,
+          "aliveCount": 2704,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 10714
+        },
+        {
+          "tick": 600,
+          "passed": true,
+          "aliveCount": 3380,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 13688
+        },
+        {
+          "tick": 720,
+          "passed": true,
+          "aliveCount": 4056,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 17202
+        },
+        {
+          "tick": 840,
+          "passed": true,
+          "aliveCount": 4056,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 18333
+        },
+        {
+          "tick": 960,
+          "passed": true,
+          "aliveCount": 4056,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 18617
+        }
+      ],
+      "timing": {
+        "firstStepMs": 2.487659999999991,
+        "meanStepMs": 0.4154680072916669,
+        "p95Ms": 1.4165009999999967,
+        "p99Ms": 3.126376999999991,
+        "maxMs": 4.073912000000007,
+        "totalObservedWallMs": 476.756399,
+        "simulatedSeconds": 8
+      }
+    },
+    {
+      "name": "dense-eighteen-blocks",
+      "scope": "Actual game move/rotate/drop/fixed-step inputs; Node throughput only, not browser FPS",
+      "requestedDrops": 18,
+      "inputs": [
+        {
+          "tick": 0,
+          "move": -100,
+          "rotate": false,
+          "color": 1,
+          "shape": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 0
+        },
+        {
+          "tick": 120,
+          "move": 65,
+          "rotate": true,
+          "color": 4,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 173,
+          "y": 27
+        },
+        {
+          "tick": 240,
+          "move": -25,
+          "rotate": false,
+          "color": 2,
+          "shape": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 83,
+          "y": 27
+        },
+        {
+          "tick": 360,
+          "move": 100,
+          "rotate": true,
+          "color": 3,
+          "shape": [
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 188,
+          "y": 28
+        },
+        {
+          "tick": 480,
+          "move": -100,
+          "rotate": false,
+          "color": 4,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 28
+        },
+        {
+          "tick": 600,
+          "move": 30,
+          "rotate": true,
+          "color": 2,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 138,
+          "y": 28
+        },
+        {
+          "tick": 720,
+          "move": -100,
+          "rotate": false,
+          "color": 2,
+          "shape": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 28
+        },
+        {
+          "tick": 840,
+          "move": 65,
+          "rotate": true,
+          "color": 1,
+          "shape": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "x": 161,
+          "y": 28
+        },
+        {
+          "tick": 960,
+          "move": -25,
+          "rotate": false,
+          "color": 1,
+          "shape": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 83,
+          "y": 29
+        },
+        {
+          "tick": 1080,
+          "move": 100,
+          "rotate": true,
+          "color": 4,
+          "shape": [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 188,
+          "y": 29
+        },
+        {
+          "tick": 1200,
+          "move": -100,
+          "rotate": false,
+          "color": 1,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 29
+        },
+        {
+          "tick": 1320,
+          "move": 30,
+          "rotate": true,
+          "color": 2,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "x": 150,
+          "y": 29
+        },
+        {
+          "tick": 1440,
+          "move": -100,
+          "rotate": false,
+          "color": 4,
+          "shape": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 30
+        },
+        {
+          "tick": 1560,
+          "move": 65,
+          "rotate": true,
+          "color": 1,
+          "shape": [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "x": 173,
+          "y": 30
+        },
+        {
+          "tick": 1680,
+          "move": -25,
+          "rotate": false,
+          "color": 3,
+          "shape": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "x": 83,
+          "y": 30
+        },
+        {
+          "tick": 1800,
+          "move": 100,
+          "rotate": true,
+          "color": 1,
+          "shape": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "x": 188,
+          "y": 30
+        },
+        {
+          "tick": 1920,
+          "move": -100,
+          "rotate": false,
+          "color": 2,
+          "shape": [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "x": 28,
+          "y": 31
+        },
+        {
+          "tick": 2040,
+          "move": 30,
+          "rotate": true,
+          "color": 4,
+          "shape": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "x": 138,
+          "y": 31
+        }
+      ],
+      "actualPieces": 18,
+      "added": 12168,
+      "rawCleared": 0,
+      "live": 12168,
+      "active": 1620,
+      "gameTick": 2160,
+      "state": "playing",
+      "stateHash": "17a31a96e63c109aec6c1c05ebf4b39e1728c2bee33fe004244a1a5a928e3a0e",
+      "audits": [
+        {
+          "tick": 120,
+          "passed": true,
+          "aliveCount": 676,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 2797
+        },
+        {
+          "tick": 240,
+          "passed": true,
+          "aliveCount": 1352,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 4967
+        },
+        {
+          "tick": 360,
+          "passed": true,
+          "aliveCount": 2028,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 8032
+        },
+        {
+          "tick": 480,
+          "passed": true,
+          "aliveCount": 2704,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 10714
+        },
+        {
+          "tick": 600,
+          "passed": true,
+          "aliveCount": 3380,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 13688
+        },
+        {
+          "tick": 720,
+          "passed": true,
+          "aliveCount": 4056,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 17202
+        },
+        {
+          "tick": 840,
+          "passed": true,
+          "aliveCount": 4732,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 20234
+        },
+        {
+          "tick": 960,
+          "passed": true,
+          "aliveCount": 5408,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 23137
+        },
+        {
+          "tick": 1080,
+          "passed": true,
+          "aliveCount": 6084,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 25482
+        },
+        {
+          "tick": 1200,
+          "passed": true,
+          "aliveCount": 6760,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 28674
+        },
+        {
+          "tick": 1320,
+          "passed": true,
+          "aliveCount": 7436,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 31218
+        },
+        {
+          "tick": 1440,
+          "passed": true,
+          "aliveCount": 8112,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 34454
+        },
+        {
+          "tick": 1560,
+          "passed": true,
+          "aliveCount": 8788,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 37300
+        },
+        {
+          "tick": 1680,
+          "passed": true,
+          "aliveCount": 9464,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 40308
+        },
+        {
+          "tick": 1800,
+          "passed": true,
+          "aliveCount": 10140,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 42843
+        },
+        {
+          "tick": 1920,
+          "passed": true,
+          "aliveCount": 10816,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 44809
+        },
+        {
+          "tick": 2040,
+          "passed": true,
+          "aliveCount": 11492,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 47401
+        },
+        {
+          "tick": 2160,
+          "passed": true,
+          "aliveCount": 12168,
+          "finite": true,
+          "uniqueIds": true,
+          "uniqueSlots": true,
+          "maxOverlap": 0,
+          "wallPenetration": 0,
+          "overlapPairs": 0,
+          "pairChecks": 51685
+        }
+      ],
+      "timing": {
+        "firstStepMs": 0.13276699999994435,
+        "meanStepMs": 1.006667282407409,
+        "p95Ms": 2.377886999999646,
+        "p99Ms": 10.428667000000132,
+        "maxMs": 13.062519000000066,
+        "totalObservedWallMs": 2422.649688,
+        "simulatedSeconds": 18
+      }
+    }
+  ]
+}
