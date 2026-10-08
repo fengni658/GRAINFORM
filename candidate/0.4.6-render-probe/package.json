@@ -1,1 +1,10 @@
-{"name": "grainform-046-render-probe", "version": "0.4.6", "private": true, "type": "module", "scripts": {"start": "node server.mjs", "test": "node --test tests/render-gpu.test.mjs"}}
+{
+  "name": "grainform-046-render-probe",
+  "version": "0.4.6",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

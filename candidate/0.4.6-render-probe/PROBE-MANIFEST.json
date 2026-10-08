@@ -13,13 +13,13 @@
     },
     {
       "path": "index.html",
-      "bytes": 7076,
-      "sha256": "7fcdce6d5e3064341947c573c160226966f0cb1f4f8060aeab251e7e4302c3c2"
+      "bytes": 9634,
+      "sha256": "00cacd3cc6299a3506942d36875efa743343220e6bef62c743d912078aca5998"
     },
     {
       "path": "package.json",
-      "bytes": 183,
-      "sha256": "fb9a9dced530d2fadd0410579e0926b526f3132bfb024a7c967cfa312a3e2a8b"
+      "bytes": 199,
+      "sha256": "3281ea037a77bf1ac213697d1119873aadbe24e9b5f4eb23ff56ad9c2baa8926"
     },
     {
       "path": "renderer-gpu.mjs",
@@ -35,6 +35,11 @@
       "path": "tests/render-gpu.test.mjs",
       "bytes": 13999,
       "sha256": "8001df18657b2e4b4c6b3436719c518b9837c3845d92bb902fb378a5c81f43ee"
+    },
+    {
+      "path": "tests/render-probe.test.mjs",
+      "bytes": 5874,
+      "sha256": "ddd7c3d38930ec4ddf5d98aaa0a3cc7a1861e96c771eab0ebae5932b27a05de2"
     }
   ]
 }
