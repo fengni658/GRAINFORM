@@ -2,7 +2,7 @@
   "version": "0.4.8",
   "candidate": "contact-compaction-grid-v3",
   "entry": "index.html",
-  "scope": "Private revision2; dense2s and frame-spike gates remain open",
+  "scope": "Private playable revision3; reduced full-scan allocation, dense/render targets and historical extreme attribution remain open",
   "runtimeFiles": [
     {
       "path": "index.html",
@@ -36,9 +36,9 @@
     },
     {
       "path": "local-sand.mjs",
-      "bytes": 15600,
-      "sha256": "e1307b06b5223b7507fc9721593751c6e33e0230e8396f517d33742df6f55f4b"
+      "bytes": 15859,
+      "sha256": "a47100264da8563e866d03c4728565ea27e8ec849cacdb5563ffd1a6ff591d88"
     }
   ],
-  "revision": 2
+  "revision": 3
 }

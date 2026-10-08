@@ -2,7 +2,7 @@
   "sourceHashes": {
     "game.mjs": "b814afabdb92729dda076bf9d98131ba796f83fd836e1e8d248b9a36de53fe7c",
     "grid-world.mjs": "525a98f78aa732fbef6d8f51b5aa249a522840d4bc6828cf700fa98eacb6c9f6",
-    "local-sand.mjs": "e1307b06b5223b7507fc9721593751c6e33e0230e8396f517d33742df6f55f4b"
+    "local-sand.mjs": "a47100264da8563e866d03c4728565ea27e8ec849cacdb5563ffd1a6ff591d88"
   },
   "summaries": [
     {
@@ -274,12 +274,12 @@
         }
       ],
       "timing": {
-        "firstStepMs": 5.340944,
-        "meanStepMs": 0.2797879416666664,
-        "p95Ms": 0.8515500000000031,
-        "p99Ms": 3.1392420000000243,
-        "maxMs": 5.340944,
-        "totalObservedWallMs": 361.291229,
+        "firstStepMs": 5.836238999999999,
+        "meanStepMs": 0.23049323854166623,
+        "p95Ms": 0.7664230000000032,
+        "p99Ms": 1.5921050000000037,
+        "maxMs": 5.836238999999999,
+        "totalObservedWallMs": 310.455367,
         "simulatedSeconds": 8
       }
     },
@@ -984,12 +984,12 @@
         }
       ],
       "timing": {
-        "firstStepMs": 0.47105899999996836,
-        "meanStepMs": 0.7224498351851841,
-        "p95Ms": 2.268752000000063,
-        "p99Ms": 9.669063000000051,
-        "maxMs": 12.71297299999992,
-        "totalObservedWallMs": 1833.12657,
+        "firstStepMs": 0.42767300000002706,
+        "meanStepMs": 0.6639842499999994,
+        "p95Ms": 2.313810000000103,
+        "p99Ms": 7.518888999999945,
+        "maxMs": 11.175799999999981,
+        "totalObservedWallMs": 1766.0876510000003,
         "simulatedSeconds": 18
       }
     }

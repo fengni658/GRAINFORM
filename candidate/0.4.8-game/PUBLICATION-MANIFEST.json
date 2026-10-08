@@ -1,25 +1,25 @@
 {
   "version": "0.4.8",
-  "revision": 2,
-  "baselineCommit": "71a0bd103d78c5fc7ef95e03a09e9069bb31a3f4",
-  "scope": "Reduced source-only public test candidate for further cloud QA; not a released game or commercial approval",
+  "revision": 3,
+  "parentCommit": "a62ae3a75161fc2a67b4463aa0c04a43b64bf014",
+  "scope": "Reduced source-only public test candidate for independent cloud QA; performance gates remain open",
   "manifestSelfExcluded": true,
-  "totalBytes": 185504,
+  "totalBytes": 187844,
   "files": [
     {
       "path": "CLOUD-VERIFY.md",
-      "bytes": 2724,
-      "sha256": "210bbfcc82116e8bf9933cdf275f3295abd369c390ce680d9956b3235e365b0a"
+      "bytes": 2551,
+      "sha256": "64deb5c47fc97754813d78db2a58a8a8730843b43939f317b8ffeced31966f03"
     },
     {
       "path": "README.md",
-      "bytes": 2867,
-      "sha256": "bd1f45a1c758a61b655d63e526cf34c8c2e0f5bd17993dee720cb89fdb80650d"
+      "bytes": 3553,
+      "sha256": "af956545000421ba41d42e822a50fb9f399941eb3ed03068ed3545f5c1601dcc"
     },
     {
       "path": "RUNTIME-MANIFEST.json",
-      "bytes": 1245,
-      "sha256": "40605404be01a8b2f22770244613801aa06693de940b29fb929f05986da1d93c"
+      "bytes": 1310,
+      "sha256": "9199a5cbb3f3a81c406362526e536c25ec0a103291f40b1b28506865c4debe4c"
     },
     {
       "path": "app.mjs",
@@ -28,8 +28,8 @@
     },
     {
       "path": "evidence-grid/replay-summary.json",
-      "bytes": 20163,
-      "sha256": "38fda7d954bedd15faa2fbaefb6ede5ef3f8b238b716c4a2ded6c56a8485ed95"
+      "bytes": 20191,
+      "sha256": "251322a2df9a01fd9491c4dbfd88ae93bf9e518f8a6ff52b915022a519cbf286"
     },
     {
       "path": "game.mjs",
@@ -48,8 +48,8 @@
     },
     {
       "path": "local-sand.mjs",
-      "bytes": 15600,
-      "sha256": "e1307b06b5223b7507fc9721593751c6e33e0230e8396f517d33742df6f55f4b"
+      "bytes": 15859,
+      "sha256": "a47100264da8563e866d03c4728565ea27e8ec849cacdb5563ffd1a6ff591d88"
     },
     {
       "path": "package.json",
@@ -88,8 +88,8 @@
     },
     {
       "path": "tests/settling.test.mjs",
-      "bytes": 2787,
-      "sha256": "01b6695265c7702d839c0faf6ff806dad3e5b68b829a546d830d6531d1d9ba60"
+      "bytes": 4262,
+      "sha256": "cbd7b9b9011e0b512ee38567c2d0281637863e0e04612d23de409c19148f0699"
     },
     {
       "path": "tests/ui-grid-boot.test.mjs",

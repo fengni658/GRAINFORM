@@ -120,11 +120,14 @@ export class LocalSandWorld{
  snapshot({includeDead=false}={}){const particles=[];for(const b of this._records.values())if(b.alive||includeDead)particles.push(snapshotParticle(b));return {modelKind:SAND_CONTRACT.modelKind,interpolation:'snap-only',tick:this.tick,time:this.time,particles,stats:this.stats()};}
  connections(){
   if(this._connectionCache)return this._connectionCache;const seen=new Set(),components=[];
-  for(const b of this._records.values()){if(!b.alive||seen.has(b.id))continue;const queue=[b.id],ids=[];seen.add(b.id);let touchesLeft=false,touchesRight=false;
-   for(let i=0;i<queue.length;i++){const q=this._records.get(queue[i]);ids.push(q.id);touchesLeft||=Math.abs(q.x-(LEFT+R))<1e-8;touchesRight||=Math.abs(q.x-(RIGHT-R))<1e-8;
-    for(const [r,c]of adjacent(q.row,q.col)){if(!this._legal(r,c))continue;const id=this._occupied.get(key(r,c));if(id===undefined||seen.has(id))continue;const neighbor=this._records.get(id);if(neighbor.color===b.color){seen.add(id);queue.push(id);}}
+  for(const b of this._records.values()){if(!b.alive||seen.has(b.id))continue;const queue=[b.id];seen.add(b.id);let touchesLeft=false,touchesRight=false;
+   for(let i=0;i<queue.length;i++){const q=this._records.get(queue[i]);touchesLeft||=Math.abs(q.x-(LEFT+R))<1e-8;touchesRight||=Math.abs(q.x-(RIGHT-R))<1e-8;
+    // Same six neighbors and BFS order, without allocating seven arrays per
+    // visited grain. Records contain legal integer slots, so bounds suffice.
+    const row=q.row,col=q.col,shift=(row&1)?0:-1;
+    for(let n=0;n<6;n++){const r=n<2?row:n<4?row-1:row+1,c=n<2?col+(n===0?-1:1):col+shift+(n&1);if(r<0||r>=this.maxRows||c<0||c>=COLS-(r&1))continue;const id=this._occupied.get(key(r,c));if(id===undefined||seen.has(id))continue;const neighbor=this._records.get(id);if(neighbor.color===b.color){seen.add(id);queue.push(id);}}
    }
-   components.push(Object.freeze({color:b.color,ids:Object.freeze(ids),touchesLeft,touchesRight,crosses:touchesLeft&&touchesRight}));
+   components.push(Object.freeze({color:b.color,ids:Object.freeze(queue),touchesLeft,touchesRight,crosses:touchesLeft&&touchesRight}));
   }
   const spanningComponents=components.filter(c=>c.crosses);return this._connectionCache=Object.freeze({components:Object.freeze(components),spanningComponents:Object.freeze(spanningComponents),crossingColors:Object.freeze([...new Set(spanningComponents.map(c=>c.color))]),revision:this._revision});
  }
