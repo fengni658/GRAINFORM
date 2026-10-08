@@ -1,0 +1,20 @@
+{
+  "scope": "Bounded completion throughput plus scheduler control",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1798,
+      "sha256": "21fb32d50df40f75d4e2e738d2c4513667b1a84ffa4d36d95c13798721e69b50"
+    },
+    {
+      "path": "index.html",
+      "bytes": 3764,
+      "sha256": "7f0c3b3d406785b3e9651308abbbc1a538bd45bda77aa3350edfe35310ec1fdc"
+    },
+    {
+      "path": "timing.mjs",
+      "bytes": 2736,
+      "sha256": "161009ada9a4bbc10ab4075a0302b4e20609c6e4cd3d45f3a4104cd551958774"
+    }
+  ]
+}
