@@ -1,0 +1,12 @@
+{
+  "name": "grainform",
+  "version": "0.4.7",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/grid-game.test.mjs tests/contact-gravity.test.mjs tests/ui-grid*.test.mjs",
+    "verify": "node tests/grid-replay.mjs"
+  }
+}
