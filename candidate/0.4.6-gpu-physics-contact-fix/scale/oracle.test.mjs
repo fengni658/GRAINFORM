@@ -1,0 +1,3 @@
+import test from'node:test';import assert from'node:assert/strict';import{auditState}from'./oracle.mjs';
+test('independent sweep catches contact across arbitrary boundaries and ignores far pairs',()=>{const p=[{id:0,x:100,y:300,vx:0,vy:0,color:1},{id:1,x:101.749,y:300,vx:0,vy:0,color:2},{id:2,x:250,y:300,vx:0,vy:0,color:3}];const a=auditState(p);assert.ok(Math.abs(a.overlap-.001)<1e-10);p[1].x=101.7;assert.equal(auditState(p).geometryPassed,false);});
+test('NaN and duplicate identities cannot pass',()=>{const p=[{id:1,x:100,y:300,vx:0,vy:0,color:1},{id:1,x:110,y:300,vx:0,vy:0,color:1}];assert.equal(auditState(p).geometryPassed,false);p[1].id=2;p[1].vy=NaN;assert.equal(auditState(p).geometryPassed,false);});
