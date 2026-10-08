@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>4056 Grid AB/BA · Bounded</title>
+<style>body{margin:0;background:#111a20;color:#e3edf0;font:15px/1.55 system-ui}main{max-width:1040px;margin:34px auto;padding:0 24px}h1{font-size:26px;letter-spacing:-.5px}.notice{padding:16px;background:#233039;border-left:3px solid #d7b260}button{margin:22px 0;padding:12px 18px;font:inherit;background:#275f61;color:#f3ffff;border:1px solid #579897;border-radius:7px;cursor:pointer}button:disabled{opacity:.5;cursor:default}pre{background:#0b1217;border:1px solid #2a424e;border-radius:8px;padding:18px;white-space:pre-wrap;overflow-wrap:anywhere}canvas{display:none}small,p{color:#afc2cb}</style>
+<main><h1>实际 4056 粒 · 桶构建 AB/BA</h1><p>一次真实物理 step 观察相邻预测锚点。两组顺序：原 17 peel → 完整 rank 路径；完整 rank 路径 → 原 17 peel。</p>
+<div class="notice">A 使用已驻 GPU 的新锚点；B 当前 API 另有 CPU guard、读回和上传。上传单列但仍计入 B 总成本。双方最终 oracle 单列；完成时间由真实读回同步。此项不验证几何/游戏质量，也不把软件渲染结果外推到硬件。</div>
+<button id="run">显式运行一次有界 AB/BA</button><p><small>默认不运行；最多 1 次准备 step + 4 次计量桶构建。每组 5 秒、总 60 秒软限，超限后不再提交样本。当前页面不会自动重试或扩展压力。</small></p>
+<pre id="status">准备检查 WebGL2；尚未执行。</pre><canvas id="compute" width="16" height="16"></canvas></main><script type="module" src="./probe.mjs"></script></html>

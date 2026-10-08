@@ -1,0 +1,7 @@
+import { runBoundedABBA } from './benchmark.mjs';
+const canvas=document.getElementById('compute'),status=document.getElementById('status'),button=document.getElementById('run'),gl=canvas.getContext('webgl2',{antialias:false,alpha:false,preserveDrawingBuffer:false});
+const debug=gl?.getExtension('WEBGL_debug_renderer_info'),renderer=gl?(debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)):null;
+const capability={webgl2:!!gl,floatColorBuffer:!!gl?.getExtension('EXT_color_buffer_float'),renderer,userAgent:navigator.userAgent,softwareRendererIndicated:!!renderer&&/swiftshader|llvmpipe|software/i.test(renderer),rendererClassificationIsOnlyAnInference:true,hardwareExtrapolation:false};
+let started=false,running=false,last=null;const show=x=>status.textContent=JSON.stringify(x,null,2);
+const api={capability,get started(){return started;},get running(){return running;},get last(){return last;},async runABBA(){if(started)throw Error('This bounded run has already started. No automatic repeat or additional build is allowed on this page.');started=true;running=true;button.disabled=true;try{last=await runBoundedABBA(gl,{onProgress:p=>show({running:true,capability,...p})});last.capability=capability;show(last);return last;}finally{running=false;}}};
+window.__GRID_RANK_ABBA=api;button.onclick=()=>api.runABBA().catch(e=>show({stopped:true,error:String(e)}));show({ready:true,started:false,capability,autoRun:false,scope:'Only an explicit bounded total-path comparison; no result yet.'});document.documentElement.dataset.probeReady='true';

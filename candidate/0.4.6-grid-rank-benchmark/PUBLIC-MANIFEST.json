@@ -1,0 +1,143 @@
+{
+  "name": "actual-4056-grid-abba-bounded-benchmark",
+  "version": 1,
+  "manifestSelfExcluded": true,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 1692,
+      "sha256": "387174aa761165cabafec73c7805784bb880823a653e301e966310c50088ef25"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 1575,
+      "sha256": "6b52047a4755d8c49d7fe2e0778000b13feba47919d5664a780c1b5d90bf7077"
+    },
+    {
+      "path": "benchmark.mjs",
+      "bytes": 13192,
+      "sha256": "fb9851fae33d06ab09bb4c4c5935ddde981794be6a8d4b5d1130e02e505d768a"
+    },
+    {
+      "path": "benchmark-helpers.mjs",
+      "bytes": 4949,
+      "sha256": "c06422bc7a6b98e2b62eb9244c917eb69bbf9361bae9f2a0fc31cd54ce2ce47e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7468,
+      "sha256": "4d33f1c4e6d941634338e6cab1d85439492f2bcf5f1bdfdea6ce2481e8c9eff3"
+    },
+    {
+      "path": "fixtures/actual-4056-t8.json",
+      "bytes": 395265,
+      "sha256": "024a9306922b746d5a34e608a1ca8b62d933427f4752a7a6d39c36c2bb62e793"
+    },
+    {
+      "path": "vendor/core/gpu-solver.mjs",
+      "bytes": 26997,
+      "sha256": "5a277ff081de4fa6db60ebbb29989fb839e6b0d66ab22f8b377d094847bf5370"
+    },
+    {
+      "path": "vendor/rank/rank-prototype.mjs",
+      "bytes": 16909,
+      "sha256": "8e09ef5a0cd652b02a027db56ab4107be747238331e105965cafc1aae3c09d57"
+    },
+    {
+      "path": "vendor/rank/eligibility.mjs",
+      "bytes": 3710,
+      "sha256": "ead117c972037f712d7a866d28284acf718638ccf281f59baa35ac84344f9d25"
+    },
+    {
+      "path": "vendor/rank/position-encoding.mjs",
+      "bytes": 3072,
+      "sha256": "9f4e3ab474e7ce3d05ca9743044201ae85537be617e35a78d16b55c40db0940b"
+    },
+    {
+      "path": "vendor/rank/contract/rank-grid.mjs",
+      "bytes": 9322,
+      "sha256": "4498ff30f29380b19222f0b6d527d4e1e48eab3e718e7fe4653d4534a72c0235"
+    },
+    {
+      "path": "vendor/core/shaders/bucket.frag.glsl",
+      "bytes": 157,
+      "sha256": "78fe93f0bb68670d37386b79594aac1a892d1898682fe275b74ddec0f3154dcb"
+    },
+    {
+      "path": "vendor/core/shaders/bucket.vert.glsl",
+      "bytes": 1776,
+      "sha256": "a32bcc038c2902d7892b1a008fe674788773c8702e97289504ca3ca7936d7aa5"
+    },
+    {
+      "path": "vendor/core/shaders/fullscreen.vert.glsl",
+      "bytes": 174,
+      "sha256": "16b2fc20c76230d3316fabe814cf1a335e693454d9e6af32a357e02966addc47"
+    },
+    {
+      "path": "vendor/core/shaders/predict.frag.glsl",
+      "bytes": 2125,
+      "sha256": "2d66b3f5111d96b555a8393ecb760f959fed1935af3db2da423f93fd682d67e7"
+    },
+    {
+      "path": "vendor/core/shaders/project.frag.glsl",
+      "bytes": 6326,
+      "sha256": "83787d1f2884a6e2a27144f27e731c233f9a87c6124bdffc9cb51f2dd5971909"
+    },
+    {
+      "path": "vendor/core/shaders/remove.frag.glsl",
+      "bytes": 611,
+      "sha256": "1a575f081656dbe429a004f695ea84aa34d762a93d5fdd103a7e6e019b89ff53"
+    },
+    {
+      "path": "vendor/core/shaders/velocity.frag.glsl",
+      "bytes": 1486,
+      "sha256": "76d42af9b92e708912b89b69c8e989b0172e9390e02766b1465d38010c39fbeb"
+    },
+    {
+      "path": "vendor/rank/shaders/fullscreen.vert.glsl",
+      "bytes": 174,
+      "sha256": "16b2fc20c76230d3316fabe814cf1a335e693454d9e6af32a357e02966addc47"
+    },
+    {
+      "path": "vendor/rank/shaders/id.frag.glsl",
+      "bytes": 161,
+      "sha256": "e38b05752842ad67119bce78debdd06973573596e9943713a0e506e3b04c2dd1"
+    },
+    {
+      "path": "vendor/rank/shaders/peel.vert.glsl",
+      "bytes": 1158,
+      "sha256": "4b075a79e90dd5140ba8fe9a932d15b886360cd4eefea66c33941c012ccf3c2c"
+    },
+    {
+      "path": "vendor/rank/shaders/rank.frag.glsl",
+      "bytes": 1835,
+      "sha256": "e1bca7b52dfb32e46a8b6ab7044bb89d4b51c498cc27b661602a893ed8c2fd42"
+    },
+    {
+      "path": "vendor/rank/shaders/scatter.vert.glsl",
+      "bytes": 651,
+      "sha256": "a1bf189ddd19065bb3eb679b67a101cd88e6470f654669c853b52d71a4276dae"
+    }
+  ],
+  "publicFileCount": 23,
+  "stage": "source-and-node-validated; GPU benchmark not executed here",
+  "autoRun": false,
+  "browserAPI": "window.__GRID_RANK_ABBA.runABBA()",
+  "limits": {
+    "preparationSteps": 1,
+    "bucketBuilds": 4,
+    "groupSoftMs": 5000,
+    "totalSoftMs": 60000
+  },
+  "scope": {
+    "physicsCoreByteIdentical": true,
+    "geometryBenchmark": false,
+    "cpuGuardAndReadbackIncluded": true,
+    "nextAnchorUploadSeparateButIncluded": true,
+    "matchedFinalOracleSeparate": true,
+    "pureShaderComparison": false,
+    "hardwareExtrapolation": false,
+    "gpuExecutedHere": false,
+    "deployed": false
+  }
+}
