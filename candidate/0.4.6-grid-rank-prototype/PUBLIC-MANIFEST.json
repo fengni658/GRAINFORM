@@ -1,0 +1,105 @@
+{
+  "name": "grainform-gpu-grid-rank-function-prototype",
+  "version": 1,
+  "stage": "source-and-node-validated; actual GPU QA pending",
+  "manifestSelfExcluded": true,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 2072,
+      "sha256": "66b18a4f87a5419347d1969d5e4b6dce60b5e6bf073c0cfcb14c53f2f8186a80"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 2766,
+      "sha256": "4a5e5f354038d13716343dd9529d168740b01207411b7c4357679a668d12462c"
+    },
+    {
+      "path": "qa.mjs",
+      "bytes": 3476,
+      "sha256": "46411514486914e1a3d766dfe4655a384018106f747a80b9f7d36c7fecc2055a"
+    },
+    {
+      "path": "cases.mjs",
+      "bytes": 2751,
+      "sha256": "b3679301d5bfd6e869b17d13688da3e6a86aac322eef35a4ec115481bf55a1cd"
+    },
+    {
+      "path": "rank-prototype.mjs",
+      "bytes": 16659,
+      "sha256": "9a7904def849bc73a0130a7840e741cfa48524ec9b6765bf1d0c9db69d0dce98"
+    },
+    {
+      "path": "eligibility.mjs",
+      "bytes": 3710,
+      "sha256": "ead117c972037f712d7a866d28284acf718638ccf281f59baa35ac84344f9d25"
+    },
+    {
+      "path": "position-encoding.mjs",
+      "bytes": 3072,
+      "sha256": "9f4e3ab474e7ce3d05ca9743044201ae85537be617e35a78d16b55c40db0940b"
+    },
+    {
+      "path": "contract/rank-grid.mjs",
+      "bytes": 9322,
+      "sha256": "4498ff30f29380b19222f0b6d527d4e1e48eab3e718e7fe4653d4534a72c0235"
+    },
+    {
+      "path": "contract/scenarios.mjs",
+      "bytes": 1688,
+      "sha256": "597c103b41e1fa123a71ba450cbed9a60be54186a64a8fe5ff45e9787c31fa43"
+    },
+    {
+      "path": "contract/GPU-CONTRACT.md",
+      "bytes": 3802,
+      "sha256": "6779509f660c051fc6088cd4ccfa135f17457ec6b036b039faddea9978ced97d"
+    },
+    {
+      "path": "shaders/fullscreen.vert.glsl",
+      "bytes": 174,
+      "sha256": "16b2fc20c76230d3316fabe814cf1a335e693454d9e6af32a357e02966addc47"
+    },
+    {
+      "path": "shaders/peel.vert.glsl",
+      "bytes": 1158,
+      "sha256": "4b075a79e90dd5140ba8fe9a932d15b886360cd4eefea66c33941c012ccf3c2c"
+    },
+    {
+      "path": "shaders/id.frag.glsl",
+      "bytes": 161,
+      "sha256": "e38b05752842ad67119bce78debdd06973573596e9943713a0e506e3b04c2dd1"
+    },
+    {
+      "path": "shaders/rank.frag.glsl",
+      "bytes": 1835,
+      "sha256": "e1bca7b52dfb32e46a8b6ab7044bb89d4b51c498cc27b661602a893ed8c2fd42"
+    },
+    {
+      "path": "shaders/scatter.vert.glsl",
+      "bytes": 651,
+      "sha256": "a1bf189ddd19065bb3eb679b67a101cd88e6470f654669c853b52d71a4276dae"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6840,
+      "sha256": "31bee2daf12150719ca240383fab820b937e449547ceda070808877d7f7d8de0"
+    }
+  ],
+  "publicFileCount": 16,
+  "serveManifestItself": true,
+  "scope": {
+    "initialBuckets": "actual GPU 17-layer depth peeling",
+    "rank": "actual GLSL rank framebuffer",
+    "scatter": "two GPU point draws to separate parity atlases",
+    "cpuEligibilityReadback": true,
+    "cpuOracleReadback": true,
+    "wholeRoundStopOnUnproven": true,
+    "physicsIntegrated": false,
+    "gpuExecutedHere": false,
+    "shaderCompiledHere": false,
+    "benchmark": false,
+    "deployed": false
+  },
+  "browserAPI": "window.__GRID_RANK_QA",
+  "defaultAutoRun": false
+}

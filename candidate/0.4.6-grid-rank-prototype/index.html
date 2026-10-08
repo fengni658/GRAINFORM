@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GPU Grid Rank · 独立功能检查</title>
+<style>body{margin:0;background:#10181d;color:#e8eeee;font:15px/1.5 system-ui,sans-serif}main{max-width:1050px;margin:32px auto;padding:0 24px}h1{font-size:25px;letter-spacing:-.5px}p{color:#afc0c8}.tag{display:inline-block;background:#213039;padding:6px 10px;border-radius:6px;color:#bfe6d8}.controls{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}select,button{font:inherit;border:1px solid #40505d;border-radius:7px;padding:10px 12px;color:#e8eeee;background:#263943}button{cursor:pointer}button:disabled{opacity:.45;cursor:wait}pre{background:#0a1116;border:1px solid #2d414b;border-radius:10px;padding:18px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;min-height:200px}canvas{display:none}.warning{border-left:3px solid #d3a358;padding-left:14px}small{color:#8ea4b1}</style>
+<main><span class="tag">独立桶功能原型 · 未接物理</span><h1>旧桶 → GPU Rank → 新桶</h1>
+<p>初始旧桶由真实 WebGL2 depth peeling 生成。每轮先用 CPU 全局资格检查，再由 GPU 计算完整 rank 并 scatter；读回全部 17 层逐槽对照独立排序 oracle。</p>
+<p class="warning">此页面默认不自动执行。带 CPU 回读的功能检查不代表纯 GPU 实时内核、物理质量通过或性能提升。144 粒用例仅检查九格合流与溢出证据，不是压力测试。</p>
+<div class="controls"><select id="case"></select><button id="run">运行所选功能用例</button><button id="small">运行六项小型功能检查</button><button id="all">运行全部拒绝/换代检查</button></div>
+<pre id="status">正在检查可用的 WebGL2 上下文；尚未运行用例。</pre>
+<small>全部粒子 slot 保留。第 17 槽明确记录 overflow；失效结果不采用为下一代。控制台 API：window.__GRID_RANK_QA</small>
+<canvas id="compute" width="16" height="16"></canvas></main><script type="module" src="./probe.mjs"></script></html>
