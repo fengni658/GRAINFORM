@@ -1,0 +1,1 @@
+{"passed":true,"kind":"mock GL API and shader source contract only","realShaderCompile":false,"realGPUNumerics":false,"passes":[16,32,64],"stableArraySlots":true,"noReadbackDuringStep":true,"noFramebufferFeedback":true}

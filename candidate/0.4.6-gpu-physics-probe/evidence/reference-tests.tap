@@ -1,0 +1,22 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grainform-gpu-physics-probe@0.4.6 test
+> node --test tests/*.test.mjs
+
+{"passed":true,"kind":"mock GL API and shader source contract only","realShaderCompile":false,"realGPUNumerics":false,"passes":[16,32,64],"stableArraySlots":true,"noReadbackDuringStep":true,"noFramebufferFeedback":true}
+✔ tests/gpu-contract.test.mjs (145.687292ms)
+✔ two coincident circles remain finite and separate deterministically (8.18948ms)
+✔ K/K+1 bucket capacity is explicit rather than silently filtered (4.126137ms)
+✔ bucket ordering uses stable array slots even with reverse business IDs (5.523391ms)
+✔ negative y crossing is represented and domain escape explicitly fails (5.417183ms)
+✔ nonfinite states cannot pass geometry audit; unsupported input speed rejected (0.313756ms)
+✔ live support deletion keeps IDs, removes one grain and causes real fall (233.910846ms)
+✔ all float texture samplers explicitly use highp for state and bucket IDs (1.760013ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 368.851511

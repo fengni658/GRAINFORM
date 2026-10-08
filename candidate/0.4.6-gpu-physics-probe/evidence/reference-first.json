@@ -1,0 +1,212 @@
+[
+  {
+    "name": "pair",
+    "shock": false,
+    "peak": 0,
+    "final": {
+      "N": 2,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7539999999999623,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.18866666667190657,
+      "maxCorrection": 0.09225000000264072,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "stack",
+    "shock": false,
+    "peak": 0,
+    "final": {
+      "N": 16,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7517823326271014,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.005037869377531479,
+      "maxCorrection": 0.0034063467693290495,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "crowded",
+    "shock": false,
+    "peak": 0,
+    "final": {
+      "N": 144,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.752638361368538,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.021216194666386107,
+      "maxCorrection": 0.006465802029381081,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "side",
+    "shock": false,
+    "peak": 0,
+    "final": {
+      "N": 65,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7531473791944123,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.17499999999608917,
+      "maxCorrection": 0.006465802189503578,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "grid-edge",
+    "shock": false,
+    "peak": 0,
+    "final": {
+      "N": 2,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7540000000000013,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.12955729167003938,
+      "maxCorrection": 0.0022500000000011955,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "pair",
+    "shock": true,
+    "peak": 0,
+    "final": {
+      "N": 2,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.754000000000019,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.18866666667184973,
+      "maxCorrection": 0.09225000000258388,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "stack",
+    "shock": true,
+    "peak": 0,
+    "final": {
+      "N": 16,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7539999824101074,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.00416670102737271,
+      "maxCorrection": 0.002083333333378734,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "crowded",
+    "shock": true,
+    "peak": 0,
+    "final": {
+      "N": 144,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7539602023368879,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.027667738574768487,
+      "maxCorrection": 0.008639910064453188,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "side",
+    "shock": true,
+    "peak": 0,
+    "final": {
+      "N": 65,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7539947132219587,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.17499999999608917,
+      "maxCorrection": 0.007120183507498604,
+      "zeroPairs": 0
+    },
+    "error": null
+  },
+  {
+    "name": "grid-edge",
+    "shock": true,
+    "peak": 0,
+    "final": {
+      "N": 2,
+      "overlap": 0,
+      "wall": 0,
+      "minDistance": 1.7540000000000013,
+      "finite": true,
+      "passed": true
+    },
+    "diagnostics": {
+      "overflow": 0,
+      "outsideGrid": 0,
+      "maxGridDrift": 0.12955729167003938,
+      "maxCorrection": 0.0022500000000011955,
+      "zeroPairs": 0
+    },
+    "error": null
+  }
+]

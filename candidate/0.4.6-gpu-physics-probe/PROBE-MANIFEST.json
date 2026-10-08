@@ -1,0 +1,136 @@
+{
+  "version": "0.4.6-gpu-physics-small-probe-1-highp",
+  "scope": "Selected shock CPU reference and actual WebGL2 shader candidate. Not a released game; real GPU compile/readback pending. Sleep not implemented.",
+  "files": [
+    {
+      "path": "README-GPU.md",
+      "bytes": 9155,
+      "sha256": "1f823e60ed561c22624ce8df4cc9ed576e709dfb58d462905568716bef8c9d59"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3177,
+      "sha256": "c8b156b2134a4229683cee40fbd03dd81cc250c94627735e9c2a8aaa2b455ee0"
+    },
+    {
+      "path": "SOURCES.md",
+      "bytes": 1044,
+      "sha256": "09adcd0ae16d005947a9422fc56e6a9152131706ee937fa240e2ee01c66c705f"
+    },
+    {
+      "path": "evidence/gpu-mock-contract.json",
+      "bytes": 220,
+      "sha256": "ad6b16831a3798698176cc8064c350857bdb6127d20179ca8d0f5f2bae58384f"
+    },
+    {
+      "path": "evidence/reference-first.json",
+      "bytes": 4235,
+      "sha256": "ea13b7ceba8eaa9fa67ef7cfd0630efdfb668ad3ec42321e2ecdb1a7fe876b35"
+    },
+    {
+      "path": "evidence/reference-tests.tap",
+      "bytes": 1171,
+      "sha256": "bfa35b3726218cb084a72f54d60813164f738b479d658d243680596d2825871b"
+    },
+    {
+      "path": "fixtures.mjs",
+      "bytes": 725,
+      "sha256": "467efae3f4e4d49b891f5f542a751c69da9163616953876a487a288ec9c4cc74"
+    },
+    {
+      "path": "gpu-solver.mjs",
+      "bytes": 23322,
+      "sha256": "512c059b8a393c4225810eb44589be2254e8208680870b3e2f4d1358d4287737"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1921,
+      "sha256": "ace6356c0b96fb6bbe17bbaa66f39af1789e1bf34821defe891881f906203fa1"
+    },
+    {
+      "path": "package.json",
+      "bytes": 202,
+      "sha256": "95f7347bd41a9a579ad7e245a7086275c5733b260b7cbd7d6acc79552a323fae"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 6642,
+      "sha256": "2764f969b882d024c2726479e80e4a181e42a5ac3154b4364d9e90ec4aef38a8"
+    },
+    {
+      "path": "reference.mjs",
+      "bytes": 4715,
+      "sha256": "ac08b797b2535fa127eb1e38813f22784c5bfe241bcf9eee8768d181fe042e67"
+    },
+    {
+      "path": "server.mjs",
+      "bytes": 1979,
+      "sha256": "2146ba99841cf3f35be891abd7565162305a7581cf51916278cac0e0f4d4a7eb"
+    },
+    {
+      "path": "shaders/bucket.frag.glsl",
+      "bytes": 157,
+      "sha256": "78fe93f0bb68670d37386b79594aac1a892d1898682fe275b74ddec0f3154dcb"
+    },
+    {
+      "path": "shaders/bucket.vert.glsl",
+      "bytes": 1143,
+      "sha256": "436050d7074abd3f4f779e7a8b0130b2251789d6b2fb7de6e32b8baf4da8af0c"
+    },
+    {
+      "path": "shaders/fullscreen.vert.glsl",
+      "bytes": 174,
+      "sha256": "16b2fc20c76230d3316fabe814cf1a335e693454d9e6af32a357e02966addc47"
+    },
+    {
+      "path": "shaders/predict.frag.glsl",
+      "bytes": 642,
+      "sha256": "c45c1d23fc65d870599f76e6724ef0bfead69d237dc789cefef45ec492010328"
+    },
+    {
+      "path": "shaders/project.frag.glsl",
+      "bytes": 4276,
+      "sha256": "8ac3c12f74e649a3fe719782fac20d77ec78c6754ff96e9dffbcf7ba63c8f665"
+    },
+    {
+      "path": "shaders/remove.frag.glsl",
+      "bytes": 540,
+      "sha256": "39072326673d47ab56bada5b1a9206addd8a07a8903d0bf90dfca823ae6b53f0"
+    },
+    {
+      "path": "shaders/velocity.frag.glsl",
+      "bytes": 733,
+      "sha256": "3020ad134f28da588f638da476d80ca68a170079668d05d664bce22a4184c7fc"
+    },
+    {
+      "path": "test-reference.mjs",
+      "bytes": 699,
+      "sha256": "48e485a67a0146f0be80babe79c39b1fac4de25f7a4acf628468447a64c9d00f"
+    },
+    {
+      "path": "tests/gpu-contract-browser.mjs",
+      "bytes": 5705,
+      "sha256": "eabc39744bdd6abb9130c034b961483466a29ff77090d6c96ea45f5c596790cd"
+    },
+    {
+      "path": "tests/gpu-contract.mjs",
+      "bytes": 8936,
+      "sha256": "ba69b69a0db654b6d7b17aaccf5235f113520d31dec35f51a71040f31407f7e6"
+    },
+    {
+      "path": "tests/gpu-contract.test.mjs",
+      "bytes": 111,
+      "sha256": "324e25b0e411d873460db2dfcae46f626a383419837a5a40257b489a04c0b657"
+    },
+    {
+      "path": "tests/reference.test.mjs",
+      "bytes": 2023,
+      "sha256": "8d3f5100a2e3117f2bd680661da324b03bffe4c16d5d24598ef6332bd5c6694e"
+    },
+    {
+      "path": "tests/sampler-precision.test.mjs",
+      "bytes": 418,
+      "sha256": "7bd95e4b291902b28df119bed9ae02be33988f85feb6c4f150f2f4e4603915d7"
+    }
+  ]
+}
