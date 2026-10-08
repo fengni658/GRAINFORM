@@ -1,0 +1,11 @@
+{
+  "name": "grainform-local-sand-reproduction",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.mjs && node validate-demo-clock.mjs",
+    "start": "node server.mjs",
+    "bench:equal": "node bench.mjs --out=second-environment/equal-cascade-window --equal-cascade-window"
+  }
+}

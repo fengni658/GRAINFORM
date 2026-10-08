@@ -1,0 +1,25 @@
+{
+  "scope": "Browser runtime allowlist only",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 3404,
+      "sha256": "4f594db1b5b6bbb120a80200e10f9c895caf8cda5062a9968845a7fa2abedaae"
+    },
+    {
+      "path": "demo.mjs",
+      "bytes": 8031,
+      "sha256": "757f6437d53a1d63e43fd837e08b922ac0cd4f804ae0ec25afc7f7d1f29f9a05"
+    },
+    {
+      "path": "engine.mjs",
+      "bytes": 13303,
+      "sha256": "dafd04ff81bb02d3f98b2d91e6bc8306c33629ff81cf53caa8f541e3718fd75f"
+    },
+    {
+      "path": "scenario.mjs",
+      "bytes": 3910,
+      "sha256": "1fdccddf159be395f763161ffac3ed7a0842a8fd4d025c0d61190eae79b02e8a"
+    }
+  ]
+}

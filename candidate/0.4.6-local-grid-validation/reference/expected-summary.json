@@ -1,0 +1,180 @@
+{
+  "scope": "Deterministic synthetic-input reference only; no host timings or environment metadata",
+  "engineSHA256": "dafd04ff81bb02d3f98b2d91e6bc8306c33629ff81cf53caa8f541e3718fd75f",
+  "scenes": [
+    {
+      "sceneId": "feed-4056-seed1",
+      "engineSHA256": "dafd04ff81bb02d3f98b2d91e6bc8306c33629ff81cf53caa8f541e3718fd75f",
+      "stateHashSHA256": "931591781cc13b504e0faeeae4864df1f480b94464cb14daac89a5d3d1a4a596",
+      "stateStage": "engine-idle-after-cascade",
+      "stateTick": 2700,
+      "completed": true,
+      "conservation": {
+        "added": 4056,
+        "alive": 1859,
+        "removed": 2197,
+        "passed": true
+      },
+      "activity": {
+        "active": {
+          "n": 2820,
+          "min": 0,
+          "p50": 138,
+          "p95": 4056,
+          "p99": 4056,
+          "max": 4056
+        },
+        "queued": {
+          "n": 2820,
+          "min": 0,
+          "p50": 138,
+          "p95": 4056,
+          "p99": 4056,
+          "max": 4056
+        },
+        "visits": {
+          "n": 2820,
+          "min": 0,
+          "p50": 151,
+          "p95": 4056,
+          "p99": 4056,
+          "max": 4056
+        },
+        "activeBins": {
+          "0..0": 257,
+          "1..10": 288,
+          "11..100": 835,
+          "101..1000": 414,
+          "1001..5000": 1026,
+          "5001..inf": 0
+        },
+        "queueBins": {
+          "0..0": 257,
+          "1..10": 288,
+          "11..100": 835,
+          "101..1000": 414,
+          "1001..5000": 1026,
+          "5001..inf": 0
+        },
+        "maxMovesPerParticle": 1
+      },
+      "lateralBeforeDeletion": {
+        "alive": 4056,
+        "meanX": 144.0797348570395,
+        "offsetFromWorldCenter": 0.07973485703951155,
+        "leftCount": 2029,
+        "rightCount": 2012,
+        "centerCount": 15,
+        "rightMinusLeftFraction": -0.004191321499013806,
+        "scope": "Actual endpoint distribution; not a proof that every input is unbiased"
+      },
+      "lateralFinal": {
+        "alive": 1859,
+        "meanX": 144.97100037367227,
+        "offsetFromWorldCenter": 0.9710003736722683,
+        "leftCount": 920,
+        "rightCount": 935,
+        "centerCount": 4,
+        "rightMinusLeftFraction": 0.008068854222700376,
+        "scope": "Actual endpoint distribution; not a proof that every input is unbiased"
+      },
+      "eventWindow": {
+        "maxTicks": 2400,
+        "observedTicks": 1310,
+        "firstResponseTicks": 14,
+        "tick90PercentOfObservedDownMoves": 201,
+        "observedMovementIsFinal": true,
+        "sustainedAtMostOnePercentActiveTick": 589,
+        "lastActive": 0,
+        "lastQueued": 0
+      }
+    },
+    {
+      "sceneId": "feed-12000-seed1",
+      "engineSHA256": "dafd04ff81bb02d3f98b2d91e6bc8306c33629ff81cf53caa8f541e3718fd75f",
+      "stateHashSHA256": "df8b52c3092ecf428a97464cde763b8315dd2f3e07110232122bfdcbaa7f8c9e",
+      "stateStage": "engine-idle-after-cascade",
+      "stateTick": 3954,
+      "completed": true,
+      "conservation": {
+        "added": 12000,
+        "alive": 9803,
+        "removed": 2197,
+        "passed": true
+      },
+      "activity": {
+        "active": {
+          "n": 4074,
+          "min": 0,
+          "p50": 869,
+          "p95": 7160,
+          "p99": 7341,
+          "max": 7379
+        },
+        "queued": {
+          "n": 4074,
+          "min": 0,
+          "p50": 869,
+          "p95": 7160,
+          "p99": 7341,
+          "max": 7379
+        },
+        "visits": {
+          "n": 4074,
+          "min": 0,
+          "p50": 977,
+          "p95": 7221,
+          "p99": 7396,
+          "max": 7518
+        },
+        "activeBins": {
+          "0..0": 257,
+          "1..10": 644,
+          "11..100": 169,
+          "101..1000": 1264,
+          "1001..5000": 822,
+          "5001..inf": 918
+        },
+        "queueBins": {
+          "0..0": 257,
+          "1..10": 644,
+          "11..100": 169,
+          "101..1000": 1264,
+          "1001..5000": 822,
+          "5001..inf": 918
+        },
+        "maxMovesPerParticle": 1
+      },
+      "lateralBeforeDeletion": {
+        "alive": 12000,
+        "meanX": 143.95298330152664,
+        "offsetFromWorldCenter": -0.047016698473356655,
+        "leftCount": 5984,
+        "rightCount": 5971,
+        "centerCount": 45,
+        "rightMinusLeftFraction": -0.0010833333333333333,
+        "scope": "Actual endpoint distribution; not a proof that every input is unbiased"
+      },
+      "lateralFinal": {
+        "alive": 9803,
+        "meanX": 147.2402279096678,
+        "offsetFromWorldCenter": 3.2402279096677944,
+        "leftCount": 4657,
+        "rightCount": 5111,
+        "centerCount": 35,
+        "rightMinusLeftFraction": 0.046312353361215954,
+        "scope": "Actual endpoint distribution; not a proof that every input is unbiased"
+      },
+      "eventWindow": {
+        "maxTicks": 2400,
+        "observedTicks": 1742,
+        "firstResponseTicks": 14,
+        "tick90PercentOfObservedDownMoves": 906,
+        "observedMovementIsFinal": true,
+        "sustainedAtMostOnePercentActiveTick": 1058,
+        "lastActive": 0,
+        "lastQueued": 0
+      }
+    }
+  ]
+}
