@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "320 admissions and removals keep storage bounded",
+      "passed": true,
+      "cycles": 320,
+      "cumulativeBirths": 163840,
+      "capacity": 97440,
+      "peakSlots": 512,
+      "live": 512
+    },
+    {
+      "name": "stale, duplicate and malformed removals are atomic",
+      "passed": true
+    },
+    {
+      "name": "invalid admissions preserve free list, identity, state and wake data",
+      "passed": true
+    },
+    {
+      "name": "new and reused births have no old interpolation, motion or stamps",
+      "passed": true
+    },
+    {
+      "name": "live identities and roughness survive unrelated slot reuse",
+      "passed": true
+    },
+    {
+      "name": "reused occupant direction uses its own fixed identity roughness",
+      "passed": true
+    },
+    {
+      "name": "handle precision exhaustion rejects before any birth",
+      "passed": true
+    }
+  ]
+}

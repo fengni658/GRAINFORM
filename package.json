@@ -1,13 +1,18 @@
 {
   "name": "grainform",
-  "version": "0.4.0",
-  "private": true,
+  "version": "0.4.9",
   "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "test:preview": "node --test tests/preview/*.test.mjs",
-    "test:browser": "node tests/browser.mjs"
-  },
-  "license": "UNLICENSED"
+    "test": "node --test tests/ca-game.test.mjs tests/ca-phase.test.mjs tests/ui-ca-presentation.test.mjs tests/ui-grid-clock.test.mjs tests/ui-grid-renderer.test.mjs tests/ui-grid-boot.test.mjs tests/ui-message-clock.test.mjs",
+    "verify:slots": "node merge-test.mjs",
+    "verify:parity": "node merge-parity.mjs",
+    "verify:browser": "node browser-smoke.mjs",
+    "verify:pixels": "node tests/pixel-equivalence-node.mjs",
+    "verify:pixels:browser": "node tests/pixel-equivalence-browser.mjs",
+    "test:legacy": "node --test tests/engine.test.mjs tests/presentation.test.mjs tests/storage-reset.test.mjs tests/cross-tab.test.mjs",
+    "test:preview": "node --test tests/preview/*.test.mjs"
+  }
 }

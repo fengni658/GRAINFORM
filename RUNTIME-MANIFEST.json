@@ -1,0 +1,54 @@
+{
+  "version": "0.4.9",
+  "candidate": "0.4.9-desktop-test",
+  "entry": "index.html",
+  "scope": "Verified 0.4.9 desktop test runtime. Runtime bytes unchanged from the published 0.4.9 package; no 0.4.10 changes.",
+  "runtimeFiles": [
+    {
+      "path": "index.html",
+      "bytes": 11288,
+      "sha256": "c3cb932bdc8ae06924dc0372b5b50890a09c652addcdb6e8483628f931f50f35"
+    },
+    {
+      "path": "style.css",
+      "bytes": 15512,
+      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9"
+    },
+    {
+      "path": "app.mjs",
+      "bytes": 38081,
+      "sha256": "4e33d2dd1c182ca4cb117116b9cccfe93ea666419760c9163dd59029f5d2424f"
+    },
+    {
+      "path": "simulation-worker.mjs",
+      "bytes": 15250,
+      "sha256": "57a2c73593014ef146080b9ec9276ed12f368b242f981601bf1424c67b803358"
+    },
+    {
+      "path": "game.mjs",
+      "bytes": 9693,
+      "sha256": "dcd6e2f4d412a8055dc4be508c288a21914b1b65b2055c09199a485503805a43"
+    },
+    {
+      "path": "ca-world.mjs",
+      "bytes": 10052,
+      "sha256": "f7a55ebb10a0a51c4852c39ef6b36c409e2ab26dddab4c05402371e1a0578773"
+    },
+    {
+      "path": "ca-frame-world.mjs",
+      "bytes": 2652,
+      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+    },
+    {
+      "path": "ca-adapter.mjs",
+      "bytes": 3600,
+      "sha256": "d2da46f86779c49808997f241c9cb9c10da505eb80513af759956cfaad69afe6"
+    },
+    {
+      "path": "ca-layer.mjs",
+      "bytes": 16239,
+      "sha256": "3081084ccd979803f51e9f81a8ebe75cad55033ac426f8ce1079ce45088373bb"
+    }
+  ],
+  "baselineArchiveSha256": "b2383be2688a6e7363e5c1a0ed323b10cb5c823e1e729b398c3d5053f5632865"
+}

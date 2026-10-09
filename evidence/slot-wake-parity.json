@@ -1,0 +1,202 @@
+{
+  "passed": true,
+  "comparedFrames": 551,
+  "comparedRuleTicks": 330,
+  "trajectoryHash": "31205449eb19668c2e2b8a9a9e1b7fa9dff7bd608772814f195b0ec5038ac5bb",
+  "clearCount": 4608,
+  "cutCount": 680,
+  "results": [
+    {
+      "label": "batch1",
+      "steps": 34,
+      "count": 2304,
+      "hash": "69431c05da6614435c79a5f83072c949bf275e792e56abfb46ccac3e0add5486",
+      "pose": {
+        "x": 80,
+        "y": 372,
+        "v": 480,
+        "ticks": 63,
+        "shape": [
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "label": "batch2",
+      "steps": 65,
+      "count": 4608,
+      "hash": "ea2e0f09ec17ddc9e823a963a78ad9f8c98aa2d68eaac320e0f0f10f969e5dd8",
+      "pose": {
+        "x": 80,
+        "y": 332,
+        "v": 480,
+        "ticks": 58,
+        "shape": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "label": "batch3",
+      "steps": 88,
+      "count": 6912,
+      "hash": "635a90942c51a3f91f8c58bd46da14050ab45245c0bef9957ec5623acdd60bd1",
+      "pose": {
+        "x": 80,
+        "y": 315,
+        "v": 480,
+        "ticks": 55,
+        "shape": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "label": "batch4",
+      "steps": 117,
+      "count": 9216,
+      "hash": "9ed0b8ad84b037b4cc744fe16e73fd9c7f58b3ebae33e6d74fd7ec342bae9d42",
+      "pose": {
+        "x": 80,
+        "y": 293,
+        "v": 480,
+        "ticks": 53,
+        "shape": [
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "label": "batch5",
+      "steps": 116,
+      "count": 11520,
+      "hash": "cca034e088a17aea19b70a8626de163b7276e71ab934dc01dbd64e2e33812450",
+      "pose": {
+        "x": 80,
+        "y": 281,
+        "v": 480,
+        "ticks": 51,
+        "shape": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "label": "batch6",
+      "steps": 128,
+      "count": 13824,
+      "hash": "8040044f2a9e1853d06e18bb3a0d39dfad27356ee451ae9677a291824c32fdef",
+      "pose": {
+        "x": 80,
+        "y": 271,
+        "v": 480,
+        "ticks": 50,
+        "shape": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "label": "gameClear",
+      "steps": 1,
+      "count": 9216,
+      "hash": "9ed0b8ad84b037b4cc744fe16e73fd9c7f58b3ebae33e6d74fd7ec342bae9d42"
+    },
+    {
+      "label": "supportCut",
+      "steps": 2,
+      "count": 8536,
+      "hash": "083cc2ab313336e4323b5f86ab07c8a7435014771c24eb1f6161cb17227b7eb6"
+    }
+  ]
+}
