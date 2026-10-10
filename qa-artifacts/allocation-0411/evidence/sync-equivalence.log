@@ -1,0 +1,14 @@
+✔ empty world, additions, deletions, empty slots, generation reuse and insertion order (56.314853ms)
+✔ sleep and wake changes preserve revision, changedBodies and stable object reuse (16.29438ms)
+✔ typed-array comparison fields, batch-only legacy semantics and full sync order (62.46969ms)
+✔ four natural pieces retain every frame, material path and ACK result (26314.553597ms)
+✔ clear barrier, deletion, post-clear reuse and restart retain every frame (1863.594535ms)
+✔ only adapter sync changed; material, rendering, transport and UI files byte-identical (5.851703ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29201.829449

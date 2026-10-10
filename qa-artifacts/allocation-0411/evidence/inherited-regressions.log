@@ -1,0 +1,41 @@
+✔ short starvation inherits actual last rAF, never stale startedAt or draw wall (3.840951ms)
+✔ recorded 1095/1096: rAF30905.4, draw/ACK30911, arrival30915.6, rAF30922.1 (2.904581ms)
+✔ recorded old1119/1120: 16.6ms rAF gap remains partial, no epsilon promotion (0.724605ms)
+✔ same timestamp (0.775233ms)
+✔ exact short-window edge (1.310316ms)
+✔ outside edge (0.23157ms)
+✔ long computation/delivery gap (0.180181ms)
+✔ backward time (0.316513ms)
+✔ next piece invalidates empty anchor (0.698157ms)
+✔ new burst after unseen transitions invalidates empty anchor (3.377572ms)
+✔ flash and return invalidates empty anchor (0.449367ms)
+✔ checking invalidates empty anchor (0.190182ms)
+✔ terminal invalidates empty anchor (0.917599ms)
+✔ missing burst invalidates empty anchor (0.227922ms)
+✔ pause/resume invalidates empty anchor (0.213205ms)
+✔ hidden/resync/failure/restart request invalidation invalidates empty anchor (0.09876ms)
+✔ full snapshot reset invalidates empty anchor (0.107804ms)
+✔ epoch reset rejects stale packets and restarts arrival timing (0.266824ms)
+✔ token gap cannot inherit; duplicate/empty snapshots cannot refresh window (0.290684ms)
+✔ one shot anchor and one receipt per distinct explicit rAF even with backlog (0.142441ms)
+✔ wrong or omitted rAF cannot fabricate continuity anchor (0.207082ms)
+✔ nonempty queue sample/receipt/offset behavior remains exact against frozen queue (2.983316ms)
+✔ game owns monotonic burst identity independently of snapshot publication (62.169852ms)
+✔ geometry allocates actual added capacity and every height-dependent cache (10.272019ms)
+✔ all seven empty-board natural falls are faster by 20-30% and retain >=6 seconds control (504.546966ms)
+✔ all shapes spawn, rotate, move to both walls and hard-drop at the new floor (158.566711ms)
+✔ soft drop remains exactly 12 cells, top bounds and floor collision are strict (15.300569ms)
+✔ all 18560 added cells admit real high-density material; old board rejects new band (132.624862ms)
+✔ left-right clearing at new bottom, ACK barrier, conservation, chain and restart (82.219415ms)
+✔ top-out remains real occupancy based in expanded field (17.814508ms)
+✔ physics and material rule source are unchanged except geometry declaration (1.002384ms)
+✔ CSS horizontal rules identical and nominal cell size preserved at desktop/phone viewports and DPR (1.482641ms)
+✔ new best isolated, settings reused, no old-record deletion (0.776917ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1303.331614

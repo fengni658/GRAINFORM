@@ -1,0 +1,171 @@
+{
+  "status": "LOCAL_QA_CANDIDATE_NOT_DEPLOYED",
+  "version": "0.4.11",
+  "buildId": "b-ab4e880d36685de4fb4983db6ad34295658bdb44c46defce0fae2c7427506065",
+  "entry": "experimental/0.4.11/builds/b-ab4e880d36685de4fb4983db6ad34295658bdb44c46defce0fae2c7427506065/index.html",
+  "identity": "sha256(sorted filename + space + file sha256 + newline), includes entry HTML",
+  "files": [
+    {
+      "file": "app.mjs",
+      "sha256": "f20b89049db10369dcd11e913543ff4220f3a00dbdabbee5103f08d1a267d13c",
+      "bytes": 38623
+    },
+    {
+      "file": "board-geometry.mjs",
+      "sha256": "51cd1a436165954d30327f0d8f5a960503556e315f1517176d2d3117e268c117",
+      "bytes": 603
+    },
+    {
+      "file": "ca-adapter.mjs",
+      "sha256": "70176b118864dc85be78142aa7ce734a5e43eeb7af1b6ecb2102fe25b945dd67",
+      "bytes": 4052
+    },
+    {
+      "file": "ca-contour.mjs",
+      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6",
+      "bytes": 11350
+    },
+    {
+      "file": "ca-frame-world.mjs",
+      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383",
+      "bytes": 2652
+    },
+    {
+      "file": "ca-layer.mjs",
+      "sha256": "13bd5cdeb020e0d60f951aee9044c13957bfe53e81ae841415d579f4bb2f418e",
+      "bytes": 19045
+    },
+    {
+      "file": "ca-world.mjs",
+      "sha256": "895821b13ce2bec1e79c9c23cfbabbff0d6e304332559f5d28833ab43ef95f51",
+      "bytes": 10132
+    },
+    {
+      "file": "game.mjs",
+      "sha256": "7b5ae4e2a59f34ff12434c975fba49d7f3e3d59a50e1a9697a7662f727c55a34",
+      "bytes": 9932
+    },
+    {
+      "file": "index.html",
+      "sha256": "7729123856fc2c5113cd915079928340abd385bb1ca02bea9eeff0ffab4595ad",
+      "bytes": 11314
+    },
+    {
+      "file": "simulation-worker.mjs",
+      "sha256": "c73be0642eed953e0f2de8cf8b4d64acf15951c8cb379c553b4095211144e91f",
+      "bytes": 15409
+    },
+    {
+      "file": "style.css",
+      "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619",
+      "bytes": 15663
+    }
+  ],
+  "baseline": [
+    {
+      "file": "app.mjs",
+      "sha256": "f20b89049db10369dcd11e913543ff4220f3a00dbdabbee5103f08d1a267d13c"
+    },
+    {
+      "file": "board-geometry.mjs",
+      "sha256": "51cd1a436165954d30327f0d8f5a960503556e315f1517176d2d3117e268c117"
+    },
+    {
+      "file": "ca-adapter.mjs",
+      "sha256": "243c6b17c1f83b2e2c6ab01113f9c32f3b4f7cfe709ab372bb9a2ddf546b7085"
+    },
+    {
+      "file": "ca-contour.mjs",
+      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
+    },
+    {
+      "file": "ca-frame-world.mjs",
+      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+    },
+    {
+      "file": "ca-layer.mjs",
+      "sha256": "13bd5cdeb020e0d60f951aee9044c13957bfe53e81ae841415d579f4bb2f418e"
+    },
+    {
+      "file": "ca-world.mjs",
+      "sha256": "895821b13ce2bec1e79c9c23cfbabbff0d6e304332559f5d28833ab43ef95f51"
+    },
+    {
+      "file": "game.mjs",
+      "sha256": "7b5ae4e2a59f34ff12434c975fba49d7f3e3d59a50e1a9697a7662f727c55a34"
+    },
+    {
+      "file": "index.html",
+      "sha256": "7729123856fc2c5113cd915079928340abd385bb1ca02bea9eeff0ffab4595ad"
+    },
+    {
+      "file": "simulation-worker.mjs",
+      "sha256": "c73be0642eed953e0f2de8cf8b4d64acf15951c8cb379c553b4095211144e91f"
+    },
+    {
+      "file": "style.css",
+      "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619"
+    }
+  ],
+  "moduleEdges": [
+    {
+      "from": "ca-world.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "simulation-worker.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "simulation-worker.mjs",
+      "to": "./game.mjs"
+    },
+    {
+      "from": "ca-frame-world.mjs",
+      "to": "./ca-world.mjs"
+    },
+    {
+      "from": "ca-adapter.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "ca-adapter.mjs",
+      "to": "./ca-frame-world.mjs"
+    },
+    {
+      "from": "ca-layer.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "ca-layer.mjs",
+      "to": "./ca-contour.mjs"
+    },
+    {
+      "from": "game.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "game.mjs",
+      "to": "./ca-adapter.mjs"
+    },
+    {
+      "from": "ca-contour.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "app.mjs",
+      "to": "./board-geometry.mjs"
+    },
+    {
+      "from": "app.mjs",
+      "to": "./ca-layer.mjs"
+    },
+    {
+      "from": "app.mjs",
+      "to": "./simulation-worker.mjs"
+    }
+  ],
+  "frozen0411Unmodified": true,
+  "old0410Unmodified": true,
+  "mainUnmodified": true
+}

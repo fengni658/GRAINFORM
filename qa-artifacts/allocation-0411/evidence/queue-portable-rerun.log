@@ -1,0 +1,31 @@
+✔ short starvation inherits actual last rAF, never stale startedAt or draw wall (5.251926ms)
+✔ recorded 1095/1096: rAF30905.4, draw/ACK30911, arrival30915.6, rAF30922.1 (1.044131ms)
+✔ recorded old1119/1120: 16.6ms rAF gap remains partial, no epsilon promotion (0.542031ms)
+✔ same timestamp (0.751685ms)
+✔ exact short-window edge (0.278874ms)
+✔ outside edge (0.257058ms)
+✔ long computation/delivery gap (0.281437ms)
+✔ backward time (1.743903ms)
+✔ next piece invalidates empty anchor (1.388348ms)
+✔ new burst after unseen transitions invalidates empty anchor (0.734686ms)
+✔ flash and return invalidates empty anchor (0.404801ms)
+✔ checking invalidates empty anchor (0.317439ms)
+✔ terminal invalidates empty anchor (0.356897ms)
+✔ missing burst invalidates empty anchor (0.43842ms)
+✔ pause/resume invalidates empty anchor (0.554953ms)
+✔ hidden/resync/failure/restart request invalidation invalidates empty anchor (0.451026ms)
+✔ full snapshot reset invalidates empty anchor (0.19906ms)
+✔ epoch reset rejects stale packets and restarts arrival timing (0.514042ms)
+✔ token gap cannot inherit; duplicate/empty snapshots cannot refresh window (0.374488ms)
+✔ one shot anchor and one receipt per distinct explicit rAF even with backlog (0.202565ms)
+✔ wrong or omitted rAF cannot fabricate continuity anchor (0.133769ms)
+✔ nonempty queue sample/receipt/offset behavior remains exact against frozen queue (2.681101ms)
+✔ game owns monotonic burst identity independently of snapshot publication (87.186477ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 433.347648

@@ -1,0 +1,25 @@
+--- a/ca-adapter.mjs
++++ b/ca-adapter.mjs
+@@ -8,7 +8,21 @@
+  has(id){return this.resolveSlot(id)>=0}
+  stats(){return{live:this.count,active:this.active.size,sleeping:this.chunks.size?0:this.count,lastTick:{visits:this.frameLast?.particles??0}}}
+  bodies(){return this.snapshot().map(p=>({...p,x:p.x+LEFT+.5,y:p.y+.5,sleep:!this.chunks.has(this.chunk(p.x,p.y))}))}
+- sync(){let changed=false;const present=new Set();for(const b of this.bodies()){present.add(b.id);const old=this.cache.get(b.id);if(!old||old.x!==b.x||old.y!==b.y||old.color!==b.color||old.sleep!==b.sleep){this.cache.set(b.id,b);this.changedBodies.set(b.id,b);this.removedBodies.delete(b.id);changed=true}}for(const id of this.cache.keys())if(!present.has(id)){this.cache.delete(id);this.changedBodies.delete(id);this.removedBodies.add(id);changed=true}if(changed)this.revision++}
++ // Preserve slot order and patch semantics; allocate body objects only for changes.
++ sync(){
++  let changed=false;const present=new Set();
++  for(let i=0;i<this.n;i++){
++   if(!this.live[i])continue;
++   const id=this.identity[i],x=this.x[i]+LEFT+.5,y=this.y[i]+.5,color=this.color[i],sleep=!this.chunks.has(this.chunk(this.x[i],this.y[i]));
++   present.add(id);const old=this.cache.get(id);
++   if(!old||old.x!==x||old.y!==y||old.color!==color||old.sleep!==sleep){
++    const b={id,x,y,color,batch:this.batch[i],sleep};
++    this.cache.set(id,b);this.changedBodies.set(id,b);this.removedBodies.delete(id);changed=true;
++   }
++  }
++  for(const id of this.cache.keys())if(!present.has(id)){this.cache.delete(id);this.changedBodies.delete(id);this.removedBodies.add(id);changed=true;}
++  if(changed)this.revision++;
++ }
+  addMany(points,{batch=0,initialVy=480}={}){if(this.count+points.length>this.maxParticles)return{accepted:false,reason:'capacity',addedIds:[]};try{const before=new Set(this.snapshot().map(p=>p.id));this.admit(points.map(p=>({x:p.x-LEFT,y:p.y})),points[0]?.color??1,batch,initialVy);const ids=this.snapshot().filter(p=>!before.has(p.id)).map(p=>p.id);this.sync();return{accepted:true,addedIds:ids}}catch(e){if(/capacity/.test(e.message))return{accepted:false,reason:'capacity',addedIds:[]};if(/admission|bounds/.test(e.message))return{accepted:false,reason:'occupied-slot',addedIds:[]};throw e}}
+  remove(ids){super.remove(ids);this.sync()}
+  step(){super.stepFrame();this.sync()}
