@@ -1,43 +1,59 @@
 {
-  "version": "0.4.9",
-  "candidate": "0.4.9-desktop-test",
+  "version": "0.4.10",
+  "candidate": "0.4.10-desktop-test",
   "entry": "index.html",
-  "scope": "Verified 0.4.9 desktop test runtime. Runtime bytes unchanged from the published 0.4.9 package; no 0.4.10 changes.",
+  "build": "b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b",
+  "scope": "Published 0.4.10 runtime, content-addressed entry wrapper; no 0.4.11 changes. Root modules are byte-identical source/test copies of the build modules.",
   "runtimeFiles": [
     {
-      "path": "index.html",
-      "bytes": 11288,
-      "sha256": "c3cb932bdc8ae06924dc0372b5b50890a09c652addcdb6e8483628f931f50f35"
-    },
-    {
-      "path": "style.css",
-      "bytes": 15512,
-      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9"
-    },
-    {
       "path": "app.mjs",
-      "bytes": 38081,
-      "sha256": "4e33d2dd1c182ca4cb117116b9cccfe93ea666419760c9163dd59029f5d2424f"
+      "bytes": 38412,
+      "sha256": "a4b2a32f5a4dc4dd40b583474d4824f4f3ae04396410178c4c80eac769f3154b"
     },
     {
-      "path": "simulation-worker.mjs",
-      "bytes": 15250,
-      "sha256": "57a2c73593014ef146080b9ec9276ed12f368b242f981601bf1424c67b803358"
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/app.mjs",
+      "bytes": 38412,
+      "sha256": "a4b2a32f5a4dc4dd40b583474d4824f4f3ae04396410178c4c80eac769f3154b"
     },
     {
-      "path": "game.mjs",
-      "bytes": 9693,
-      "sha256": "dcd6e2f4d412a8055dc4be508c288a21914b1b65b2055c09199a485503805a43"
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/ca-adapter.mjs",
+      "bytes": 3600,
+      "sha256": "d2da46f86779c49808997f241c9cb9c10da505eb80513af759956cfaad69afe6"
     },
     {
-      "path": "ca-world.mjs",
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/ca-contour.mjs",
+      "bytes": 11290,
+      "sha256": "9d6b0ff94abfa51fb5e44caa08c38d573027173f3d78ad2f78205d692cb6bfb2"
+    },
+    {
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/ca-frame-world.mjs",
+      "bytes": 2652,
+      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+    },
+    {
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/ca-layer.mjs",
+      "bytes": 18954,
+      "sha256": "66a6c125436d09740c0b9fbae1c04b902ffbfdc19f4fbc8ddce7ec3681e73994"
+    },
+    {
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/ca-world.mjs",
       "bytes": 10052,
       "sha256": "f7a55ebb10a0a51c4852c39ef6b36c409e2ab26dddab4c05402371e1a0578773"
     },
     {
-      "path": "ca-frame-world.mjs",
-      "bytes": 2652,
-      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/game.mjs",
+      "bytes": 9791,
+      "sha256": "f4e5754d11a057460216ca2b25d776f03fcd38ba55b3b9272517a7666a0d5004"
+    },
+    {
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/simulation-worker.mjs",
+      "bytes": 15250,
+      "sha256": "57a2c73593014ef146080b9ec9276ed12f368b242f981601bf1424c67b803358"
+    },
+    {
+      "path": "builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/style.css",
+      "bytes": 15512,
+      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9"
     },
     {
       "path": "ca-adapter.mjs",
@@ -45,10 +61,49 @@
       "sha256": "d2da46f86779c49808997f241c9cb9c10da505eb80513af759956cfaad69afe6"
     },
     {
+      "path": "ca-contour.mjs",
+      "bytes": 11290,
+      "sha256": "9d6b0ff94abfa51fb5e44caa08c38d573027173f3d78ad2f78205d692cb6bfb2"
+    },
+    {
+      "path": "ca-frame-world.mjs",
+      "bytes": 2652,
+      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+    },
+    {
       "path": "ca-layer.mjs",
-      "bytes": 16239,
-      "sha256": "3081084ccd979803f51e9f81a8ebe75cad55033ac426f8ce1079ce45088373bb"
+      "bytes": 18954,
+      "sha256": "66a6c125436d09740c0b9fbae1c04b902ffbfdc19f4fbc8ddce7ec3681e73994"
+    },
+    {
+      "path": "ca-world.mjs",
+      "bytes": 10052,
+      "sha256": "f7a55ebb10a0a51c4852c39ef6b36c409e2ab26dddab4c05402371e1a0578773"
+    },
+    {
+      "path": "game.mjs",
+      "bytes": 9791,
+      "sha256": "f4e5754d11a057460216ca2b25d776f03fcd38ba55b3b9272517a7666a0d5004"
+    },
+    {
+      "path": "index.html",
+      "bytes": 11441,
+      "sha256": "4012edb775f0388a34698346c246ba9a282e7a6830e798486df73fb129ace657"
+    },
+    {
+      "path": "play-b6104e010aee4.html",
+      "bytes": 11441,
+      "sha256": "4012edb775f0388a34698346c246ba9a282e7a6830e798486df73fb129ace657"
+    },
+    {
+      "path": "simulation-worker.mjs",
+      "bytes": 15250,
+      "sha256": "57a2c73593014ef146080b9ec9276ed12f368b242f981601bf1424c67b803358"
+    },
+    {
+      "path": "style.css",
+      "bytes": 15512,
+      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9"
     }
-  ],
-  "baselineArchiveSha256": "b2383be2688a6e7363e5c1a0ed323b10cb5c823e1e729b398c3d5053f5632865"
+  ]
 }

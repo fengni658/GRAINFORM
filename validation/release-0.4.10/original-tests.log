@@ -1,0 +1,202 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grainform@0.4.9 test
+> node --test tests/ca-game.test.mjs tests/ca-phase.test.mjs tests/ui-ca-presentation.test.mjs tests/ui-grid-clock.test.mjs tests/ui-grid-renderer.test.mjs tests/ui-grid-boot.test.mjs tests/ui-message-clock.test.mjs
+
+✔ whole block exists until actual contact then atomic 2304 identity cells (106.228634ms)
+✔ quiet physics cannot check or spawn until exact last output presentation (510.612473ms)
+✔ presentations reject missing, future, duplicate and non-head tokens (93.479668ms)
+✔ supported full-color clear waits flash then settles before new spawn (32.357942ms)
+✔ paused and settled phases reject piece movement; reset discards tokens (246.711493ms)
+✔ capacity rejects whole admission without partial material (212.912965ms)
+✔ unobstructed rigid sweep cannot prematurely release (7.991069ms)
+✔ seven shapes, rotations, seeded preview sequence retain legacy semantics (17.295311ms)
+✔ normal gap drop never clears its partly moving component; whole2488 removed (706.906462ms)
+✔ cross-color support cascade clears full466 then462 with fresh settle and chain score (36.046128ms)
+✔ pause and restart retain exact phase state and reject prior-frame presentation (403.970354ms)
+✔ material sampling preserves every ordered one-cell leg and all phase holds (7.731728ms)
+✔ render completion is exact, ordered and bounded; a delayed rAF cannot skip frames (1.874004ms)
+✔ pause freezes the current exact path and restart invalidates undrawn old tokens (0.763498ms)
+✔ worker retains wall-time debt when two frames block, rejects invalid ACK and catches up without substep loss (16.406254ms)
+✔ worker pause keeps debt and pending exact tokens; restart isolates ACK, resync includes full in-flight paths (2.412384ms)
+✔ real CA does not clear a bridge before its latest exact material frame is painted (67.818694ms)
+✖ CA cell drawing uses identity-fixed subpixel grain, cached static cells and current path positions (18.671055ms)
+✖ 12000 settled cells are cached, removed cells leave no stale paint, and resize/theme rebuild once (358.581585ms)
+✔ early-clear QA settles the artificial floor before spawn; cascade really requires a second settled check (92.526846ms)
+✖ a failed second canvas preserves immediate drawing through the existing cell fallback (11.605084ms)
+✖ original UI boots through real worker runtime: start/drop/fullsync/highlight/restart/stale messages (767.165849ms)
+✔ one active wall second executes 60 fixed control ticks, one timer, exact conserved debt (15.293281ms)
+✔ a late callback keeps every owed tick and catch-up is bounded per callback (0.974115ms)
+✔ slow steps do not rebase time; existing debt survives pause/resume/hidden (8.068004ms)
+✔ sub-tick debt before pause is retained and hidden wall time is excluded (0.8474ms)
+✔ incremental publish avoids default full snapshots and full sync is explicit (2.100817ms)
+✔ old-round state commands and visibility cannot mutate new epoch; input ids ACK once (0.688497ms)
+✔ initial full/ordered deltas retain exact ids; sequence gap never partially applies (12.426649ms)
+✔ revision/count corruption requests authoritative full sync without ghosts (0.537453ms)
+✔ clear overlay follows actual existing IDs and vanishes on clear completion/restart (0.325401ms)
+✖ old ack/fatal/visibility/ready are uniformly stale; UI keeps old visual and input system (47.069877ms)
+✔ visual invalidation ignores diagnostic clocks and retains pose, epoch and clear animation (13.833155ms)
+✔ worker and window independent origins use shared epoch coordinates (4.093952ms)
+✔ unmeasurable older or invalid frames report unknown instead of fictitious zero delay (0.721694ms)
+✔ actual runtime snapshot carries its injected monotonic time origin (20.042427ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 31
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1559.014764
+
+✖ failing tests:
+
+test at tests/ui-ca-presentation.test.mjs:74:1
+✖ CA cell drawing uses identity-fixed subpixel grain, cached static cells and current path positions (18.671055ms)
+  TypeError: context.moveTo is not a function
+      at clipMaterialContour (file://<repo>/ca-contour.mjs:66:236)
+      at CALayerRenderer.draw (file://<repo>/ca-layer.mjs:205:86)
+      at TestContext.<anonymous> (file://<repo>/tests/ui-ca-presentation.test.mjs:77:122)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/ui-ca-presentation.test.mjs:81:1
+✖ 12000 settled cells are cached, removed cells leave no stale paint, and resize/theme rebuild once (358.581585ms)
+  TypeError: context.moveTo is not a function
+      at clipMaterialContour (file://<repo>/ca-contour.mjs:66:236)
+      at CALayerRenderer.draw (file://<repo>/ca-layer.mjs:205:86)
+      at TestContext.<anonymous> (file://<repo>/tests/ui-ca-presentation.test.mjs:84:83)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/ui-ca-presentation.test.mjs:97:1
+✖ a failed second canvas preserves immediate drawing through the existing cell fallback (11.605084ms)
+  TypeError: context.moveTo is not a function
+      at clipMaterialContour (file://<repo>/ca-contour.mjs:66:236)
+      at CALayerRenderer.draw (file://<repo>/ca-layer.mjs:205:86)
+      at TestContext.<anonymous> (file://<repo>/tests/ui-ca-presentation.test.mjs:101:158)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/ui-grid-boot.test.mjs:5:1
+✖ original UI boots through real worker runtime: start/drop/fullsync/highlight/restart/stale messages (767.165849ms)
+  TypeError: context.quadraticCurveTo is not a function
+      at vertex (file://<repo>/ca-contour.mjs:64:83)
+      at clipMaterialContour (file://<repo>/ca-contour.mjs:66:302)
+      at CALayerRenderer.draw (file://<repo>/ca-layer.mjs:205:86)
+      at draw (file://<repo>/app.mjs?ui-ca-boot:178:178)
+      at Array.renderLoop (file://<repo>/app.mjs?ui-ca-boot:195:76)
+      at draw (file://<repo>/tests/ui-grid-boot.test.mjs:16:98)
+      at TestContext.<anonymous> (file://<repo>/tests/ui-grid-boot.test.mjs:22:57)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/ui-grid-renderer.test.mjs:26:1
+✖ old ack/fatal/visibility/ready are uniformly stale; UI keeps old visual and input system (47.069877ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /0\.4\.9 测试版/. Input:
+  
+  '<!doctype html>\n' +
+    '<html lang="zh-CN">\n' +
+    '<head>\n' +
+    '<meta charset="UTF-8">\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' +
+    '<meta name="theme-color" content="#121718">\n' +
+    '<meta name="description" content="粒序 GRAINFORM 0.4.10 测试版。方块落地化为细沙，同色连通两壁，释放空间。">\n' +
+    '<title>粒序 GRAINFORM · 0.4.10 测试版</title>\n' +
+    `<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eac370'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%234fc0b3'/%3E%3C/svg%3E">\n` +
+    '<link rel="stylesheet" href="./builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/style.css">\n' +
+    '</head>\n' +
+    '<body>\n' +
+    '<div class="app">\n' +
+    '<header class="topbar">\n' +
+    '  <a class="brand" href="./" aria-label="粒序 GRAINFORM 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-cn">粒序</span><span class="brand-en">GRAINFORM</span></a>\n' +
+    '  <div class="top-actions"><span class="edition">流沙方块 <b>0.4.10 测试版</b></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 / 继续 · P" disabled>Ⅱ</button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg></button><button id="headerHelp" class="icon-button" aria-label="查看玩法" title="玩法">?</button></div>\n' +
+    '</header>\n' +
+    '<main class="game-layout">\n' +
+    '  <aside class="left-panel">\n' +
+    '    <div class="eyebrow">当前得分</div><div class="score big-score" data-score>0</div>\n' +
+    '    <div class="record-row"><span data-best-label>本地最高</span><strong class="mono" data-best>0</strong></div>\n' +
+    '    <div class="level-block"><div class="record-row"><span>流速等级</span><span class="mono">LV. <strong data-level>01</strong></span></div><div class="level-track"><span id="levelProgress"></span></div><p class="subtle">让同色相遇，给新方块留出空间</p></div>\n' +
+    '    <div class="session-stats"><div><strong data-cleared>0</strong><small>已消除沙粒</small></div><div><strong data-pieces>0</strong><small>已落方块</small></div></div>\n' +
+    '    <div class="rule-note"><span class="eyebrow">连成一线</span><p>方寸之间<br>自有流动<br><em>每一粒，都算数</em></p><div class="connection-line" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i><i></i><span></span></div></div>\n' +
+    '  </aside>\n' +
+    '  <section class="stage" aria-label="流沙方块游戏区域">\n' +
+    '    <div class="mobile-hud"><div><span>得分</span><strong data-score>0</strong></div><div><span data-best-label>本地最高</span><strong data-best>0</strong></div><div class="mobile-next"><span>下一个</span><canvas id="nextMobile" width="112" height="64" aria-label="下一块预览"></canvas></div><div><span>等级</span><strong>LV.<b data-level>01</b></strong></div></div>\n' +
+    '    <div class="board-heading"><span><i id="stateDot"></i><span id="stateLabel">正在准备</span></span><span class="mono">288 × 432</span></div>\n' +
+    '    <div class="board-shell" id="boardShell">\n' +
+    '      <canvas id="gameCanvas" width="576" height="864" tabindex="0" role="img" aria-label="流沙棋盘。方向键移动、旋转和软降，空格硬降，P 暂停。"></canvas>\n' +
+    '      <section id="overlay" class="overlay" aria-labelledby="overlayTitle">\n' +
+    '        <div id="homePanel" class="overlay-panel">\n' +
+    '          <div class="mode-label">流沙方块 · 0.4.10 测试版</div><h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1><p class="intro">方块落地，化为沙粒<br>同色连通两壁，整片消除</p><button id="startButton" class="primary-button" disabled>正在准备…</button><button id="howButton" class="text-button">怎么玩</button><p class="start-hint">测试版 · 本局进度不保存</p>\n' +
+    '        </div>\n' +
+    '        <div id="pausePanel" class="overlay-panel" hidden>\n' +
+    '          <div class="mode-label">TAKE A BREATH</div><h2 id="pauseTitle">让沙粒等一等</h2><p id="pauseReason" class="intro">游戏已暂停</p><button id="resumeButton" class="primary-button">继续游戏 <span aria-hidden="true">▶</span></button><button id="restartButton" class="text-button">重新开始</button>\n' +
+    '        </div>\n' +
+    '        <div id="overPanel" class="overlay-panel" hidden>\n' +
+    '          <div class="mode-label">这一局，落定</div><h2 id="overTitle">再来一场流动</h2><div class="end-score" id="endScore">0</div><p id="endRecord" class="intro"></p><p id="endDetails" class="end-details"></p><button id="againButton" class="primary-button">再玩一局 <span aria-hidden="true">↵</span></button>\n' +
+    '        </div>\n' +
+    '        <div id="errorPanel" class="overlay-panel" hidden>\n' +
+    '          <div class="mode-label">实验试玩</div><h2 id="errorTitle">暂时无法开始</h2><p id="errorText" class="intro">游戏模块未能加载。</p><button id="retryButton" class="primary-button">重新加载</button>\n' +
+    '        </div>\n' +
+    '      </section>\n' +
+    '    </div>\n' +
+    '    <div class="board-caption"><span>连接两壁 · 释放空间</span><span id="inputStatus" role="status">等待开始</span></div>\n' +
+    '    <div class="touch-controls" id="touchControls" aria-label="游戏操作">\n' +
+    '      <button data-action="left" aria-label="向左移动，长按连续移动"><span class="control-icon" aria-hidden="true">←</span><small>左移</small></button>\n' +
+    '      <button data-action="right" aria-label="向右移动，长按连续移动"><span class="control-icon" aria-hidden="true">→</span><small>右移</small></button>\n' +
+    '      <button data-action="rotate" aria-label="顺时针旋转"><span class="control-icon" aria-hidden="true">↻</span><small>旋转</small></button>\n' +
+    '      <button data-action="down" aria-label="软降，长按连续下落"><span class="control-icon" aria-hidden="true">↓</span><small>软降</small></button>\n' +
+    '      <button data-action="drop" class="drop-control" aria-label="硬降，直接落下"><span class="control-icon" aria-hidden="true">⤓</span><small>硬降</small></button>\n' +
+    '    </div>\n' +
+    '    <div id="clockNotice" class="clock-notice" role="status">沙粒落定后，再判断消除。</div>\n' +
+    '  </section>\n' +
+    '  <aside class="right-panel">\n' +
+    '    <div class="next-box"><div class="eyebrow">下一个</div><canvas id="nextCanvas" width="192" height="128" aria-label="下一块预览"></canvas><span id="nextColor" class="subtle">等待开始</span></div>\n' +
+    '    <div class="controls-guide"><div class="eyebrow">操作</div><div><span><kbd>←</kbd><kbd>→</kbd></span><span>左右移动</span></div><div><span><kbd>↑</kbd></span><span>旋转方块</span></div><div><span><kbd>↓</kbd></span><span>软降</span></div><div><span><kbd class="wide">SPACE</kbd></span><span>硬降</span></div><div><span><kbd>P</kbd><kbd>Esc</kbd></span><span>暂停 / 继续</span></div></div>\n' +
+    '    <div class="palette-note"><div class="swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p>四种颜色<br>无数种可能</p></div><button id="helpButton" class="help-button">玩法与提示 <span aria-hidden="true">?</span></button>\n' +
+    '  </aside>\n' +
+    '</main>\n' +
+    '<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序 <b>0.4.10 测试版</b></span><span id="storageFooter">设置与最高分仅保存在此浏览器</span></footer>\n' +
+    '</div>\n' +
+    '<dialog id="settingsDialog" aria-labelledby="settingsTitle">\n' +
+    '  <div class="dialog-top"><span class="eyebrow">偏好设置</span><button class="dialog-close icon-button" data-close aria-label="关闭设置">×</button></div><h2 id="settingsTitle">照你的节奏</h2>\n' +
+    '  <label class="setting-row"><span><strong>游戏音效</strong><small>轻量合成音，无背景音乐</small></span><input id="soundToggle" type="checkbox" role="switch"></label>\n' +
+    '  <label class="setting-row"><span><strong>高对比配色</strong><small>提高四色的明度和色相差异</small></span><input id="contrastToggle" type="checkbox" role="switch"></label>\n' +
+    '  <label class="setting-row"><span><strong>减少界面动效</strong><small>关闭按钮和界面的过渡效果</small></span><input id="motionToggle" type="checkbox" role="switch"></label>\n' +
+    '  <div class="storage-info"><span data-best-label>本地最高</span><strong data-best>0</strong></div><p id="storageNotice" class="subtle">设置与最高分仅保存在当前浏览器，刷新不保留本局。</p>\n' +
+    '  <button id="resetBest" class="danger-text">清除本地最高分</button><div id="resetConfirm" hidden><p class="confirm-copy">清除后无法恢复，确认清除？</p><div class="button-pair"><button id="cancelReset" class="secondary-button">保留记录</button><button id="confirmReset" class="secondary-button danger">确认清除</button></div></div><p id="resetStatus" class="subtle" hidden></p>\n' +
+    '  <button class="primary-button dialog-done" data-close>完成</button>\n' +
+    '</dialog>\n' +
+    '<dialog id="helpDialog" aria-labelledby="helpTitle">\n' +
+    '  <div class="dialog-top"><span class="eyebrow">玩法指南</span><button class="dialog-close icon-button" data-close aria-label="关闭玩法">×</button></div><h2 id="helpTitle">让同色，彼此相连</h2>\n' +
+    '  <ol class="how-list"><li><span>01</span><div><strong>方块落下，沙粒流动</strong><p>左右移动、旋转方块。软降帮助微调；硬降让方块直接落地，散成沙粒。</p></div></li><li><span>02</span><div><strong>同色连通两壁，整片消除</strong><p>同色沙粒连成一片，同时接触左右两面墙，落定后整片消除。其他颜色不会补成连接。</p></div></li><li><span>03</span><div><strong>留出空间，让流动继续</strong><p>留意下一个方块，把同色放在一起。顶部出生区被堵住时，本局结束。</p></div></li></ol>\n' +
+    '  <p class="tip-note">沙粒完全落定后，才会判断消除。消除后，让剩下的沙粒落定，再落下下一块。</p><p class="subtle">方向键或 A / D / W / S，空格硬降，P 或 Esc 暂停。手机可长按左右和软降键，松开停止追加操作。已提交的操作会显示处理状态；打开设置、玩法或离开页面会请求暂停，返回后需手动继续。</p><button class="primary-button dialog-done" data-close>明白了</button>\n' +
+    '</dialog>\n' +
+    '<dialog id="restartDialog" aria-labelledby="restartTitle"><div class="dialog-top"><span class="eyebrow">重新开始</span><button class="dialog-close icon-button" data-close aria-label="取消重新开始">×</button></div><h2 id="restartTitle">开始新的一局？</h2><p class="intro">当前这一局不会保留。最高分与设置不受影响。</p><div class="button-pair"><button id="cancelRestart" class="secondary-button">继续这一局</button><button id="confirmRestart" class="primary-button">重新开始</button></div></dialog>\n' +
+    '<div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>\n' +
+    '<details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>QA 只读诊断</summary><p>模拟、绘图与rAF回调独立计时；rAF回调率不是实际绘图率，倍率是模拟/活跃墙时。增量序号、缓存回退、积压与输入ACK延迟均如实显示。本地诊断，无遥测。</p><pre id="qaOutput"></pre></details>\n' +
+    '<script type="module" src="./builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/app.mjs"></script>\n' +
+    '</body>\n' +
+    '</html>\n'
+  
+      at TestContext.<anonymous> (file://<repo>/tests/ui-grid-renderer.test.mjs:27:650)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: `<!doctype html>\n<html lang="zh-CN">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<meta name="theme-color" content="#121718">\n<meta name="description" content="粒序 GRAINFORM 0.4.10 测试版。方块落地化为细沙，同色连通两壁，释放空间。">\n<title>粒序 GRAINFORM · 0.4.10 测试版</title>\n<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eac370'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%234fc0b3'/%3E%3C/svg%3E">\n<link rel="stylesheet" href="./builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/style.css">\n</head>\n<body>\n<div class="app">\n<header class="topbar">\n  <a class="brand" href="./" aria-label="粒序 GRAINFORM 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-cn">粒序</span><span class="brand-en">GRAINFORM</span></a>\n  <div class="top-actions"><span class="edition">流沙方块 <b>0.4.10 测试版</b></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 / 继续 · P" disabled>Ⅱ</button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg></button><button id="headerHelp" class="icon-button" aria-label="查看玩法" title="玩法">?</button></div>\n</header>\n<main class="game-layout">\n  <aside class="left-panel">\n    <div class="eyebrow">当前得分</div><div class="score big-score" data-score>0</div>\n    <div class="record-row"><span data-best-label>本地最高</span><strong class="mono" data-best>0</strong></div>\n    <div class="level-block"><div class="record-row"><span>流速等级</span><span class="mono">LV. <strong data-level>01</strong></span></div><div class="level-track"><span id="levelProgress"></span></div><p class="subtle">让同色相遇，给新方块留出空间</p></div>\n    <div class="session-stats"><div><strong data-cleared>0</strong><small>已消除沙粒</small></div><div><strong data-pieces>0</strong><small>已落方块</small></div></div>\n    <div class="rule-note"><span class="eyebrow">连成一线</span><p>方寸之间<br>自有流动<br><em>每一粒，都算数</em></p><div class="connection-line" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i><i></i><span></span></div></div>\n  </aside>\n  <section class="stage" aria-label="流沙方块游戏区域">\n    <div class="mobile-hud"><div><span>得分</span><strong data-score>0</strong></div><div><span data-best-label>本地最高</span><strong data-best>0</strong></div><div class="mobile-next"><span>下一个</span><canvas id="nextMobile" width="112" height="64" aria-label="下一块预览"></canvas></div><div><span>等级</span><strong>LV.<b data-level>01</b></strong></div></div>\n    <div class="board-heading"><span><i id="stateDot"></i><span id="stateLabel">正在准备</span></span><span class="mono">288 × 432</span></div>\n    <div class="board-shell" id="boardShell">\n      <canvas id="gameCanvas" width="576" height="864" tabindex="0" role="img" aria-label="流沙棋盘。方向键移动、旋转和软降，空格硬降，P 暂停。"></canvas>\n      <section id="overlay" class="overlay" aria-labelledby="overlayTitle">\n        <div id="homePanel" class="overlay-panel">\n          <div class="mode-label">流沙方块 · 0.4.10 测试版</div><h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1><p class="intro">方块落地，化为沙粒<br>同色连通两壁，整片消除</p><button id="startButton" class="primary-button" disabled>正在准备…</button><button id="howButton" class="text-button">怎么玩</button><p class="start-hint">测试版 · 本局进度不保存</p>\n        </div>\n        <div id="pausePanel" class="overlay-panel" hidden>\n          <div class="mode-label">TAKE A BREATH</div><h2 id="pauseTitle">让沙粒等一等</h2><p id="pauseReason" class="intro">游戏已暂停</p><button id="resumeButton" class="primary-button">继续游戏 <span aria-hidden="true">▶</span></button><button id="restartButton" class="text-button">重新开始</button>\n        </div>\n        <div id="overPanel" class="overlay-panel" hidden>\n          <div class="mode-label">这一局，落定</div><h2 id="overTitle">再来一场流动</h2><div class="end-score" id="endScore">0</div><p id="endRecord" class="intro"></p><p id="endDetails" class="end-details"></p><button id="againButton" class="primary-button">再玩一局 <span aria-hidden="true">↵</span></button>\n        </div>\n        <div id="errorPanel" class="overlay-panel" hidden>\n          <div class="mode-label">实验试玩</div><h2 id="errorTitle">暂时无法开始</h2><p id="errorText" class="intro">游戏模块未能加载。</p><button id="retryButton" class="primary-button">重新加载</button>\n        </div>\n      </section>\n    </div>\n    <div class="board-caption"><span>连接两壁 · 释放空间</span><span id="inputStatus" role="status">等待开始</span></div>\n    <div class="touch-controls" id="touchControls" aria-label="游戏操作">\n      <button data-action="left" aria-label="向左移动，长按连续移动"><span class="control-icon" aria-hidden="true">←</span><small>左移</small></button>\n      <button data-action="right" aria-label="向右移动，长按连续移动"><span class="control-icon" aria-hidden="true">→</span><small>右移</small></button>\n      <button data-action="rotate" aria-label="顺时针旋转"><span class="control-icon" aria-hidden="true">↻</span><small>旋转</small></button>\n      <button data-action="down" aria-label="软降，长按连续下落"><span class="control-icon" aria-hidden="true">↓</span><small>软降</small></button>\n      <button data-action="drop" class="drop-control" aria-label="硬降，直接落下"><span class="control-icon" aria-hidden="true">⤓</span><small>硬降</small></button>\n    </div>\n    <div id="clockNotice" class="clock-notice" role="status">沙粒落定后，再判断消除。</div>\n  </section>\n  <aside class="right-panel">\n    <div class="next-box"><div class="eyebrow">下一个</div><canvas id="nextCanvas" width="192" height="128" aria-label="下一块预览"></canvas><span id="nextColor" class="subtle">等待开始</span></div>\n    <div class="controls-guide"><div class="eyebrow">操作</div><div><span><kbd>←</kbd><kbd>→</kbd></span><span>左右移动</span></div><div><span><kbd>↑</kbd></span><span>旋转方块</span></div><div><span><kbd>↓</kbd></span><span>软降</span></div><div><span><kbd class="wide">SPACE</kbd></span><span>硬降</span></div><div><span><kbd>P</kbd><kbd>Esc</kbd></span><span>暂停 / 继续</span></div></div>\n    <div class="palette-note"><div class="swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p>四种颜色<br>无数种可能</p></div><button id="helpButton" class="help-button">玩法与提示 <span aria-hidden="true">?</span></button>\n  </aside>\n</main>\n<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序 <b>0.4.10 测试版</b></span><span id="storageFooter">设置与最高分仅保存在此浏览器</span></footer>\n</div>\n<dialog id="settingsDialog" aria-labelledby="settingsTitle">\n  <div class="dialog-top"><span class="eyebrow">偏好设置</span><button class="dialog-close icon-button" data-close aria-label="关闭设置">×</button></div><h2 id="settingsTitle">照你的节奏</h2>\n  <label class="setting-row"><span><strong>游戏音效</strong><small>轻量合成音，无背景音乐</small></span><input id="soundToggle" type="checkbox" role="switch"></label>\n  <label class="setting-row"><span><strong>高对比配色</strong><small>提高四色的明度和色相差异</small></span><input id="contrastToggle" type="checkbox" role="switch"></label>\n  <label class="setting-row"><span><strong>减少界面动效</strong><small>关闭按钮和界面的过渡效果</small></span><input id="motionToggle" type="checkbox" role="switch"></label>\n  <div class="storage-info"><span data-best-label>本地最高</span><strong data-best>0</strong></div><p id="storageNotice" class="subtle">设置与最高分仅保存在当前浏览器，刷新不保留本局。</p>\n  <button id="resetBest" class="danger-text">清除本地最高分</button><div id="resetConfirm" hidden><p class="confirm-copy">清除后无法恢复，确认清除？</p><div class="button-pair"><button id="cancelReset" class="secondary-button">保留记录</button><button id="confirmReset" class="secondary-button danger">确认清除</button></div></div><p id="resetStatus" class="subtle" hidden></p>\n  <button class="primary-button dialog-done" data-close>完成</button>\n</dialog>\n<dialog id="helpDialog" aria-labelledby="helpTitle">\n  <div class="dialog-top"><span class="eyebrow">玩法指南</span><button class="dialog-close icon-button" data-close aria-label="关闭玩法">×</button></div><h2 id="helpTitle">让同色，彼此相连</h2>\n  <ol class="how-list"><li><span>01</span><div><strong>方块落下，沙粒流动</strong><p>左右移动、旋转方块。软降帮助微调；硬降让方块直接落地，散成沙粒。</p></div></li><li><span>02</span><div><strong>同色连通两壁，整片消除</strong><p>同色沙粒连成一片，同时接触左右两面墙，落定后整片消除。其他颜色不会补成连接。</p></div></li><li><span>03</span><div><strong>留出空间，让流动继续</strong><p>留意下一个方块，把同色放在一起。顶部出生区被堵住时，本局结束。</p></div></li></ol>\n  <p class="tip-note">沙粒完全落定后，才会判断消除。消除后，让剩下的沙粒落定，再落下下一块。</p><p class="subtle">方向键或 A / D / W / S，空格硬降，P 或 Esc 暂停。手机可长按左右和软降键，松开停止追加操作。已提交的操作会显示处理状态；打开设置、玩法或离开页面会请求暂停，返回后需手动继续。</p><button class="primary-button dialog-done" data-close>明白了</button>\n</dialog>\n<dialog id="restartDialog" aria-labelledby="restartTitle"><div class="dialog-top"><span class="eyebrow">重新开始</span><button class="dialog-close icon-button" data-close aria-label="取消重新开始">×</button></div><h2 id="restartTitle">开始新的一局？</h2><p class="intro">当前这一局不会保留。最高分与设置不受影响。</p><div class="button-pair"><button id="cancelRestart" class="secondary-button">继续这一局</button><button id="confirmRestart" class="primary-button">重新开始</button></div></dialog>\n<div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>\n<details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>QA 只读诊断</summary><p>模拟、绘图与rAF回调独立计时；rAF回调率不是实际绘图率，倍率是模拟/活跃墙时。增量序号、缓存回退、积压与输入ACK延迟均如实显示。本地诊断，无遥测。</p><pre id="qaOutput"></pre></details>\n<script type="module" src="./builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/app.mjs"></script>\n</body>\n</html>\n`,
+    expected: /0\.4\.9 测试版/,
+    operator: 'match',
+    diff: 'simple'
+  }

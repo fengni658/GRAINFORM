@@ -1,0 +1,33 @@
+--- 0.4.9/tests/ui-ca-presentation.test.mjs
++++ 0.4.10/tests/ui-ca-presentation.test.mjs
+@@ -70,7 +70,7 @@
+  for(const f of flight)runtime.receive({type:'presented',epoch:runtime.epoch,token:f.token});
+  clock.to(1000);assert.equal(g.rawCleared,232);assert.equal(g.world.stats().live,40);assert.equal(g.active,null,'Fall after the clear needs its own presented paths');assert.ok(runtime.stats().maxPendingMaterialFrames<=2);runtime.dispose();
+ });
+-class Context {constructor(){this.cells=[];this.images=0;}save(){}restore(){}setTransform(){}clearRect(){}drawImage(){this.images++;}fillRect(...v){this.cells.push(v);}beginPath(){}arc(x,y,r){this.cells.push([x,y,r]);}fill(){}}
++class Context {constructor(){this.cells=[];this.images=0;this.pathArcs=[];}save(){}restore(){}setTransform(){}clearRect(){}drawImage(){this.images++;}fillRect(...v){this.cells.push(v);}beginPath(){this.pathArcs=[];}arc(x,y,r){this.pathArcs.push([x,y,r]);}moveTo(){}lineTo(){}quadraticCurveTo(){}closePath(){}clip(){}stroke(){}fill(){this.cells.push(...this.pathArcs);}}
+ test('CA cell drawing uses identity-fixed subpixel grain, cached static cells and current path positions',()=>{
+  const cache=new Context(),screen=new Context(),r=new CALayerRenderer({createCanvas:()=>({getContext:()=>cache})});
+  r.apply({reset:true,removed:[],upsert:[{id:1,x:31.5,y:22.5,color:1},{id:2,x:50.5,y:30.5,color:2}]});
+--- 0.4.9/tests/ui-grid-boot.test.mjs
++++ 0.4.10/tests/ui-grid-boot.test.mjs
+@@ -5,7 +5,7 @@
+ test('original UI boots through real worker runtime: start/drop/fullsync/highlight/restart/stale messages',async()=>{
+  let wall=0,timerId=0,rafId=0;const timers=new Map(),rafs=new Map(),elements=new Map(),listeners=new Map();
+  const old={};for(const k of['document','window','Worker','location','localStorage','matchMedia','requestAnimationFrame','cancelAnimationFrame','devicePixelRatio','performance','Image'])old[k]=globalThis[k];
+- class Context{constructor(){this.polygons=0;this.fills=[];}setTransform(){}fillRect(){}clearRect(){}save(){}restore(){}translate(){}scale(){}beginPath(){}arc(){}moveTo(){}lineTo(){}closePath(){this.polygons++;}rect(){}clip(){}fill(){this.fills.push(this.fillStyle);}drawImage(){}getImageData(x,y,width,height){return{width,height,data:new Uint8ClampedArray(width*height*4)};}putImageData(){}}
++ class Context{constructor(){this.polygons=0;this.fills=[];}setTransform(){}fillRect(){}clearRect(){}save(){}restore(){}translate(){}scale(){}beginPath(){}arc(){}moveTo(){}lineTo(){}quadraticCurveTo(){}stroke(){}closePath(){this.polygons++;}rect(){}clip(){}fill(){this.fills.push(this.fillStyle);}drawImage(){}getImageData(x,y,width,height){return{width,height,data:new Uint8ClampedArray(width*height*4)};}putImageData(){}}
+  class Element{constructor(id){this.id=id;this.dataset={};this.style={};this.textContent='';this.hidden=false;this.open=false;this.width=id.startsWith('next')?192:576;this.height=id.startsWith('next')?128:864;this.ctx=new Context();this.handlers=new Map();this.classList={add(){},remove(){},toggle(){}};this.tagName=id.includes('Canvas')?'CANVAS':'BUTTON';}addEventListener(t,f){this.handlers.set(t,f);}setAttribute(k,v){this[k]=v;}getContext(){return this.ctx;}getBoundingClientRect(){return{width:288,height:432};}focus(){document.activeElement=this;}showModal(){this.open=true;}close(){this.open=false;}closest(){return elements.get('settingsDialog');}setPointerCapture(){}}
+  const get=id=>{if(!elements.has(id))elements.set(id,new Element(id));return elements.get(id);};
+  const buttons=['left','right','rotate','down','drop'].map(action=>{const b=get('control-'+action);b.dataset.action=action;return b;});
+--- 0.4.9/tests/ui-grid-renderer.test.mjs
++++ 0.4.10/tests/ui-grid-renderer.test.mjs
+@@ -24,7 +24,7 @@
+  const bodies=new Map([[1,b(1)],[2,b(2)]]);assert.deepEqual(clearHighlightBodies({clearIds:[1,1,2,99]},bodies).map(p=>p.id),[1,2]);bodies.delete(1);assert.deepEqual(clearHighlightBodies({clearIds:[1,2]},bodies).map(p=>p.id),[2]);assert.equal(clearHighlightBodies({clearIds:[]},bodies).length,0);bodies.clear();assert.equal(clearHighlightBodies({clearIds:[1,2]},bodies).length,0);
+ });
+ test('old ack/fatal/visibility/ready are uniformly stale; UI keeps old visual and input system',async()=>{
+- for(const type of['ack','fatal','visibility','ready','snapshot'])assert.equal(staleEpoch({type,epoch:1},2),true);const source=await readFile(new URL('../app.mjs',import.meta.url),'utf8'),html=await readFile(new URL('../index.html',import.meta.url),'utf8');assert.match(source,/if \(staleEpoch\(data, epoch\)\)/);assert.match(source,/grainform:0\.4\.8:grid:best/);assert.doesNotMatch(source,/grainform:0\.4\.5/);assert.match(source,/ctx\.globalAlpha = settings.motion/);assert.match(source,/clearHighlightBodies\(snapshot, bodyStore.bodies\)/);assert.match(source,/bodyStore\.array\(\)/);assert.doesNotMatch(source,/snapshot\.bodies\s*\|\|/);assert.match(html,/0\.4\.9 测试版/);for(const control of['left','right','rotate','down','drop'])assert.match(html,new RegExp(`data-action="${control}"`));
++ for(const type of['ack','fatal','visibility','ready','snapshot'])assert.equal(staleEpoch({type,epoch:1},2),true);const source=await readFile(new URL('../app.mjs',import.meta.url),'utf8'),html=await readFile(new URL('../index.html',import.meta.url),'utf8');assert.match(source,/if \(staleEpoch\(data, epoch\)\)/);assert.match(source,/grainform:0\.4\.8:grid:best/);assert.doesNotMatch(source,/grainform:0\.4\.5/);assert.match(source,/ctx\.globalAlpha = settings.motion/);assert.match(source,/clearHighlightBodies\(snapshot, bodyStore.bodies\)/);assert.match(source,/bodyStore\.array\(\)/);assert.doesNotMatch(source,/snapshot\.bodies\s*\|\|/);assert.match(html,/0\.4\.10 测试版/);for(const control of['left','right','rotate','down','drop'])assert.match(html,new RegExp(`data-action="${control}"`));
+ });
+ 
+ test('visual invalidation ignores diagnostic clocks and retains pose, epoch and clear animation',async()=>{

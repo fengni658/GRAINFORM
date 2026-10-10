@@ -35,18 +35,8 @@ export function validateMaterialFrame(frame) {
 /** Presentation is explicitly bounded. Completion is returned only after the
  * caller has painted the final pose and calls didDraw(), never from a timer. */
 export class MaterialFrameQueue {
-  constructor({ durationMs = MATERIAL_FRAME_MS } = {}) { this.continuity = null; this.emptyAnchor = null; this.sampledAt = null; this.lastReceiptRaf = null; this.durationMs = durationMs; this.epoch = 0; this.queue = []; this.startedAt = null; this.pausedAt = null; this.lastCompleted = 0; this.sampledCompletion = null; this.metrics = { completed: 0, maxPending: 0, receivedPathPoints: 0 }; }
-  reset(epoch) { this.invalidateContinuity(); this.epoch = epoch; this.queue = []; this.startedAt = null; this.pausedAt = null; this.lastCompleted = 0; this.sampledCompletion = null; }
-  invalidateContinuity() { this.continuity = null; this.emptyAnchor = null; }
-  // The game owns burst identity: intermediate phase transitions may not each
-  // produce a snapshot. Missing identity fails closed to arrival-based timing.
-  setContinuity(epoch, snapshot, reset = false) {
-    const key = snapshot?.state === 'playing' && snapshot.phase === 'settling' &&
-      Number.isSafeInteger(snapshot.settlingBurst) && snapshot.settlingBurst > 0 &&
-      Number.isSafeInteger(snapshot.pieceId) ? `${epoch}:${snapshot.pieceId}:${snapshot.settlingBurst}` : null;
-    if (reset || key !== this.continuity) this.emptyAnchor = null;
-    this.continuity = key;
-  }
+  constructor({ durationMs = MATERIAL_FRAME_MS } = {}) { this.durationMs = durationMs; this.epoch = 0; this.queue = []; this.startedAt = null; this.pausedAt = null; this.lastCompleted = 0; this.sampledCompletion = null; this.metrics = { completed: 0, maxPending: 0, receivedPathPoints: 0 }; }
+  reset(epoch) { this.epoch = epoch; this.queue = []; this.startedAt = null; this.pausedAt = null; this.lastCompleted = 0; this.sampledCompletion = null; }
   accept(epoch, frames, now) {
     if (epoch < this.epoch) return false;
     if (epoch !== this.epoch) this.reset(epoch);
@@ -55,13 +45,6 @@ export class MaterialFrameQueue {
       if (frame.token <= this.lastCompleted || this.queue.some(f => f.token === frame.token)) continue;
       if (this.queue.length >= 2) throw Error('Material presentation queue exceeded two frames');
       if (this.queue.length && frame.token <= this.queue.at(-1).token) throw Error('Material presentation order reversed');
-      if (!this.queue.length) {
-        const anchor = this.emptyAnchor;
-        this.emptyAnchor = null; // One shot; neither duplicates nor snapshots extend it.
-        if (anchor && this.pausedAt === null && anchor.key === this.continuity &&
-            anchor.epoch === epoch && frame.token === anchor.token + 1 &&
-            now >= anchor.raf && now - anchor.raf <= this.durationMs) this.startedAt = anchor.raf;
-      }
       this.queue.push(frame); this.metrics.receivedPathPoints += frame.paths.reduce((sum, path) => sum + path.points.length / 3, 0);
       if (this.startedAt === null) this.startedAt = this.pausedAt ?? now;
       this.metrics.maxPending = Math.max(this.metrics.maxPending, this.queue.length);
@@ -69,29 +52,20 @@ export class MaterialFrameQueue {
     return true;
   }
   setPaused(paused, now) {
-    if (paused) this.emptyAnchor = null;
     if (paused && this.pausedAt === null) this.pausedAt = now;
     if (!paused && this.pausedAt !== null) { if (this.startedAt !== null) this.startedAt += now - this.pausedAt; this.pausedAt = null; }
   }
   sample(now) {
     const frame = this.queue[0];
-    this.sampledCompletion = null; this.sampledAt = now;
+    this.sampledCompletion = null;
     if (!frame) return null;
     const t = this.pausedAt ?? now, alpha = Math.max(0, Math.min(1, (t - this.startedAt) / this.durationMs));
     if (alpha === 1) this.sampledCompletion = frame.token;
     return { frame, alpha, positions: frame.paths.map(path => ({ id: path.id, xy: positionOnPath(path, alpha) })) };
   }
-  didDraw(rafTimestamp) {
-    // Explicit rAF identity is required for continuity and forbids a second
-    // receipt in that same callback, even if callers sample again. Legacy
-    // callers without an rAF timestamp retain their original queue semantics.
-    const hasRaf = Number.isFinite(rafTimestamp);
-    if (hasRaf && (rafTimestamp !== this.sampledAt || rafTimestamp === this.lastReceiptRaf)) return null;
+  didDraw() {
     if (this.sampledCompletion === null || this.queue[0]?.token !== this.sampledCompletion) return null;
-    if (hasRaf) this.lastReceiptRaf = rafTimestamp;
     const frame = this.queue.shift(); this.lastCompleted = frame.token; this.metrics.completed++;
-    this.emptyAnchor = !this.queue.length && hasRaf && this.continuity !== null && this.pausedAt === null
-      ? { raf: rafTimestamp, epoch: this.epoch, token: frame.token, key: this.continuity } : null;
     this.startedAt = this.queue.length ? this.startedAt + this.durationMs : null; this.sampledCompletion = null;
     return { epoch: this.epoch, token: frame.token, ruleTick: frame.ruleTick };
   }

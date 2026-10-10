@@ -1,0 +1,31 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grainform@0.4.10 verify:pixels
+> node tests/pixel-equivalence-node.mjs
+
+{"passed":false,"drawComparisons":144,"failures":70,"candidateStatus":"Authorized stable dirty-tile cache only; material and dynamic paths unchanged"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Candidate pixels must match the frozen renderer exactly
+
+false !== true
+
+    at file://<repo>/tests/pixel-equivalence-node.mjs:9:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+
+Observed oracle process exit: 1 (assertion failure retained).

@@ -1,0 +1,53 @@
+{
+  "release": "0.4.10",
+  "qaCommit": "99d57e31f2450afadd08285db6f0a0ec90c2e2d9",
+  "siteWrapperCommit": "7f400bb9346c8e3c313a8056aa3f72a4ae6e6e9b",
+  "unchangedRuntimeModules": [
+    {
+      "path": "ca-world.mjs",
+      "sha256": "f7a55ebb10a0a51c4852c39ef6b36c409e2ab26dddab4c05402371e1a0578773",
+      "bytes": 10052
+    },
+    {
+      "path": "style.css",
+      "sha256": "d59dfb6949e494e865f402f6ebf7c147dd60500059067bc9d92d680fb471f4e9",
+      "bytes": 15512
+    },
+    {
+      "path": "simulation-worker.mjs",
+      "sha256": "57a2c73593014ef146080b9ec9276ed12f368b242f981601bf1424c67b803358",
+      "bytes": 15250
+    },
+    {
+      "path": "ca-frame-world.mjs",
+      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383",
+      "bytes": 2652
+    },
+    {
+      "path": "ca-adapter.mjs",
+      "sha256": "d2da46f86779c49808997f241c9cb9c10da505eb80513af759956cfaad69afe6",
+      "bytes": 3600
+    },
+    {
+      "path": "ca-layer.mjs",
+      "sha256": "66a6c125436d09740c0b9fbae1c04b902ffbfdc19f4fbc8ddce7ec3681e73994",
+      "bytes": 18954
+    },
+    {
+      "path": "game.mjs",
+      "sha256": "f4e5754d11a057460216ca2b25d776f03fcd38ba55b3b9272517a7666a0d5004",
+      "bytes": 9791
+    },
+    {
+      "path": "ca-contour.mjs",
+      "sha256": "9d6b0ff94abfa51fb5e44caa08c38d573027173f3d78ad2f78205d692cb6bfb2",
+      "bytes": 11290
+    },
+    {
+      "path": "app.mjs",
+      "sha256": "a4b2a32f5a4dc4dd40b583474d4824f4f3ae04396410178c4c80eac769f3154b",
+      "bytes": 38412
+    }
+  ],
+  "htmlDelta": "Only CSS and entry module URLs point to the content-addressed build. The new play entry is identical to index.html."
+}

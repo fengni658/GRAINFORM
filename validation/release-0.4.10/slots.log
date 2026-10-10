@@ -1,0 +1,12 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grainform@0.4.10 verify:slots
+> node merge-test.mjs
+
+PASS 320 admissions and removals keep storage bounded
+PASS stale, duplicate and malformed removals are atomic
+PASS invalid admissions preserve free list, identity, state and wake data
+PASS new and reused births have no old interpolation, motion or stamps
+PASS live identities and roughness survive unrelated slot reuse
+PASS reused occupant direction uses its own fixed identity roughness
+PASS handle precision exhaustion rejects before any birth

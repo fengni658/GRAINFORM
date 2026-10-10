@@ -70,7 +70,7 @@ test('real CA does not clear a bridge before its latest exact material frame is 
  for(const f of flight)runtime.receive({type:'presented',epoch:runtime.epoch,token:f.token});
  clock.to(1000);assert.equal(g.rawCleared,232);assert.equal(g.world.stats().live,40);assert.equal(g.active,null,'Fall after the clear needs its own presented paths');assert.ok(runtime.stats().maxPendingMaterialFrames<=2);runtime.dispose();
 });
-class Context {constructor(){this.cells=[];this.images=0;}save(){}restore(){}setTransform(){}clearRect(){}drawImage(){this.images++;}fillRect(...v){this.cells.push(v);}beginPath(){}arc(x,y,r){this.cells.push([x,y,r]);}fill(){}}
+class Context {constructor(){this.cells=[];this.images=0;this.pathArcs=[];}save(){}restore(){}setTransform(){}clearRect(){}drawImage(){this.images++;}fillRect(...v){this.cells.push(v);}beginPath(){this.pathArcs=[];}arc(x,y,r){this.pathArcs.push([x,y,r]);}moveTo(){}lineTo(){}quadraticCurveTo(){}closePath(){}clip(){}stroke(){}fill(){this.cells.push(...this.pathArcs);}}
 test('CA cell drawing uses identity-fixed subpixel grain, cached static cells and current path positions',()=>{
  const cache=new Context(),screen=new Context(),r=new CALayerRenderer({createCanvas:()=>({getContext:()=>cache})});
  r.apply({reset:true,removed:[],upsert:[{id:1,x:31.5,y:22.5,color:1},{id:2,x:50.5,y:30.5,color:2}]});

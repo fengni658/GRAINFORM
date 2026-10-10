@@ -24,4 +24,4 @@ const server = http.createServer(async (req, res) => {
     else { const stream = createReadStream(file); stream.on('error', () => res.destroy()); stream.pipe(res); }
   } catch { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }); res.end('Not found'); }
 });
-server.listen(port, host, () => console.log(`GRAINFORM 0.4.9 test: http://${host}:${port}/`));
+server.listen(port, host, () => console.log(`GRAINFORM 0.4.10 test: http://${host}:${port}/`));

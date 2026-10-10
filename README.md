@@ -1,28 +1,29 @@
-# 粒序 / GRAINFORM 0.4.9
+# 粒序 / GRAINFORM 0.4.10
 
-原生 JavaScript、ES Modules、Canvas 2D 和 Web Worker 实现的流沙方块游戏。当前主版本为 **0.4.9 桌面测试版**，使用 1 px 元胞自动机（CA）材料网格；这是离散游戏规则，不是连续硬圆碰撞或真实颗粒物理认证。
+原生 JavaScript、ES Modules、Canvas 2D 和 Web Worker 流沙方块游戏。当前 main 为 **0.4.10 桌面测试版**。1 px CA 材料网格是离散游戏规则，不是连续硬圆物理认证。
 
 ## 运行
 
-需要 Node.js 20+。游戏和默认 Node 测试无第三方依赖，无需安装或构建。
+Node.js 20+，游戏及默认测试不需要第三方依赖或构建：
 
 ```sh
 npm start
 ```
 
-打开 http://127.0.0.1:4181/ 。`PORT` 可修改端口；默认仅监听 `127.0.0.1`。根目录 `index.html` 是当前入口，`RUNTIME-MANIFEST.json` 列出全部 9 个运行时文件及 SHA-256。服务器只提供这些运行时文件，不公开测试、历史源码或报告。
+打开 http://127.0.0.1:4181/ 。PORT 可调整端口，默认仅监听本机。根 index.html 为当前入口，play-b6104e010aee4.html 是同内容的新入口。HTML 将 CSS 与模块指向内容寻址 builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/，其 9 个文件与根目录同名源文件逐字节一致。Worker 的相对模块依赖留在同一 build 中，降低缓存混载风险。
 
-静态托管时复制清单中的 9 个文件并保持相对路径。**不要把 `dist/` 当作当前构建输出：它是保留的 0.4.0 及更早版本归档。** 仓库没有构建步骤，本次提交不部署站点。
+静态部署请完整保留 RUNTIME-MANIFEST.json 中全部 20 个运行时文件及相对路径。server.mjs 仅服务清单内文件，不公开测试与报告。dist/ 是 0.4.0 及更早历史归档，不能当当前构建输出。本次 main 同步不会部署新站点。
 
-## 0.4.9 范围
+## 0.4.10 范围
 
-- 一块四格形状接触后转换为 2,304 个 1 px 材料格；保留七种形状、旋转、确定性随机序列和按块质量归一化的计分
-- 固定身份粗糙度、完整可通行路径、几何休眠和分块唤醒；稳定后检查同色连通消除及支撑恢复
-- UI 按物理记录的水平/垂直单位路径呈现；Worker 最多保留两个未确认材料帧，背压保留时间欠账，不通过丢帧或截断队列伪装速度
-- 稳定层采用整数设备像素脏瓦片复制，保留动态绘制；身份使用有界槽位与代数，避免旧身份删除复用后的粒子
-- 左右或 A/D 移动，上或 W 旋转，下或 S 加速，空格直落，P/Esc 暂停；失焦、后台与重开有独立状态屏障
+- 保持 0.4.9 物理运动、单位材料路径、质量、身份/代数、按块计分及有序 ACK
+- 使用当前边缘/轮廓呈现，包括已有外角局部裁切边界
+- 同一 settling burst 的短队列空窗可以继承最后实际 rAF 时间；长空窗、换块/换 burst、暂停、后台、重同步及 epoch 切换会失效
+- settlingBurst 是只读阶段标识，不改变物理规则
+- 加入已部署的内容寻址入口包装；此措施不等于确认了线上用户加载失败的根因
+- 保持 288 × 432 逻辑范围和原速度；不含 0.4.11 手机窗口比例、范围扩大或初速调整
 
-本次 GitHub main 更新保持已核验 0.4.9 的 9 个运行时文件字节不变，不包含 0.4.10 开发内容。
+方向键或 A/D/W/S 移动、旋转、软降，空格硬降，P/Esc 暂停；失焦/后台返回后手动继续。
 
 ## 验证
 
@@ -32,32 +33,18 @@ npm run verify:slots
 npm run verify:parity
 ```
 
-- `npm test`：36 项当前 CA、阶段、UI/Worker 协议、缓存与消息时钟测试
-- `verify:slots`：320 轮复用、有界存储、原子拒绝、旧身份及轨迹检查
-- `verify:parity`：与冻结参考逐字节比较 551 帧，包含六批堆积、消除、支撑切断与恢复
+本次暂存版本重新运行：默认 61/61 测试（36 个原功能测试适配当前 Canvas mock 与版本标签，23 个队列测试，2 个清单/HTTP 检查）。槽位与轨迹结果见 [本次验证说明](validation/release-0.4.10/README.md)。原断言运行失败日志、mock/标签差异及旧像素 oracle 均保留；没有删除像素断言来制造全绿。
 
-以上三项在本次提交的完整暂存源码上实际重新执行。测试生成报告到 `evidence/`。
+可选 npm run verify:pixels 需要 @napi-rs/canvas；verify:pixels:browser 与 verify:browser 需要 Playwright/Chromium。这些是冻结旧绘制参考的比较或历史 smoke 工具，不能称为 0.4.10 全绿验收。旧像素 oracle 已知 70 个 screen 差异仍保留，其命令应报告 FAIL；72 个 raw-cell 与 72 个非 fallback cache 比较在既有证据中相等。
 
-可选绘制与浏览器测试：
+详细既有队列/落堆/browser 证据位于 [固定 QA 提交](https://github.com/fengni658/GRAINFORM/tree/99d57e31f2450afadd08285db6f0a0ec90c2e2d9/qa-artifacts) 的 queue-continuity runtime/validation 小包。当前同步使用同一核心运行时，随后仅 HTML 两个资源 URL 与 build 包装变化。
 
-```sh
-npm run verify:pixels
-npm run verify:pixels:browser
-npm run verify:browser
-```
+## 边界与历史
 
-`verify:pixels` 需要环境中可解析的 `@napi-rs/canvas`；两个浏览器命令需要 Playwright 与 Chromium。测试工具不是游戏运行依赖，也未随仓库打包。已有 Playwright 可通过 `GRAINFORM_PLAYWRIGHT_MODULE` 指定。像素浏览器脚本支持 `GRAINFORM_CHROMIUM`；UI smoke 使用 `/usr/bin/chromium`。这些脚本使用受控测试页面，不要求启动游戏服务器。
+这是桌面测试版，不是商用或全设备通过。固定 60 Hz 步长不是持续 60 fps。独立浏览器落堆/队列与包装热更新有有限场景证据，不能代替真实 OS 后台、BFCache、Worker 故障恢复、移动设备或普通显示器手感测试。实际用户线上加载失败根因未确认。
 
-已核验源包有 144 项 Node RGBA 比较及独立真实浏览器功能验收。本次 main 同步重新运行的是 Node/槽位/轨迹检查，不将此前浏览器结果冒充为本次重新执行。像素相等只证明对应后端与夹具的相等，不证明帧率、视觉偏好或所有设备兼容性。
+?qa 有测量成本，?qa=0 仍开启诊断；关闭须删除参数。不要用累计模拟/墙时比例抹去峰值队列欠账。
 
-## 性能与兼容边界
+保留旧 Git 历史、dist/、tests/preview/、validation/ 中旧报告、PREVIEW-NOTES.md 与 VALIDATION.md。历史报告不代表当前版本结论；test:legacy 与 test:preview 仍是历史套件。原 main 保存于 backup/0.4.9-before-0410。
 
-0.4.9 是桌面测试版，不是商业认证或全平台发布。固定 60 Hz 物理步长不等于持续 60 fps。历史密集六批场景中曾观测约 44–46 draw/s；优化操作计数不能替代相同设备、相同场景的浏览器性能测量。高密度堆积、长时运行、移动设备及其他浏览器仍需独立评估。
-
-诊断参数 `?qa` 有额外测量成本；`?qa=0` 仍然开启诊断。关闭时应完整删除该参数。消息投递延迟包含排队等成本，不能当作独立结构化克隆 CPU 耗时；应分别检查实际绘制频率、帧耗时、队列/欠账、暂停和后台行为。
-
-## 历史源码与许可
-
-`dist/`、`tests/preview/`、`validation/`、`PREVIEW-NOTES.md` 和 `VALIDATION.md` 保留旧版本背景，不能作为 0.4.9 当前行为或验收结论。`npm run test:legacy` 与 `npm run test:preview` 是历史套件；默认 `npm test` 只运行适用的当前测试。冻结参考用于回归，不是另一套生产入口。
-
-保留全部 Git 历史及原有 [LICENSES.md](LICENSES.md)。项目标记为 `UNLICENSED`；公开源码不代表授予公众复制、修改或再分发许可。
+保留 [LICENSES.md](LICENSES.md)；UNLICENSED，公开源码不等于授予再分发许可。
