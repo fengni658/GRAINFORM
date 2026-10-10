@@ -1,50 +1,38 @@
-# 粒序 / GRAINFORM 0.4.10
+# 粒序 / GRAINFORM 0.4.11
 
-原生 JavaScript、ES Modules、Canvas 2D 和 Web Worker 流沙方块游戏。当前 main 为 **0.4.10 桌面测试版**。1 px CA 材料网格是离散游戏规则，不是连续硬圆物理认证。
+原生 JavaScript、ES Modules、Canvas 2D 和 Web Worker 流沙方块游戏。当前 main 为已验收的 0.4.11 测试版。1 px CA 材料网格是离散游戏规则，不是连续硬圆物理认证。
 
 ## 运行
 
-Node.js 20+，游戏及默认测试不需要第三方依赖或构建：
+Node.js 20+，游戏与默认测试不需要第三方依赖：
 
 ```sh
 npm start
-```
-
-打开 http://127.0.0.1:4181/ 。PORT 可调整端口，默认仅监听本机。根 index.html 为当前入口，play-b6104e010aee4.html 是同内容的新入口。HTML 将 CSS 与模块指向内容寻址 builds/b-6104e010aee4cd4c26c50161fc744906a5ad1ec865d903282fad415de99c7b6b/，其 9 个文件与根目录同名源文件逐字节一致。Worker 的相对模块依赖留在同一 build 中，降低缓存混载风险。
-
-静态部署请完整保留 RUNTIME-MANIFEST.json 中全部 20 个运行时文件及相对路径。server.mjs 仅服务清单内文件，不公开测试与报告。dist/ 是 0.4.0 及更早历史归档，不能当当前构建输出。本次 main 同步不会部署新站点。
-
-## 0.4.10 范围
-
-- 保持 0.4.9 物理运动、单位材料路径、质量、身份/代数、按块计分及有序 ACK
-- 使用当前边缘/轮廓呈现，包括已有外角局部裁切边界
-- 同一 settling burst 的短队列空窗可以继承最后实际 rAF 时间；长空窗、换块/换 burst、暂停、后台、重同步及 epoch 切换会失效
-- settlingBurst 是只读阶段标识，不改变物理规则
-- 加入已部署的内容寻址入口包装；此措施不等于确认了线上用户加载失败的根因
-- 保持 288 × 432 逻辑范围和原速度；不含 0.4.11 手机窗口比例、范围扩大或初速调整
-
-方向键或 A/D/W/S 移动、旋转、软降，空格硬降，P/Esc 暂停；失焦/后台返回后手动继续。
-
-## 验证
-
-```sh
 npm test
-npm run verify:slots
-npm run verify:parity
 ```
 
-本次暂存版本重新运行：默认 61/61 测试（36 个原功能测试适配当前 Canvas mock 与版本标签，23 个队列测试，2 个清单/HTTP 检查）。槽位与轨迹结果见 [本次验证说明](validation/release-0.4.10/README.md)。原断言运行失败日志、mock/标签差异及旧像素 oracle 均保留；没有删除像素断言来制造全绿。
+打开 http://127.0.0.1:4181/ 。PORT 可调整端口，默认仅监听本机。根 index.html 与 play-b560060d5b73b.html 指向内容寻址构建。builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ 内 14 个文件逐字节复现验收源码；根模块是同字节副本，根 HTML 仅改写 CSS 与模块资源地址。
 
-可选 npm run verify:pixels 需要 @napi-rs/canvas；verify:pixels:browser 与 verify:browser 需要 Playwright/Chromium。这些是冻结旧绘制参考的比较或历史 smoke 工具，不能称为 0.4.10 全绿验收。旧像素 oracle 已知 70 个 screen 差异仍保留，其命令应报告 FAIL；72 个 raw-cell 与 72 个非 fallback cache 比较在既有证据中相等。
+静态部署请保留 RUNTIME-MANIFEST.json 中全部 29 个运行时文件及相对路径。server.mjs 仅服务清单内文件，不公开测试与报告。dist/ 和旧 builds/ 是历史归档。本次 main 更新不改变任何已发布站点。
 
-详细既有队列/落堆/browser 证据位于 [固定 QA 提交](https://github.com/fengni658/GRAINFORM/tree/99d57e31f2450afadd08285db6f0a0ec90c2e2d9/qa-artifacts) 的 queue-continuity runtime/validation 小包。当前同步使用同一核心运行时，随后仅 HTML 两个资源 URL 与 build 包装变化。
+## 0.4.11 范围
 
-## 边界与历史
+- 288 × 512 全幅可玩区域，边缘、落底、出生区、容量与身份索引统一
+- 保持 1 px 材料单元与 24 px 方块单元；初始刚体下降速度 46.224，保留等级增量与速度上限
+- 有界复合呈现队列、独立传输回执与实际绘制 ACK，支持重同步和 epoch 切换
+- 共享材质与消除高亮裁切，失败绘制可重试；预览异常正确恢复 Canvas 状态
+- 不包含 0.4.12 的沙粒尺寸或样式修改
 
-这是桌面测试版，不是商用或全设备通过。固定 60 Hz 步长不是持续 60 fps。独立浏览器落堆/队列与包装热更新有有限场景证据，不能代替真实 OS 后台、BFCache、Worker 故障恢复、移动设备或普通显示器手感测试。实际用户线上加载失败根因未确认。
+方向键或 A/D/W/S 移动、旋转、软降，空格硬降，P/Esc 暂停；触屏提供对应按键。失焦或后台返回后需手动继续。
 
-?qa 有测量成本，?qa=0 仍开启诊断；关闭须删除参数。不要用累计模拟/墙时比例抹去峰值队列欠账。
+## 验证与边界
 
-保留旧 Git 历史、dist/、tests/preview/、validation/ 中旧报告、PREVIEW-NOTES.md 与 VALIDATION.md。历史报告不代表当前版本结论；test:legacy 与 test:preview 仍是历史套件。原 main 保存于 backup/0.4.9-before-0410。
+本次发布重新运行 15/15 个独立规则、边界、身份、传输与发布完整性/HTTP 检查。此前对同一 14 文件源码完成的 66/66 原生检查与 12/12 独立检查记录已核对源码身份。默认测试是发布回归子集，不替代完整原生或浏览器测试。详见 [发布验证说明](validation/release-0.4.11/README.md)。
+
+这是测试版，不是商用或全设备通过。有限浏览器场景不代表所有设备持续 60 fps。?qa 有测量成本；关闭诊断须删除该参数。
+
+旧 Git 历史、dist/、旧 builds/、旧测试和报告均保留。test:0410、test:legacy、test:preview、verify:slots、verify:parity、verify:pixels、verify:pixels:browser 与 verify:browser 是历史工具，不是 0.4.11 验收命令，可能因当前几何或呈现协议而失败。旧像素 oracle 的既有差异没有被删改来制造通过。
+
+上一版 main 保存在 [backup/0.4.10-before-0411](https://github.com/fengni658/GRAINFORM/tree/backup/0.4.10-before-0411)，其精确提交为 ddc8a1aed5a525b2efa8bd5da384b6961b790db2。更早备份及 QA 分支保持原样。
 
 保留 [LICENSES.md](LICENSES.md)；UNLICENSED，公开源码不等于授予再分发许可。

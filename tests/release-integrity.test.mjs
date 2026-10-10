@@ -6,12 +6,13 @@ import {spawn} from 'node:child_process';
 import {once} from 'node:events';
 const root=new URL('../',import.meta.url),manifest=JSON.parse(fs.readFileSync(new URL('RUNTIME-MANIFEST.json',root)));
 test('release manifest binds every source/build byte and HTML entry',()=>{
- assert.equal(manifest.version,'0.4.10');assert.equal(manifest.runtimeFiles.length,20);
+ assert.equal(manifest.version,'0.4.11');assert.equal(manifest.runtimeFiles.length,29);
  for(const f of manifest.runtimeFiles){const b=fs.readFileSync(new URL(f.path,root));assert.equal(b.length,f.bytes,f.path);assert.equal(createHash('sha256').update(b).digest('hex'),f.sha256,f.path);}
- const html=fs.readFileSync(new URL('index.html',root),'utf8');assert.equal(html,fs.readFileSync(new URL('play-b6104e010aee4.html',root),'utf8'));
+ const html=fs.readFileSync(new URL('index.html',root),'utf8');assert.equal(html,fs.readFileSync(new URL('play-b560060d5b73b.html',root),'utf8'));
  for(const name of ['app.mjs','style.css'])assert.ok(html.includes(`./builds/${manifest.build}/${name}`));
- for(const f of manifest.runtimeFiles.filter(f=>f.path.startsWith('builds/'))){const name=f.path.split('/').at(-1);assert.deepEqual(fs.readFileSync(new URL(f.path,root)),fs.readFileSync(new URL(name,root)),name);}
- assert.match(html,/0\.4\.10 测试版/);assert.doesNotMatch(html,/0\.4\.11/);
+ for(const f of manifest.runtimeFiles.filter(f=>f.path.startsWith('builds/')&&!f.path.endsWith('/index.html'))){const name=f.path.split('/').at(-1);assert.deepEqual(fs.readFileSync(new URL(f.path,root)),fs.readFileSync(new URL(name,root)),name);}
+ for(const f of manifest.sourceFiles){const b=fs.readFileSync(new URL('builds/'+manifest.build+'/'+f.path,root));assert.equal(b.length,f.bytes);assert.equal(createHash('sha256').update(b).digest('hex'),f.sha256);}
+ assert.match(html,/0\.4\.11 测试版/);assert.doesNotMatch(html,/0\.4\.12/);
 });
 test('HTTP serves all manifest files with correct bytes and rejects private files',async()=>{
  const child=spawn(process.execPath,['server.mjs'],{cwd:root,env:{...process.env,PORT:'4198',HOST:'127.0.0.1'},stdio:['ignore','pipe','pipe']});

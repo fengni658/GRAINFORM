@@ -7,7 +7,7 @@
 <meta name="description" content="粒序 GRAINFORM 0.4.11 测试版。方块落地化为细沙，同色连通两壁，释放空间。">
 <title>粒序 GRAINFORM · 0.4.11 测试版</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eac370'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%234fc0b3'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/style.css">
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <div class="app">
@@ -78,6 +78,6 @@
 <dialog id="restartDialog" aria-labelledby="restartTitle"><div class="dialog-top"><span class="eyebrow">重新开始</span><button class="dialog-close icon-button" data-close aria-label="取消重新开始">×</button></div><h2 id="restartTitle">开始新的一局？</h2><p class="intro">当前这一局不会保留。最高分与设置不受影响。</p><div class="button-pair"><button id="cancelRestart" class="secondary-button">继续这一局</button><button id="confirmRestart" class="primary-button">重新开始</button></div></dialog>
 <div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>QA 只读诊断</summary><p>模拟、绘图与rAF回调独立计时；rAF回调率不是实际绘图率，倍率是模拟/活跃墙时。增量序号、缓存回退、积压与输入ACK延迟均如实显示。本地诊断，无遥测。</p><pre id="qaOutput"></pre></details>
-<script type="module" src="./builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/app.mjs"></script>
+<script type="module" src="./app.mjs"></script>
 </body>
 </html>
