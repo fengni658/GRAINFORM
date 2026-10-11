@@ -1,7 +1,7 @@
 // All simulation, wire paths, material contour and renderer tile coordinates are
 // GRID units. Only the app camera converts to visible world pixels. Never mix
 // grid bodies with world-pixel active blocks or paths.
-export const VERSION='0.5.1';
+export const VERSION='0.5.2';
 export const WORLD_WIDTH=288,WORLD_HEIGHT=512,WORLD_BLOCK=24,GRAIN_PITCH=3;
 export const GRID_ORIGIN_X=0,GRID_ORIGIN_Y=-1;
 export const WIDTH=96,HEIGHT=171,BLOCK=8;

@@ -12,7 +12,10 @@ const RADII = [
  [1,.96,.99,.97,.98,.99,1,.98,.96,.99,.97,.99],
  [1,.99,.96,.98,.97,.99,1,.96,.99,.98,.99,.97],
 ];
-const SHAPES=RADII.map(radii=>radii.flatMap((r,i)=>[Math.cos(i*Math.PI/6)*r,Math.sin(i*Math.PI/6)*r]));
+// 0.5.2 fixed-ID flank contraction. Keep both maximum-diameter tips;
+// perpendicular width is 94%, polygon area is 94%. No contact-state mutation.
+export const GRAIN_FLANK_SCALE = .94;
+const SHAPES=RADII.map(radii=>radii.flatMap((r,i)=>[Math.cos(i*Math.PI/6)*r,Math.sin(i*Math.PI/6)*r*GRAIN_FLANK_SCALE]));
 export const GRAIN_OUTLINES = Object.freeze(SHAPES.flatMap(shape => Array.from({length:16},(_,orientation)=>{
   const angle=orientation*Math.PI/8,c=Math.cos(angle),s=Math.sin(angle);
   return Object.freeze(Array.from({length:12},(_,i)=>Object.freeze([shape[i*2]*c-shape[i*2+1]*s,shape[i*2]*s+shape[i*2+1]*c])));
