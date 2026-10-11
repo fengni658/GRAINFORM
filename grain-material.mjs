@@ -1,5 +1,8 @@
+// Variant interface: change only this constant in the square branch.
+export const GRAIN_SHAPE = 'mineral';
+export const GRAIN_OFFSET_BOUND = .18;
 // Presentation only. Diameter is the maximum distance between outline vertices:
-// opposite +/-radius tips guarantee the original grid-unit circle diameter. Camera pitch supplies the 1.5x world diameter.
+// opposite +/-radius tips guarantee the original grid-unit circle diameter. Camera pitch 3 doubles the world diameter relative to the frozen 1.5-pitch 0.4.12.
 // Four mineral-like silhouettes, sixteen stable orientations, twelve tones.
 // No time-dependent noise, per-pixel shader, gradients or physics rescaling.
 export const GRAIN_DIAMETER_SCALE = 1;

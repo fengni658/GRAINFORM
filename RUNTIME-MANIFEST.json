@@ -1,19 +1,24 @@
 {
-  "version": "0.4.12",
-  "candidate": "rest-neutral-r1",
+  "version": "0.5.1",
+  "candidate": "A-mineral-r4",
+  "build": "b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6",
   "entry": "index.html",
-  "build": "b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3",
-  "scope": "Exact private r2 trial source; natural contact motion, stable-interior work reduction and neutral shading. No0.4.13 changes. Browser runtime not revalidated;166ms rAF cause unresolved.",
+  "scope": "User-selected exact0.5.1A mineral runtime from private trial. Includes r4 context-bound rendering fixes. NoB square runtime or0.5.2 changes.",
   "sourceFiles": [
     {
+      "path": "anchor-table.mjs",
+      "bytes": 181452,
+      "sha256": "f06de137a820c5b2f684bd374fc77e130c86e05e76086fea6706f59645a8d50e"
+    },
+    {
       "path": "app.mjs",
-      "bytes": 41492,
-      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
+      "bytes": 41918,
+      "sha256": "a88e54070063fc3e251cac94d842c2824805322c0cae5a48a20d77f7f06ee338"
     },
     {
       "path": "board-geometry.mjs",
-      "bytes": 1563,
-      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
+      "bytes": 1556,
+      "sha256": "8da2ee785112d4d975e931c606cb8b2f40a22c884ff7bcc0f74499b598e0108b"
     },
     {
       "path": "ca-adapter.mjs",
@@ -22,8 +27,8 @@
     },
     {
       "path": "ca-contour.mjs",
-      "bytes": 11350,
-      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
+      "bytes": 11851,
+      "sha256": "f5f780dcad569934b82928c61e42273356997a480905d8c9088242b981d1eca0"
     },
     {
       "path": "ca-frame-world.mjs",
@@ -32,18 +37,18 @@
     },
     {
       "path": "ca-layer.mjs",
-      "bytes": 22786,
-      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
+      "bytes": 30882,
+      "sha256": "83f5056978979b390b056cbc7e0bedb3fa9cbc2ee3a940ba1ea9751aff413434"
     },
     {
       "path": "ca-world.mjs",
-      "bytes": 13339,
-      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
+      "bytes": 13341,
+      "sha256": "285e4884c4b60b3d78a4fb5e05fa2fca5e5e9ac548b2190471bc8909e5a7d781"
     },
     {
       "path": "composite-presentation.mjs",
-      "bytes": 3263,
-      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
+      "bytes": 3711,
+      "sha256": "ad6cd1d8f7b81a15315e0ca89f75ff374cf26db057ff6e7a557de85c648c5149"
     },
     {
       "path": "composite-protocol.mjs",
@@ -57,13 +62,18 @@
     },
     {
       "path": "grain-material.mjs",
-      "bytes": 1558,
-      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
+      "bytes": 1741,
+      "sha256": "1e0f423d9912868c447302a4eba910226c1447cf8c9dded0355837cbd1def176"
     },
     {
       "path": "index.html",
-      "bytes": 11314,
-      "sha256": "065c6769c31bdb056195240276eae24e91a07589bdbe96ca66c8a704ed4eb296"
+      "bytes": 11319,
+      "sha256": "9acb2303500cf06f91368d9902d60c67db2c6cda7425b832be4debb277ef0155"
+    },
+    {
+      "path": "settle-anchors.mjs",
+      "bytes": 1299,
+      "sha256": "cac0e724b09f2e892c97c36345cd4bf2b7034cc120c6a363036c1c33ebaba594"
     },
     {
       "path": "simulation-worker.mjs",
@@ -83,87 +93,102 @@
   ],
   "runtimeFiles": [
     {
+      "path": "anchor-table.mjs",
+      "bytes": 181452,
+      "sha256": "f06de137a820c5b2f684bd374fc77e130c86e05e76086fea6706f59645a8d50e"
+    },
+    {
       "path": "app.mjs",
-      "bytes": 41492,
-      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
+      "bytes": 41918,
+      "sha256": "a88e54070063fc3e251cac94d842c2824805322c0cae5a48a20d77f7f06ee338"
     },
     {
       "path": "board-geometry.mjs",
-      "bytes": 1563,
-      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
+      "bytes": 1556,
+      "sha256": "8da2ee785112d4d975e931c606cb8b2f40a22c884ff7bcc0f74499b598e0108b"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/app.mjs",
-      "bytes": 41492,
-      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/anchor-table.mjs",
+      "bytes": 181452,
+      "sha256": "f06de137a820c5b2f684bd374fc77e130c86e05e76086fea6706f59645a8d50e"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/board-geometry.mjs",
-      "bytes": 1563,
-      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/app.mjs",
+      "bytes": 41918,
+      "sha256": "a88e54070063fc3e251cac94d842c2824805322c0cae5a48a20d77f7f06ee338"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-adapter.mjs",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/board-geometry.mjs",
+      "bytes": 1556,
+      "sha256": "8da2ee785112d4d975e931c606cb8b2f40a22c884ff7bcc0f74499b598e0108b"
+    },
+    {
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/ca-adapter.mjs",
       "bytes": 4181,
       "sha256": "fa0e919c0125cb11917daa769770bb9ffe8fb138726a82c2d5ff15c0df150054"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-contour.mjs",
-      "bytes": 11350,
-      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/ca-contour.mjs",
+      "bytes": 11851,
+      "sha256": "f5f780dcad569934b82928c61e42273356997a480905d8c9088242b981d1eca0"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-frame-world.mjs",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/ca-frame-world.mjs",
       "bytes": 2935,
       "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-layer.mjs",
-      "bytes": 22786,
-      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/ca-layer.mjs",
+      "bytes": 30882,
+      "sha256": "83f5056978979b390b056cbc7e0bedb3fa9cbc2ee3a940ba1ea9751aff413434"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-world.mjs",
-      "bytes": 13339,
-      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/ca-world.mjs",
+      "bytes": 13341,
+      "sha256": "285e4884c4b60b3d78a4fb5e05fa2fca5e5e9ac548b2190471bc8909e5a7d781"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/composite-presentation.mjs",
-      "bytes": 3263,
-      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/composite-presentation.mjs",
+      "bytes": 3711,
+      "sha256": "ad6cd1d8f7b81a15315e0ca89f75ff374cf26db057ff6e7a557de85c648c5149"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/composite-protocol.mjs",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/composite-protocol.mjs",
       "bytes": 13609,
       "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/game.mjs",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/game.mjs",
       "bytes": 10141,
       "sha256": "579a92440bccff67dd37761c9f0c5a25a790cc66a412d036d1ee830ed206b621"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/grain-material.mjs",
-      "bytes": 1558,
-      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/grain-material.mjs",
+      "bytes": 1741,
+      "sha256": "1e0f423d9912868c447302a4eba910226c1447cf8c9dded0355837cbd1def176"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/index.html",
-      "bytes": 11314,
-      "sha256": "065c6769c31bdb056195240276eae24e91a07589bdbe96ca66c8a704ed4eb296"
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/index.html",
+      "bytes": 11319,
+      "sha256": "9acb2303500cf06f91368d9902d60c67db2c6cda7425b832be4debb277ef0155"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/simulation-worker.mjs",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/settle-anchors.mjs",
+      "bytes": 1299,
+      "sha256": "cac0e724b09f2e892c97c36345cd4bf2b7034cc120c6a363036c1c33ebaba594"
+    },
+    {
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/simulation-worker.mjs",
       "bytes": 22529,
       "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/snapshot-transport.mjs",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/snapshot-transport.mjs",
       "bytes": 763,
       "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
     },
     {
-      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/style.css",
+      "path": "builds/b-684ce8df6298ed3eb9e04b2cbc304417a51fcf059d78db09956e3be600778ff6/style.css",
       "bytes": 15663,
       "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619"
     },
@@ -174,8 +199,8 @@
     },
     {
       "path": "ca-contour.mjs",
-      "bytes": 11350,
-      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
+      "bytes": 11851,
+      "sha256": "f5f780dcad569934b82928c61e42273356997a480905d8c9088242b981d1eca0"
     },
     {
       "path": "ca-frame-world.mjs",
@@ -184,18 +209,18 @@
     },
     {
       "path": "ca-layer.mjs",
-      "bytes": 22786,
-      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
+      "bytes": 30882,
+      "sha256": "83f5056978979b390b056cbc7e0bedb3fa9cbc2ee3a940ba1ea9751aff413434"
     },
     {
       "path": "ca-world.mjs",
-      "bytes": 13339,
-      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
+      "bytes": 13341,
+      "sha256": "285e4884c4b60b3d78a4fb5e05fa2fca5e5e9ac548b2190471bc8909e5a7d781"
     },
     {
       "path": "composite-presentation.mjs",
-      "bytes": 3263,
-      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
+      "bytes": 3711,
+      "sha256": "ad6cd1d8f7b81a15315e0ca89f75ff374cf26db057ff6e7a557de85c648c5149"
     },
     {
       "path": "composite-protocol.mjs",
@@ -209,18 +234,23 @@
     },
     {
       "path": "grain-material.mjs",
-      "bytes": 1558,
-      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
+      "bytes": 1741,
+      "sha256": "1e0f423d9912868c447302a4eba910226c1447cf8c9dded0355837cbd1def176"
     },
     {
       "path": "index.html",
-      "bytes": 11462,
-      "sha256": "ff9cf0037d3093f603cf195979706e939187478f2bf394785a4f60ef3ed32275"
+      "bytes": 11467,
+      "sha256": "89920d5b045b65620adab3346c3fba062e7997716299bff65de8ba64cf710927"
     },
     {
-      "path": "play-b37a7cdea50f9.html",
-      "bytes": 11462,
-      "sha256": "ff9cf0037d3093f603cf195979706e939187478f2bf394785a4f60ef3ed32275"
+      "path": "play-051-a-r4.html",
+      "bytes": 11467,
+      "sha256": "89920d5b045b65620adab3346c3fba062e7997716299bff65de8ba64cf710927"
+    },
+    {
+      "path": "settle-anchors.mjs",
+      "bytes": 1299,
+      "sha256": "cac0e724b09f2e892c97c36345cd4bf2b7034cc120c6a363036c1c33ebaba594"
     },
     {
       "path": "simulation-worker.mjs",

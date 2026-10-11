@@ -1,7 +1,7 @@
-import {FIELD_WIDTH,FIELD_HEIGHT,GRAIN_PITCH} from './board-geometry.mjs';
+import {FIELD_WIDTH,FIELD_HEIGHT,GRAIN_PITCH,BLOCK} from './board-geometry.mjs';
 // Independently written gameplay CA, based on mechanisms described in the source review.
 // Cells are material units, not hard circles. No third-party source copied.
-export const CFG={width:FIELD_WIDTH,height:FIELD_HEIGHT,cell:1,dt:1/60,gravity:900/GRAIN_PITCH,maxVertical:Math.ceil(8/GRAIN_PITCH),maxSlide:2,maxSpeed:480/GRAIN_PITCH,chunk:16,massPerCell:676/1024,phases:17};
+export const CFG={width:FIELD_WIDTH,height:FIELD_HEIGHT,cell:1,dt:1/60,gravity:900/GRAIN_PITCH,maxVertical:Math.ceil(8/GRAIN_PITCH),maxSlide:2,maxSpeed:480/GRAIN_PITCH,chunk:8,massPerCell:676/(4*BLOCK*BLOCK),phases:17};
 export class World{
  constructor(){const C=CFG.width*CFG.height;this.grid=new Int32Array(C);this.x=new Int16Array(C);this.y=new Int16Array(C);this.color=new Uint8Array(C);this.batch=new Uint16Array(C);this.live=new Uint8Array(C);this.vy=new Float64Array(C);this.credit=new Float64Array(C);this.slideBudget=new Uint8Array(C);this.n=0;this.count=0;this.identity=new Float64Array(C);this.freeSlots=new Int32Array(C);this.freeCount=0;this.tick=0;this.time=0;this.seed=0x842199;this.cols=Math.ceil(CFG.width/CFG.chunk);this.rows=Math.ceil(CFG.height/CFG.chunk);this.chunks=new Set();this.quiet=new Uint8Array(this.cols*this.rows);this.changed=new Uint8Array(this.quiet.length);this.potential=new Uint8Array(this.quiet.length);this.noMoveSweeps=0;this.pendingInbound=0;this.lastMoveTick=-1;this.presentedTick=-1;this.dirty=null;this.lastMoved=new Uint32Array(C);this.moveStamp=new Uint32Array(C);this.pathN=new Uint8Array(C);this.pathX=new Int16Array(C*18);this.pathY=new Int16Array(C*18);this.pathPhase=new Uint8Array(C*18);this.pathStamp=new Uint32Array(C);this.reserved=new Int32Array(C);this.reserveStamp=new Uint32Array(C);this.reserveEpoch=0;this.metrics={stepCalls:0,chunkVisits:0,cellVisits:0,particleVisits:0,pathMoves:0,directionChecks:0,verticalMoves:0,slideMoves:0,pathInitializations:0,verticalCandidateVisits:0,blockedDirections:0};this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.audit=null;}
  rand(){let s=this.seed;s^=s<<13;s^=s>>>17;s^=s<<5;this.seed=s>>>0;return this.seed/4294967296}
@@ -36,7 +36,7 @@ export class World{
  record(i,phase){if(phase===0)this.metrics.pathInitializations++;let n=this.pathN[i];if(n>=18)throw Error('path-capacity');const p=i*18+n;this.pathX[p]=this.x[i];this.pathY[p]=this.y[i];this.pathPhase[p]=phase;this.pathN[i]=n+1}
  move(i,x,y,phase){const ox=this.x[i],oy=this.y[i];if(!this.empty(x,y)||Math.abs(x-ox)+Math.abs(y-oy)!==1||y<oy)throw Error('invalid-local-path');if(this.pathStamp[i]!==this.tick){this.pathN[i]=0;this.pathStamp[i]=this.tick}if(!this.pathN[i])this.record(i,0);this.grid[this.cell(ox,oy)]=0;this.grid[this.cell(x,y)]=i+1;this.x[i]=x;this.y[i]=y;this.record(i,phase);this.wake(ox,oy);this.wake(x,y);this.markDirty(ox,oy);this.markDirty(x,y);this.metrics.pathMoves++;this.last.moves++;this.lastMoved[i]=this.tick;if(this.moveStamp[i]!==this.tick){this.moveStamp[i]=this.tick;this.last.movedParticles++;}if(this.audit)this.audit(this.identity[i],ox,oy,x,y,phase)}
  roughness(i){let h=(i+1)>>>0;h=Math.imul(h^(h>>>16),0x7feb352d);h=Math.imul(h^(h>>>15),0x846ca68b);return 1+((h^(h>>>16))&1)}
- direction(i,dx,reservations=true){this.metrics.directionChecks++;const x=this.x[i],y=this.y[i];if(!this.empty(x+dx,y)){this.metrics.blockedDirections++;return null}const limit=this.roughness(this.identity[i]);for(let dist=1;dist<=limit;dist++){const xx=x+dx*dist;if(dist>1&&!this.empty(xx,y))return null;const a=this.cell(xx,y);if(reservations&&this.reserveStamp[a]===this.reserveEpoch)return null;if(!this.empty(xx,y+1))continue;const b=this.cell(xx,y+1);if(reservations&&this.reserveStamp[b]===this.reserveEpoch)continue;let depth=0;while(depth<8&&this.empty(xx,y+1+depth))depth++;return{dx,dist,depth}}return null}
+ direction(i,dx,reservations=true){this.metrics.directionChecks++;const x=this.x[i],y=this.y[i];if(!this.empty(x+dx,y)){this.metrics.blockedDirections++;return null}const limit=1;for(let dist=1;dist<=limit;dist++){const xx=x+dx*dist;if(dist>1&&!this.empty(xx,y))return null;const a=this.cell(xx,y);if(reservations&&this.reserveStamp[a]===this.reserveEpoch)return null;if(!this.empty(xx,y+1))continue;const b=this.cell(xx,y+1);if(reservations&&this.reserveStamp[b]===this.reserveEpoch)continue;let depth=0;while(depth<8&&this.empty(xx,y+1+depth))depth++;return{dx,dist,depth}}return null}
 
 
  wakeSupportedChunks(){
@@ -56,18 +56,18 @@ export class World{
   }
  }
 
- step(){this.metrics.stepCalls++;this.tick++;this.time+=CFG.dt;this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.dirty=null;if(!this.chunks.size)return;this.wakeSupportedChunks();this.changed.fill(0);this.potential.fill(0);const ids=[];for(const c of this.chunks){this.metrics.chunkVisits++;this.last.chunks++;const cx=c%this.cols,cy=Math.floor(c/this.cols);for(let y=cy*16;y<Math.min((cy+1)*16,CFG.height);y++)for(let x=cx*16;x<Math.min((cx+1)*16,CFG.width);x++){this.metrics.cellVisits++;const v=this.grid[this.cell(x,y)];if(v)ids.push(v-1)}}ids.sort((a,b)=>this.y[b]-this.y[a]||((this.tick&1)?this.x[a]-this.x[b]:this.x[b]-this.x[a]));this.last.particles=ids.length;
- const fallers=[];for(const i of ids){this.metrics.particleVisits++;if(this.empty(this.x[i],this.y[i]+1)){this.vy[i]=Math.min(CFG.maxSpeed,this.vy[i]+CFG.gravity*CFG.dt);this.credit[i]=Math.min(CFG.maxVertical,this.credit[i]+this.vy[i]*CFG.dt)}else{const support=this.grid[this.cell(this.x[i],this.y[i]+1)]-1;if(support>=0&&this.vy[support]>0){this.vy[i]=this.vy[support];this.credit[i]=this.credit[support];}else{this.vy[i]=0;this.credit[i]=0}}this.pathN[i]=0;this.pathStamp[i]=this.tick;if(this.credit[i]>=1-1e-9)fallers.push(i)}
+ step(){this.metrics.stepCalls++;this.tick++;this.time+=CFG.dt;this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.dirty=null;if(!this.chunks.size)return;this.wakeSupportedChunks();this.changed.fill(0);this.potential.fill(0);const ids=[];for(const c of this.chunks){this.metrics.chunkVisits++;this.last.chunks++;const cx=c%this.cols,cy=Math.floor(c/this.cols);for(let y=cy*CFG.chunk;y<Math.min((cy+1)*CFG.chunk,CFG.height);y++)for(let x=cx*CFG.chunk;x<Math.min((cx+1)*CFG.chunk,CFG.width);x++){this.metrics.cellVisits++;const v=this.grid[this.cell(x,y)];if(v)ids.push(v-1)}}ids.sort((a,b)=>this.y[b]-this.y[a]||((this.tick&1)?this.x[a]-this.x[b]:this.x[b]-this.x[a]));this.last.particles=ids.length;
+ const fallers=[];for(const i of ids){this.metrics.particleVisits++;if(this.empty(this.x[i],this.y[i]+1)){this.vy[i]=Math.min(CFG.maxSpeed,this.vy[i]+CFG.gravity*CFG.dt);this.credit[i]=Math.min(CFG.maxVertical+1,this.credit[i]+this.vy[i]*CFG.dt)}else{const support=this.grid[this.cell(this.x[i],this.y[i]+1)]-1;if(support>=0&&this.vy[support]>0){this.vy[i]=this.vy[support];this.credit[i]=this.credit[support];}else{this.vy[i]=0;this.credit[i]=0}}this.pathN[i]=0;this.pathStamp[i]=this.tick;if(this.credit[i]>=1-1e-9)fallers.push(i)}
  // Keep every support integration bottom-up. Only fall credit can authorize
  // vertical work; no phase below increases credit, so this stable subset keeps
  // the original order and exact trajectories. Stationary path starts are lazy.
  // Same-axis phases make interpolated unit-cell trajectories collision-safe.
  // Retain the original phase slots; the separate one-roll budget leaves the
- // second slide round unused. Freefall credit stays capped at ceil(8/1.5)=6; the
- // coarser lattice permits at most a 1-world-px burst quantization difference.
- // A 1e-9-grid credit tolerance handles 16/3 accumulation: 5.999999999999999
- // must not drop the sixth cell and then discard its credit at the six-cell cap.
- // Consumption clamps only the sub-epsilon negative residue back to zero.
+ // second slide round unused. Pitch3 permits three vertical unit legs per
+ // rule step, while credit retains one extra fractional-cell margin (cap4).
+ // At max speed the exact 8/3-grid increment must keep its remainder; capping
+ // total credit at3 incorrectly changes the 2,3,3 pattern into2,3,2,3.
+ // The epsilon tolerance only removes floating-point residue at integer credit.
  // Original phase slots remain fixed; unused slots are genuine recorded holds.
  for(let round=0;round<CFG.maxVertical;round++)for(const i of fallers){this.metrics.verticalCandidateVisits++;if(this.credit[i]>=1-1e-9&&this.empty(this.x[i],this.y[i]+1)){this.move(i,this.x[i],this.y[i]+1,round+1);this.credit[i]=Math.max(0,this.credit[i]-1);this.metrics.verticalMoves++}}
  // Contact cancels free-fall energy. A supported grain gets at most one

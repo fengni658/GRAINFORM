@@ -1,3 +1,4 @@
+import {SettleAnchors} from './settle-anchors.mjs';
 import {decodeSnapshotWire} from './snapshot-transport.mjs';
 import {VERSION,WIDTH,HEIGHT,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH,WORLD_WIDTH,WORLD_HEIGHT,GRAIN_PITCH,VIEW_GRID_TOP,VIEW_GRID_HEIGHT} from './board-geometry.mjs';
 import {CALayerRenderer} from './ca-layer.mjs';
@@ -40,7 +41,7 @@ async function bootApp() {
 const $ = (id) => document.getElementById(id);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const STORAGE = Object.freeze({ best: 'grainform:0.4.12:grid15:best', settings: 'grainform:0.4.8:grid:settings' });
+const STORAGE = Object.freeze({ best: 'grainform:0.4.13:grid3:best', settings: 'grainform:0.4.8:grid:settings' });
 const PALETTES = { standard: ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'], contrast: ['', '#ffe07a', '#4df0b0', '#fc87b5', '#71a7ff'] };
 const COLOR_NAMES = ['', '琥珀色', '海青色', '玫红色', '雾蓝色'];
 
@@ -62,7 +63,8 @@ let audio = null, lastAnnounced = '', lastDiagnosticsAt = 0, lastDiagnosticsStat
 let focusedDialogTrigger = null, lastUIState = null;
 let drawRequested = false, rafCallbacks = 0, lastRafStamp = null, rafTimes = [], drawTimes = [], ackLatencies = [], lastNextSignature = '', clearStartTick = 0, clearSignature = '', lastDrawBodySequence = 0, lastDrawSnapshotTick = 0, lastDrawHighlightCount = 0;
 const layerRenderer = new CALayerRenderer({resolveColor:color,rawCells:query.get('display')==='original'});
-const presentation = new MaterialFrameQueue();
+const anchors = new SettleAnchors();
+const presentation = new MaterialFrameQueue({anchors});
 let lastSnapshotDeliveryDelayMs = null, maxSnapshotDeliveryDelayMs = null;
 const bodyStore = new GridBodyStore({ onResync: request => { presentation.invalidateContinuity(); worker?.postMessage({type:'resync', ...request}); } });
 
@@ -184,6 +186,8 @@ function draw(timestamp = performance.now()) {
   const w = Math.max(WORLD_WIDTH, Math.round(rect.width * dpr)), h = Math.round(w * WORLD_HEIGHT / WORLD_WIDTH);
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
   layerRenderer.configure(w, h, settings.contrast ? 'contrast' : 'standard');
+  anchors.prepare(layerRenderer,{group:sample?.group,alpha:sample?.alpha??0,now:timestamp});
+  try {
   paintBoard(); clipBoard();
   const highlighted = clearHighlightBodies(snapshot, bodyStore.bodies);
   const selection = highlighted.length ? {
@@ -196,7 +200,7 @@ function draw(timestamp = performance.now()) {
   // retry so partially drawn translucent glyphs cannot be composited twice.
   let layerDrawMs;
   try {
-    try { layerRenderer.draw(ctx, selection); } catch (error) { ctx.restore(); layerRenderer.fallback(`Cache compositing failed: ${error.message}`); paintBoard(); clipBoard(); layerRenderer.draw(ctx, selection); }
+    try { layerRenderer.draw(ctx, selection, {standardBoard:true}); } catch (error) { ctx.restore(); layerRenderer.fallback(`Cache compositing failed: ${error.message}`); paintBoard(); clipBoard(); layerRenderer.draw(ctx, selection, {standardBoard:true}); }
     layerDrawMs=performance.now()-layerBegun;
     piece(ctx, snapshot.active);
   } finally { ctx.restore(); }
@@ -204,17 +208,19 @@ function draw(timestamp = performance.now()) {
   if (signature !== lastNextSignature) { drawNext($('nextCanvas')); drawNext($('nextMobile')); lastNextSignature = signature; }
   lastVisualKey = currentVisualKey(); drawCount++; lastDrawBodySequence = bodyStore.seq; lastDrawSnapshotTick = snapshot.tick; lastDrawHighlightCount = highlighted.length; drawTimes.push(performance.now());
   while (drawTimes.length && performance.now() - drawTimes[0] > 2000) drawTimes.shift();
+  anchors.commit();
   const completion = presentation.didDraw(timestamp);
   if (completion) worker?.postMessage({type:'presented', ...completion});
   const end=performance.now();lastDrawMs=end-totalBegun;maxDrawMs=Math.max(maxDrawMs,lastDrawMs);
   const sampleMs=afterSample-totalBegun,synchronizeMs=afterSynchronize-afterSample;
   lastDrawStages={version:2,layerScope:'material-and-selection',sampleMs,synchronizeMs,layerDrawMs,remainingDrawMs:lastDrawMs-sampleMs-synchronizeMs-layerDrawMs,totalMs:lastDrawMs};
+  } catch(error) { anchors.abort(layerRenderer); throw error; }
 }
 function renderLoop(timestamp) {
   renderFrame = null; rafCallbacks++; lastRafStamp = timestamp; rafTimes.push(timestamp);
   while (rafTimes.length && timestamp - rafTimes[0] > 2000) rafTimes.shift();
-  if (drawRequested || presentation.queue.length) { drawRequested = false; draw(timestamp); }
-  if (presentation.queue.length && presentation.pausedAt === null) requestDraw();
+  try { if (drawRequested || presentation.queue.length) { drawRequested = false; draw(timestamp); } }
+  finally { if (presentation.queue.length && presentation.pausedAt === null) requestDraw(); }
   // Idle material stays cached; an in-flight path always gets its endpoint rAF.
 }
 function requestDraw() { drawRequested = true; if (renderFrame === null && !document.hidden) renderFrame = requestAnimationFrame(renderLoop); }
@@ -324,7 +330,7 @@ function fail(message) {
 }
 function setupWorker() {
   try {
-    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.4.12-simulation' });
+    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.4.13-simulation' });
     worker.onmessage = ({ data: incoming }) => {
       const handlerBegun=performance.now();
       const wire=incoming?.type==='snapshot-wire'?incoming:null;
@@ -355,6 +361,7 @@ function setupWorker() {
           else presentation.accept(data.epoch,data.presentationGroups??[],performance.now());
           presentation.setPaused(snapshot.state !== 'playing' || pauseRequested || document.hidden, performance.now());
           layerRenderer.synchronize(presentation.queue, presentation.sample(performance.now()));
+          anchors.observePatch(data.epoch,data.bodyPatch,layerRenderer.bodies);
           layerRenderer.apply(data.bodyPatch);
         } catch (error) { fail(error.message); return; }
         const nextClear = (snapshot.clearIds || []).join(','); if (nextClear !== clearSignature) { clearSignature = nextClear; clearStartTick = snapshot.tick; }

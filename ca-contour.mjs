@@ -59,7 +59,7 @@ export class MaterialContour {
    // the opposing strengths avoids a second binary bridge/protrusion threshold.
    const opposing=Math.max(Math.min(weights[0],weights[1]),Math.min(weights[2],weights[3]));p[3]=Math.max(0,Math.max(...weights)-opposing);return p;
   }).sort((a,b)=>a[0]-b[0]);
-  this.result={loops:smooth,preserve};this.metrics.rebuilds++;this.metrics.vertices=smooth.reduce((n,l)=>n+l.length,0);this.metrics.preservedGrains=[...this.preserved.values()].filter(p=>!p[3]).length;this.metrics.centerGuardGrains=this.preserved.size-this.metrics.preservedGrains;this.metrics.lastUpdatedSquares=dirtySquares.size;return this.result;
+  this.result={loops:smooth,preserve,fieldLoops:loops};this.metrics.rebuilds++;this.metrics.vertices=smooth.reduce((n,l)=>n+l.length,0);this.metrics.preservedGrains=[...this.preserved.values()].filter(p=>!p[3]).length;this.metrics.centerGuardGrains=this.preserved.size-this.metrics.preservedGrains;this.metrics.lastUpdatedSquares=dirtySquares.size;return this.result;
  }
 }
 function vertex(context,loop,i){const p=loop[i],n=loop[(i+1)%loop.length];context.quadraticCurveTo(p[0],p[1],(p[0]+n[0])/2,(p[1]+n[1])/2)}
@@ -75,3 +75,8 @@ export function paintContourRim(context,{loops},resolveColor){
  context.lineWidth=.7;context.lineCap='round';context.lineJoin='round';
  for(const color of [...colors].sort((a,b)=>a-b)){context.beginPath();for(const loop of loops)if(loop.length>=12&&!loop.linear)for(let i=0;i<loop.length;i++){if(loop[i][2]!==color)continue;const a=loop[(i+loop.length-1)%loop.length],b=loop[i];context.moveTo((a[0]+b[0])/2,(a[1]+b[1])/2);vertex(context,loop,i)}context.strokeStyle=resolveColor(color);context.stroke()}
 }
+
+// Only the neutral interior shade uses this unsmoothed continuous field clip.
+// Colored material and flash are the actual grain glyphs, never clipped to a
+// reconstructed group envelope or a binary exposed-grain classification.
+export function clipMaterialField(context,shape){context.beginPath();for(const loop of shape.fieldLoops??[]){context.moveTo(loop[0][0],loop[0][1]);for(let i=1;i<loop.length;i++)context.lineTo(loop[i][0],loop[i][1]);context.closePath()}context.clip();}

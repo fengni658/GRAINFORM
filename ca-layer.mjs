@@ -1,6 +1,7 @@
-import {GRAIN_DIAMETER_SCALE, GRAIN_OUTLINES, GRAIN_LIGHT_EDGES, appendGrainPath} from './grain-material.mjs';
+import {GRAIN_SHAPE, GRAIN_OFFSET_BOUND, GRAIN_DIAMETER_SCALE, GRAIN_OUTLINES, GRAIN_LIGHT_EDGES, appendGrainPath} from './grain-material.mjs';
 import {WIDTH,HEIGHT,VIEW_GRID_TOP,VIEW_GRID_HEIGHT} from './board-geometry.mjs';
-import {MaterialContour, clipMaterialContour, paintContourRim} from './ca-contour.mjs';
+import {MaterialContour, clipMaterialContour, paintContourRim, clipMaterialField} from './ca-contour.mjs';
+const SQUARE_GRAINS = GRAIN_SHAPE === 'square';
 export const MATERIAL_FRAME_MS = 1000 / 60;
 export const MATERIAL_PHASES = 68;
 
@@ -106,7 +107,7 @@ function hashUnit(id, salt) {
 }
 export function materialStyle(id) {
   const variant=Math.min(63, Math.floor(hashUnit(id, 0x9e3779b9) * 64));
-  return { dx: (hashUnit(id, 0xa511e9b3) * 2 - 1) * .28, dy: (hashUnit(id, 0x63d83595) * 2 - 1) * .28,
+  return { dx: (hashUnit(id, 0xa511e9b3) * 2 - 1) * GRAIN_OFFSET_BOUND, dy: (hashUnit(id, 0x63d83595) * 2 - 1) * GRAIN_OFFSET_BOUND,
     radius: GRAIN_DIAMETER_SCALE * (.95 + hashUnit(id, 0xb5297a4d) * .3) / 2,
     outline: GRAIN_OUTLINES[variant], lightEdge:GRAIN_LIGHT_EDGES[variant], facet: (variant & 7) === 0,
     brightness: .84 + Math.min(11, Math.floor(hashUnit(id, 0x1b56c4e9) * 12)) * .22 / 11 };
@@ -117,7 +118,7 @@ function tint(hex, brightness) {
   return `rgb(${channel(16)},${channel(8)},${channel(0)})`;
 }
 function tinyGrain(context, body, style, rawCells, x = body.x, y = body.y) {
-  if (rawCells) { context.fillRect(x - .5, y - .5, 1, 1); return; }
+  if (rawCells || SQUARE_GRAINS) { context.fillRect(x - .5, y - .5, 1, 1); return; }
   context.beginPath(); appendGrainPath(context, x + style.dx, y + style.dy, style); context.fill();
 }
 
@@ -125,9 +126,34 @@ function tinyGrain(context, body, style, rawCells, x = body.x, y = body.y) {
  * moving IDs are redrawn each rAF. There is no legacy large circle/mask. */
 export class CALayerRenderer {
   constructor({ createCanvas = () => document.createElement('canvas'), resolveColor = c => ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'][c], rawCells = false } = {}) {
-    this.createCanvas = createCanvas; this.resolveColor = resolveColor; this.rawCells = rawCells; this.contour = new MaterialContour(); this.styles = new Map(); this.bodies = new Map(); this.moving = new Set(); this.positions = new Map(); this.canvas = null; this.context = null; this.width = 0; this.height = 0; this.palette = null; this.dirty = true; this.mode = 'ca-cell-cached-layer'; this.fallbackReason = null;
-    this.scratchCanvas = null; this.scratchContext = null; this.tileSize = 16; this.tileColumns = Math.ceil(WIDTH / this.tileSize); this.tileRows = Math.ceil(HEIGHT / this.tileSize); this.tiles = new Map(); this.staticRecords = new Map(); this.dirtyTiles = new Set(); this.paintRanks = new Map(); this.nextPaintRank = 0;
+    this.createCanvas = createCanvas; this.resolveColor = resolveColor; this.rawCells = rawCells; this.contour = new MaterialContour(); this.styles = new Map(); this.bodies = new Map(); this.moving = new Set(); this.physicalMoving = new Set(); this.anchorMoving = null; this.positions = new Map(); this.canvas = null; this.context = null; this.width = 0; this.height = 0; this.palette = null; this.dirty = true; this.mode = 'ca-cell-cached-layer'; this.fallbackReason = null;
+    this.scratchCanvas = null; this.scratchContext = null; this.tileSize = 8; this.tileColumns = Math.ceil(WIDTH / this.tileSize); this.tileRows = Math.ceil(HEIGHT / this.tileSize); this.tiles = new Map(); this.staticRecords = new Map(); this.dirtyTiles = new Set(); this.paintRanks = new Map(); this.nextPaintRank = 0;
+    this.tailStart=Infinity;this.tailIds=[];this.qualifyDirty=true;this.qualifyKeys=new Set;this.displayChanged=true;this.tailMetrics={qualifications:0,eligible:0,rejected:0,workScans:0,boundaryIds:0,tailPaints:0};
+    this.paintRevision=0;this.selectionCache={canvas:null,context:null,valid:false,ids:[],fillStyle:null};this.selectionMetrics={builds:0,reuses:0,identityScans:0,paintedGrains:0,idComparisons:0,composites:0,lastIdentityScans:0,lastPaintedGrains:0,bytes:0};
     this.metrics = { frames: 0, fullCacheRebuilds: 0, dirtyCacheRebuilds: 0, dirtyTilesRepainted: 0, lastDirtyTiles: 0, cacheTileCopies: 0, cacheCopiedPixels: 0, lastCacheCopiedPixels: 0, stableCellPaints: 0, dynamicCellPaints: 0, lastStablePaints: 0, lastDynamicPaints: 0 };
+  }
+  orderedIds() { if(!this.paintOrder) this.paintOrder=[...this.bodies.keys()].sort((a,b)=>a-b); return this.paintOrder; }
+  qualifyTail(allowDirect = true) {
+    // Group opacity and non-source-over blending cannot be distributed over the
+    // cached prefix and direct suffix. Merge once, then retain the correct cache.
+    if(!allowDirect){
+      if(Number.isFinite(this.tailStart)){
+        for(const id of this.tailIds)for(const key of this.staticRecords.get(id)?.keys??[])this.dirtyTiles.add(key);
+        this.tailMetrics.boundaryIds+=this.tailIds.length;this.tailStart=Infinity;this.tailIds=[];
+      }
+      this.qualifyDirty=true;return;
+    }
+    if(!this.qualifyDirty)return;
+    if(this.physicalMoving.size&&!this.displayChanged)return;
+    const order=this.orderedIds();let cutoff=Infinity,work=0,count=0;
+    if(this.physicalMoving.size){let min=Infinity;for(const id of this.physicalMoving)if(this.bodies.has(id))min=Math.min(min,id);
+      let lo=0,hi=order.length;while(lo<hi){const mid=(lo+hi)>>>1;if(order[mid]<min)lo=mid+1;else hi=mid;}count=order.length-lo;
+      if(this.dirty)work=order.length;else{const ids=new Set;for(const key of this.qualifyKeys)for(const id of this.tiles.get(key)??[]){ids.add(id);this.tailMetrics.workScans++;}work=ids.size;}
+      if(count&&count<=work){cutoff=min;this.tailMetrics.eligible++;}else this.tailMetrics.rejected++;
+    }
+    if(cutoff!==this.tailStart){const low=Math.min(cutoff,this.tailStart),high=Math.max(cutoff,this.tailStart);for(const id of order)if(id>=low&&id<high){for(const key of this.staticRecords.get(id)?.keys??[])this.dirtyTiles.add(key);this.tailMetrics.boundaryIds++;}this.tailStart=cutoff;}
+    this.tailIds=Number.isFinite(cutoff)?order.filter(id=>id>=cutoff):[];
+    this.tailMetrics.qualifications++;this.tailMetrics.lastSuffixCount=count;this.tailMetrics.lastCorrectTileWork=work;this.qualifyDirty=false;this.qualifyKeys.clear();
   }
   tileRect(key) {
     const x = (key % this.tileColumns) * this.tileSize, y = Math.floor(key / this.tileColumns) * this.tileSize;
@@ -136,7 +162,9 @@ export class CALayerRenderer {
   }
   footprintKeys(body) {
     const style = this.styles.get(body.id), sx = this.width / WIDTH, sy = this.height / VIEW_GRID_HEIGHT;
-    const x = body.x + (this.rawCells ? 0 : style.dx), y = body.y + (this.rawCells ? 0 : style.dy), radius = this.rawCells ? .5 : style.radius;
+    const pos=this.moving.has(body.id)?this.positions.get(body.id):null;
+    const square=this.rawCells||SQUARE_GRAINS;
+    const x = (pos?pos[0]:body.x) + (square ? 0 : style.dx), y = (pos?pos[1]:body.y) + (square ? 0 : style.dy), radius = square ? .5 : style.radius;
     // A one-device-pixel fringe includes antialiased neighbors. Tile bounds use
     // shared integer device pixels, while every arc retains the original origin.
     const x0 = Math.max(0, Math.floor((x - radius) * sx) - 1), y0 = Math.max(0, Math.floor((y - radius - VIEW_GRID_TOP) * sy) - 1);
@@ -151,43 +179,57 @@ export class CALayerRenderer {
   }
   removeStatic(id) {
     const record = this.staticRecords.get(id); if (!record) return;
-    for (const key of record.keys) { const ids = this.tiles.get(key); ids?.delete(id); if (ids?.size === 0) this.tiles.delete(key); this.dirtyTiles.add(key); }
+    for (const key of record.keys) { const ids = this.tiles.get(key); ids?.delete(id); if (ids?.size === 0) this.tiles.delete(key); if(id<this.tailStart)this.dirtyTiles.add(key); }
     this.staticRecords.delete(id);
   }
   addStatic(id, invalidate = true) {
-    if (this.dirty || !this.width || !this.height || this.moving.has(id) || !this.bodies.has(id) || this.staticRecords.has(id)) return;
-    const keys = this.footprintKeys(this.bodies.get(id)); this.staticRecords.set(id, { keys, id, rank: this.paintRanks.get(id) });
-    for (const key of keys) { if (!this.tiles.has(key)) this.tiles.set(key, new Set()); this.tiles.get(key).add(id); if (invalidate) this.dirtyTiles.add(key); }
+    if (this.dirty || !this.width || !this.height || !this.bodies.has(id) || this.staticRecords.has(id)) return;
+    const body=this.bodies.get(id),pos=this.positions.get(id),keys=this.footprintKeys(body); this.staticRecords.set(id,{keys,id,rank:id,x:pos?pos[0]:body.x,y:pos?pos[1]:body.y});
+    for (const key of keys) { if (!this.tiles.has(key)) this.tiles.set(key, new Set()); this.tiles.get(key).add(id); if (invalidate&&id<this.tailStart) this.dirtyTiles.add(key); }
   }
   rebuildStaticIndex() {
     this.tiles.clear(); this.staticRecords.clear(); this.dirtyTiles.clear();
-    for (const body of this.bodies.values()) if (!this.moving.has(body.id)) this.addStatic(body.id, false);
+    for (const id of this.orderedIds()) this.addStatic(id, false);
   }
   apply(patch) {
-    this.contour.invalidate(patch);
-    if (patch.reset) { this.bodies.clear(); this.styles.clear(); this.tiles.clear(); this.staticRecords.clear(); this.dirtyTiles.clear(); this.paintRanks.clear(); this.nextPaintRank = 0; this.dirty = true; }
+    let visualChange=!!patch.reset||patch.removed.length>0;
+    
+    if(patch.reset||patch.removed.length||patch.upsert.some(b=>!this.bodies.has(b.id))){this.paintOrder=null;this.qualifyDirty=true;}
+    if (patch.reset) { this.tailStart=Infinity;this.tailIds=[];this.qualifyKeys.clear();this.bodies.clear(); this.styles.clear(); this.tiles.clear(); this.staticRecords.clear(); this.dirtyTiles.clear(); this.paintRanks.clear(); this.nextPaintRank = 0; this.dirty = true; }
     for (const id of patch.removed) { this.removeStatic(id); this.bodies.delete(id); this.positions.delete(id); this.styles.delete(id); this.paintRanks.delete(id); }
     for (const body of patch.upsert) {
       const old = this.bodies.get(body.id), changed = !old || old.x !== body.x || old.y !== body.y || old.color !== body.color;
-      if (changed) this.removeStatic(body.id);
+      if (changed) {this.removeStatic(body.id);visualChange=true;}
       this.bodies.set(body.id, { ...body });
-      if (!this.paintRanks.has(body.id)) this.paintRanks.set(body.id, this.nextPaintRank++);
+      if (!this.paintRanks.has(body.id)) this.paintRanks.set(body.id, body.id);
       if (!this.styles.has(body.id)) this.styles.set(body.id, materialStyle(body.id));
-      if (!this.moving.has(body.id)) this.addStatic(body.id);
+      this.addStatic(body.id);
     }
+    if(visualChange){this.displayChanged=true;this.paintRevision++;this.selectionCache.valid=false;}
+    if(patch.reset)this.selectionCache.ids=[];
   }
   synchronize(queue, sample) {
     queue = sample?.displayQueue ?? queue;
     const moving = new Set(), positions = new Map();
     // The earliest unpresented pose wins when an ID occurs in both frames.
     for (const frame of queue) for (const path of frame.paths) if (!moving.has(path.id)) { moving.add(path.id); positions.set(path.id, path.points.slice(0, 2)); }
-    if (sample) for (const { id, xy } of sample.positions) positions.set(id, xy);
-    const membershipChanged = moving.size !== this.moving.size || [...moving].some(id => !this.moving.has(id));
-    if (membershipChanged) for (const id of moving) if (!this.moving.has(id)) this.removeStatic(id);
-    const previousMoving = this.moving; this.moving = moving; this.positions = positions;
-    if (membershipChanged) for (const id of previousMoving) if (!moving.has(id)) this.addStatic(id);
+    if (sample) for (const { id, xy } of sample.positions) if(moving.has(id)) positions.set(id, xy);
+    this.physicalMoving = moving; this.positions = positions; this.syncMovingLayers();
+  }
+  setAnchorMoving(ids) { if (ids === this.anchorMoving) return; this.anchorMoving = ids; this.syncMovingLayers(); }
+  syncMovingLayers() {
+    const moving = new Set();
+    for (const id of this.anchorMoving ?? []) if(this.bodies.has(id)&&!this.physicalMoving.has(id))moving.add(id);
+    for (const id of this.physicalMoving) moving.add(id);
+    // Membership is not painter order. Invalidate only changed displayed footprints.
+    const membershipChanged=moving.size!==this.moving.size||[...moving].some(id=>!this.moving.has(id));if(membershipChanged)this.qualifyDirty=true;
+    const affected=new Set([...this.moving,...moving]);this.moving=moving;
+    let changed=false;
+    for(const id of affected){const body=this.bodies.get(id);if(!body)continue;const pos=this.positions.get(id),x=pos?pos[0]:body.x,y=pos?pos[1]:body.y,record=this.staticRecords.get(id);if(this.qualifyDirty)for(const key of record?.keys??[])this.qualifyKeys.add(key);if(!record||record.x!==x||record.y!==y){this.removeStatic(id);this.addStatic(id);changed=true;}if(this.qualifyDirty)for(const key of this.staticRecords.get(id)?.keys??[])this.qualifyKeys.add(key);}
+    if(changed){this.displayChanged=true;this.paintRevision++;this.selectionCache.valid=false;}
   }
   configure(width, height, palette) {
+    if(width!==this.width||height!==this.height||palette!==this.palette){this.paintRevision++;this.selectionCache.valid=false;if(this.selectionCache.canvas){this.selectionCache.canvas.width=width;this.selectionCache.canvas.height=height;this.selectionMetrics.bytes=width*height*4;}}
     if (this.mode !== 'full-cell-fallback' && !this.canvas) { try { this.canvas = this.createCanvas(); this.context = this.canvas?.getContext('2d', { alpha: true }); if (!this.context) throw Error('Cell cache 2D canvas unavailable'); } catch (error) { this.fallback(error.message); } }
     if (width !== this.width || height !== this.height) { this.width = width; this.height = height; if (this.canvas) { this.canvas.width = width; this.canvas.height = height; } this.dirty = true; }
     if (palette !== this.palette) { this.palette = palette; this.dirty = true; }
@@ -200,7 +242,7 @@ export class CALayerRenderer {
       const style = this.styles.get(body.id), baseColor = this.resolveColor(body.color);
       if (style.baseColor !== baseColor) { style.baseColor = baseColor; style.fillColor = tint(baseColor, style.brightness); style.facetColor = tint(baseColor, Math.min(1.16,style.brightness + .08)); }
       context.fillStyle = this.rawCells ? baseColor : style.fillColor; tinyGrain(context, body, style, this.rawCells, x, y);
-      if (!this.rawCells && style.facet) {
+      if (!this.rawCells && !SQUARE_GRAINS && style.facet) {
         // One restrained diffuse facet, always facing upper-left. No glitter,
         // outline stroke, cast shadow, extra alpha pass or transient random noise.
         const points=style.outline,edge=style.lightEdge;
@@ -212,9 +254,9 @@ export class CALayerRenderer {
     return n;
   }
   fallback(reason) { this.mode = 'full-cell-fallback'; this.fallbackReason = String(reason); this.canvas = null; this.context = null; this.dirty = true; }
-  draw(context, selection = null) {
-    // Only source-over shares the contour scope. Nonlocal compositing modes
-    // retain the original two-pass save/clip boundaries and raster semantics.
+  draw(context, selection = null, presentation = null) {
+    // Nonlocal compositing modes retain separate material and selection scopes.
+    // Normal source-over selection uses the cached visible-coverage mask.
     if (selection && context.globalCompositeOperation !== 'source-over') {
       this.draw(context);
       context.save();
@@ -227,10 +269,20 @@ export class CALayerRenderer {
     }
     context.save();
     try {
-    if (!this.rawCells) {const shape=this.contour.update(this.bodies,this.positions);clipMaterialContour(context,shape,this.styles);if(context.globalCompositeOperation==='source-over'){context.fillStyle='#4b4b4b';context.fillRect(0,VIEW_GRID_TOP,WIDTH,VIEW_GRID_HEIGHT);}paintContourRim(context,shape,this.resolveColor);}
+
+    // Arbitrary caller clips cannot be inspected. Only the application's own
+    // device-aligned board context may opt in; generic Canvas callers use cache.
+    let direct=false;
+    if(presentation?.standardBoard===true&&context.globalAlpha===1&&context.globalCompositeOperation==='source-over'&&context.shadowBlur===0&&context.shadowOffsetX===0&&context.shadowOffsetY===0&&(!context.filter||context.filter==='none')){
+      const t=context.getTransform?.(),sx=this.width/WIDTH,sy=this.height/VIEW_GRID_HEIGHT;
+      const near=(a,b)=>Math.abs(a-b)<=1e-7*Math.max(1,Math.abs(b));
+      direct=!!t&&near(t.a,sx)&&near(t.d,sy)&&near(t.b,0)&&near(t.c,0)&&near(t.e,0)&&near(t.f,-VIEW_GRID_TOP*sy);
+    }
+    this.qualifyTail(direct);
     this.metrics.frames++; this.metrics.lastStablePaints = 0; this.metrics.lastDirtyTiles = 0; this.metrics.lastCacheCopiedPixels = 0;
+    let anchorPaints = 0, anchorComposited = false;
     if (this.mode !== 'full-cell-fallback') {
-      if (this.dirty) { const c = this.context; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.width, this.height); c.setTransform(this.width / WIDTH, 0, 0, this.height / VIEW_GRID_HEIGHT, 0, -VIEW_GRID_TOP * this.height / VIEW_GRID_HEIGHT); const stable = [...this.bodies.values()].filter(b => !this.moving.has(b.id)); const count = this.paint(c, stable); this.metrics.lastStablePaints = count; this.metrics.stableCellPaints += count; this.metrics.fullCacheRebuilds++; this.dirty = false; this.rebuildStaticIndex(); }
+      if (this.dirty) { const c = this.context; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.width, this.height); c.setTransform(this.width / WIDTH, 0, 0, this.height / VIEW_GRID_HEIGHT, 0, -VIEW_GRID_TOP * this.height / VIEW_GRID_HEIGHT); const count = this.paint(c,this.orderedIds().filter(id=>id<this.tailStart),this.positions,true); this.metrics.lastStablePaints = count; this.metrics.stableCellPaints += count; this.metrics.fullCacheRebuilds++; this.dirty = false; this.rebuildStaticIndex(); }
       else if (this.dirtyTiles.size) {
         try {
           if (!this.scratchCanvas) { this.scratchCanvas = this.createCanvas(); this.scratchContext = this.scratchCanvas?.getContext('2d', { alpha: true }); if (!this.scratchContext) throw Error('Local cell repaint canvas unavailable'); }
@@ -242,7 +294,7 @@ export class CALayerRenderer {
         // order and original canvas origin, so every copied pixel is identical
         // to the per-tile raster; shared-border grains are painted only once.
         const ids = new Set();
-        for (const key of this.dirtyTiles) for (const id of this.tiles.get(key) ?? []) ids.add(id);
+        for (const key of this.dirtyTiles) for (const id of this.tiles.get(key) ?? []) if(id<this.tailStart)ids.add(id);
         if (ids.size) {
           // Static records already carry immutable insertion ranks. Sort those
           // directly: no two Map lookups per comparator, and no body-array copy.
@@ -252,7 +304,7 @@ export class CALayerRenderer {
           for (let i = 0; i < ordered.length; i++) ordered[i] = ordered[i].id;
           scratch.setTransform(1, 0, 0, 1, 0, 0); scratch.clearRect(0, 0, this.width, this.height);
           scratch.setTransform(this.width / WIDTH, 0, 0, this.height / VIEW_GRID_HEIGHT, 0, -VIEW_GRID_TOP * this.height / VIEW_GRID_HEIGHT);
-          paints = this.paint(scratch, ordered, null, true);
+          paints = this.paint(scratch, ordered, this.positions, true);
         }
         // Copy disjoint horizontal runs with identical integer tile boundaries.
         // No extra pixels are cleared or copied, and original grain raster/order
@@ -277,23 +329,42 @@ export class CALayerRenderer {
         this.metrics.lastStablePaints = paints; this.metrics.stableCellPaints += paints; this.metrics.lastDirtyTiles = this.dirtyTiles.size; this.metrics.dirtyTilesRepainted += this.dirtyTiles.size; this.metrics.dirtyCacheRebuilds++; this.dirtyTiles.clear();
         }
       }
-      if (this.mode !== 'full-cell-fallback') context.drawImage(this.canvas, 0, 0, this.width, this.height, 0, VIEW_GRID_TOP, WIDTH, VIEW_GRID_HEIGHT);
+      if (this.mode !== 'full-cell-fallback') context.drawImage(this.canvas,0,0,this.width,this.height,0,VIEW_GRID_TOP,WIDTH,VIEW_GRID_HEIGHT);
     }
     const fallback = this.mode === 'full-cell-fallback';
-    this.metrics.lastDynamicPaints = this.paint(context, fallback ? this.bodies.values() : this.moving, this.positions, !fallback); this.metrics.dynamicCellPaints += this.metrics.lastDynamicPaints;
-    // Reuse the material contour scope, preserving individual glyph fill order
+    // Recovery and cache use immutable numeric-ID order, independent of activity.
+    this.metrics.lastDynamicPaints = fallback ? this.paint(context,this.orderedIds(),this.positions,true) : this.paint(context,this.tailIds,this.positions,true);
+    if(!fallback)this.tailMetrics.tailPaints+=this.metrics.lastDynamicPaints;this.displayChanged=false;
+    this.metrics.dynamicCellPaints += this.metrics.lastDynamicPaints;
+    // Preserve individual full-glyph fill order inside the caller board clip
     // and body (not interpolated) selection coordinates. No group compositing.
     if (selection) {
       context.save();
       try {
         context.globalAlpha = selection.alpha;
         context.fillStyle = selection.fillStyle;
-        this.paintSelection(context, selection.ids);
+        this.drawSelection(context, selection.ids);
       } finally { context.restore(); }
     }
     } finally { context.restore(); }
   }
   paintSelection(context, ids) { for (const id of ids) { const body=this.bodies.get(id);if(body)tinyGrain(context,body,this.styles.get(id),this.rawCells); } }
-  drawSelection(context, ids) { context.save(); try { if (!this.rawCells) clipMaterialContour(context,this.contour.update(this.bodies,this.positions),this.styles); this.paintSelection(context, ids); } finally { context.restore(); } }
-  read() { return { contour: {...this.contour.metrics}, mode: this.mode, fallbackReason: this.fallbackReason, liveCount: this.bodies.size, stableCount: this.bodies.size - this.moving.size, dynamicCount: this.moving.size, countsConserved: true, style: this.rawCells ? 'raw-1px-cell' : 'fixed-id-mineral-grain-grid15', styleCacheSize: this.styles.size, indexedStableCount: this.staticRecords.size, pendingDirtyTiles: this.dirtyTiles.size, ...this.metrics }; }
+  selectionMask(ids,fillStyle) {
+    const cache=this.selectionCache,m=this.selectionMetrics;m.lastIdentityScans=0;m.lastPaintedGrains=0;m.idComparisons+=ids.length;
+    if(cache.valid&&cache.revision===this.paintRevision&&cache.fillStyle===fillStyle&&ids.length===cache.ids.length&&ids.every((id,i)=>id===cache.ids[i])){m.reuses++;return cache.empty?null:cache.canvas;}
+    cache.valid=false;const selected=new Set(ids.filter(id=>this.bodies.has(id)));
+    if(!selected.size){cache.empty=true;cache.ids=ids.slice();cache.fillStyle=fillStyle;cache.revision=this.paintRevision;cache.valid=true;return null;}
+    if(!cache.canvas){const canvas=this.createCanvas(),c=canvas?.getContext('2d',{alpha:true});if(!c)throw Error('Visible selection mask unavailable');cache.canvas=canvas;cache.context=c;}
+    const canvas=cache.canvas,c=cache.context;if(canvas.width!==this.width)canvas.width=this.width;if(canvas.height!==this.height)canvas.height=this.height;m.bytes=this.width*this.height*4;
+    c.setTransform(1,0,0,1,0,0);c.globalAlpha=1;c.globalCompositeOperation='source-over';c.clearRect(0,0,this.width,this.height);c.setTransform(this.width/WIDTH,0,0,this.height/VIEW_GRID_HEIGHT,0,-VIEW_GRID_TOP*this.height/VIEW_GRID_HEIGHT);
+    // Existing tile membership conservatively contains every potential occluder.
+    // No per-frame full scene repaint: the resulting mask is reused through flash.
+    let relevant=null;if(this.mode!=='full-cell-fallback'&&!this.dirty){relevant=new Set;for(const id of selected)for(const key of this.staticRecords.get(id)?.keys??[])for(const other of this.tiles.get(key)??[])relevant.add(other);for(const id of selected)relevant.add(id);}
+    const paint=id=>{if(relevant&&!relevant.has(id))return;const b=this.bodies.get(id);if(!b)return;const p=this.moving.has(id)?this.positions.get(id):null,x=p?p[0]:b.x,y=p?p[1]:b.y,style=this.styles.get(id);c.globalCompositeOperation=selected.has(id)?'source-over':'destination-out';c.fillStyle=selected.has(id)?fillStyle:'#000000';tinyGrain(c,b,style,this.rawCells,x,y);if(!this.rawCells&&!SQUARE_GRAINS&&style.facet){const points=style.outline,edge=style.lightEdge,a=points[edge],q=points[(edge+1)%points.length],gx=x+style.dx,gy=y+style.dy,r=style.radius;c.beginPath();c.moveTo(gx+a[0]*r*.9,gy+a[1]*r*.9);c.lineTo(gx+q[0]*r*.9,gy+q[1]*r*.9);c.lineTo(gx-r*.08,gy-r*.08);c.closePath();c.fill();}m.lastPaintedGrains++;};
+    for(const id of this.orderedIds()){m.lastIdentityScans++;paint(id);}
+    m.builds++;m.identityScans+=m.lastIdentityScans;m.paintedGrains+=m.lastPaintedGrains;cache.empty=false;cache.ids=ids.slice();cache.fillStyle=fillStyle;cache.revision=this.paintRevision;cache.valid=true;return canvas;
+  }
+  drawSelection(context,ids){context.save();try{if(context.globalCompositeOperation!=='source-over'){this.paintSelection(context,ids);return;}if(!context.globalAlpha)return;const mask=this.selectionMask(ids,context.fillStyle);if(mask){context.drawImage(mask,0,0,this.width,this.height,0,VIEW_GRID_TOP,WIDTH,VIEW_GRID_HEIGHT);this.selectionMetrics.composites++;}}finally{context.restore();}}
+
+  read() { return { tail: {...this.tailMetrics,cutoff:Number.isFinite(this.tailStart)?this.tailStart:null,count:this.tailIds.length}, selection: {...this.selectionMetrics}, contour: {...this.contour.metrics}, mode: this.mode, fallbackReason: this.fallbackReason, liveCount: this.bodies.size, stableCount: this.bodies.size - this.moving.size, dynamicCount: this.moving.size, countsConserved: true, style: this.rawCells ? 'raw-1px-cell' : SQUARE_GRAINS ? 'fixed-id-square-grain-grid3' : 'fixed-id-mineral-grain-grid3', styleCacheSize: this.styles.size, indexedStableCount: this.staticRecords.size, pendingDirtyTiles: this.dirtyTiles.size, ...this.metrics }; }
 }

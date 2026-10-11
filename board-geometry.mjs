@@ -1,12 +1,12 @@
 // All simulation, wire paths, material contour and renderer tile coordinates are
 // GRID units. Only the app camera converts to visible world pixels. Never mix
 // grid bodies with world-pixel active blocks or paths.
-export const VERSION='0.4.12';
-export const WORLD_WIDTH=288,WORLD_HEIGHT=512,WORLD_BLOCK=24,GRAIN_PITCH=1.5;
+export const VERSION='0.5.1';
+export const WORLD_WIDTH=288,WORLD_HEIGHT=512,WORLD_BLOCK=24,GRAIN_PITCH=3;
 export const GRID_ORIGIN_X=0,GRID_ORIGIN_Y=-1;
-export const WIDTH=192,HEIGHT=342,BLOCK=16;
+export const WIDTH=96,HEIGHT=171,BLOCK=8;
 export const LEFT=0,RIGHT=WIDTH,FLOOR=HEIGHT,FIELD_WIDTH=WIDTH,FIELD_HEIGHT=HEIGHT;
-// Bottom-aligned uniform lattice: 342*1.5=513 world px. The excess 1px is
+// Bottom-aligned uniform lattice: 171*3=513 world px. The excess 1px is
 // outside the TOP of the viewport. No bottom gap and no anisotropic stretching.
 export const VIEW_GRID_TOP=-GRID_ORIGIN_Y/GRAIN_PITCH;
 export const VIEW_GRID_HEIGHT=WORLD_HEIGHT/GRAIN_PITCH;
