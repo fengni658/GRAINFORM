@@ -1,9 +1,19 @@
-// Shared logical dimensions. One material cell stays one logical pixel.
-export const VERSION='0.4.11';
-export const WIDTH=288, HEIGHT=512, BLOCK=24;
-// The canvas content box is the playable field; its CSS border is outside it.
-export const LEFT=0, RIGHT=WIDTH, FLOOR=HEIGHT;
-export const FIELD_WIDTH=RIGHT-LEFT, FIELD_HEIGHT=FLOOR;
-export const BOARD=Object.freeze({width:WIDTH,height:HEIGHT,left:LEFT,right:RIGHT,floor:FLOOR,fieldWidth:FIELD_WIDTH,fieldHeight:FIELD_HEIGHT,cell:1});
-// Initial rigid speed: original 0.4.10 base +7%; unchanged level/piece ramp and cap.
-export const rigidFallSpeed=(level,pieces)=>180*Math.min(1.45,.24*1.07+(level-1)*.065+Math.min(.4,pieces*.002));
+// All simulation, wire paths, material contour and renderer tile coordinates are
+// GRID units. Only the app camera converts to visible world pixels. Never mix
+// grid bodies with world-pixel active blocks or paths.
+export const VERSION='0.4.12';
+export const WORLD_WIDTH=288,WORLD_HEIGHT=512,WORLD_BLOCK=24,GRAIN_PITCH=1.5;
+export const GRID_ORIGIN_X=0,GRID_ORIGIN_Y=-1;
+export const WIDTH=192,HEIGHT=342,BLOCK=16;
+export const LEFT=0,RIGHT=WIDTH,FLOOR=HEIGHT,FIELD_WIDTH=WIDTH,FIELD_HEIGHT=HEIGHT;
+// Bottom-aligned uniform lattice: 342*1.5=513 world px. The excess 1px is
+// outside the TOP of the viewport. No bottom gap and no anisotropic stretching.
+export const VIEW_GRID_TOP=-GRID_ORIGIN_Y/GRAIN_PITCH;
+export const VIEW_GRID_HEIGHT=WORLD_HEIGHT/GRAIN_PITCH;
+export const gridToWorldX=x=>x*GRAIN_PITCH+GRID_ORIGIN_X;
+export const gridToWorldY=y=>y*GRAIN_PITCH+GRID_ORIGIN_Y;
+export const worldToGridX=x=>(x-GRID_ORIGIN_X)/GRAIN_PITCH;
+export const worldToGridY=y=>(y-GRID_ORIGIN_Y)/GRAIN_PITCH;
+export const BOARD=Object.freeze({width:WORLD_WIDTH,height:WORLD_HEIGHT,left:0,right:WORLD_WIDTH,floor:WORLD_HEIGHT,fieldWidth:WORLD_WIDTH,fieldHeight:WORLD_HEIGHT,cell:GRAIN_PITCH,block:WORLD_BLOCK,grid:Object.freeze({width:WIDTH,height:HEIGHT,block:BLOCK,originX:GRID_ORIGIN_X,originY:GRID_ORIGIN_Y,coordinates:'grid',topVisible:VIEW_GRID_TOP})});
+export const rigidWorldFallSpeed=(level,pieces)=>180*Math.min(1.45,.24*1.07+(level-1)*.065+Math.min(.4,pieces*.002));
+export const rigidFallSpeed=(level,pieces)=>rigidWorldFallSpeed(level,pieces)/GRAIN_PITCH;

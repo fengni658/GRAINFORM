@@ -1,5 +1,5 @@
 import {decodeSnapshotWire} from './snapshot-transport.mjs';
-import {VERSION,WIDTH,HEIGHT,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH} from './board-geometry.mjs';
+import {VERSION,WIDTH,HEIGHT,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH,WORLD_WIDTH,WORLD_HEIGHT,GRAIN_PITCH,VIEW_GRID_TOP,VIEW_GRID_HEIGHT} from './board-geometry.mjs';
 import {CALayerRenderer} from './ca-layer.mjs';
 import {CompositePresentation as MaterialFrameQueue} from './composite-presentation.mjs';
 /** Shared performance time-origin coordinates. Includes preparation after the stamp,
@@ -40,7 +40,7 @@ async function bootApp() {
 const $ = (id) => document.getElementById(id);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const STORAGE = Object.freeze({ best: 'grainform:0.4.11:288x512:best', settings: 'grainform:0.4.8:grid:settings' });
+const STORAGE = Object.freeze({ best: 'grainform:0.4.12:grid15:best', settings: 'grainform:0.4.8:grid:settings' });
 const PALETTES = { standard: ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'], contrast: ['', '#ffe07a', '#4df0b0', '#fc87b5', '#71a7ff'] };
 const COLOR_NAMES = ['', '琥珀色', '海青色', '玫红色', '雾蓝色'];
 
@@ -48,8 +48,8 @@ const query = new URLSearchParams(location.search);
 const solver = 'ca-path';
 const qaMode = query.has('qa');
 const canvas = $('gameCanvas'), ctx = canvas.getContext('2d', { alpha: false });
-canvas.style.aspectRatio = `${WIDTH} / ${HEIGHT}`;
-$('boardDimensions').textContent = `${WIDTH} × ${HEIGHT}`;
+canvas.style.aspectRatio = `${WORLD_WIDTH} / ${WORLD_HEIGHT}`;
+$('boardDimensions').textContent = `${WORLD_WIDTH} × ${WORLD_HEIGHT}`;
 const defaults = { sound: false, contrast: false, motion: !matchMedia('(prefers-reduced-motion: reduce)').matches };
 let settings = { ...defaults }, best = 0, savedBest = 0, storageAvailable = true, storageMessage = '', settingsDirty = false;
 let ready = false, worker = null, failed = false, epoch = 0, sequence = 0;
@@ -159,7 +159,7 @@ function drawNext(target) {
   const next = snapshot.next; if (!next?.shape?.length) return;
   const xs = next.shape.map(p => p[0]), ys = next.shape.map(p => p[1]);
   const minX = Math.min(...xs), minY = Math.min(...ys), width = (Math.max(...xs) - minX + 1) * BLOCK, height = (Math.max(...ys) - minY + 1) * BLOCK;
-  const scale = Math.min((target.width - 24) / width, (target.height - 20) / height, 1.5);
+  const scale = Math.min((target.width - 24) / width, (target.height - 20) / height, 1.5 * GRAIN_PITCH);
   context.save();
   try {
     context.translate((target.width - width * scale) / 2, (target.height - height * scale) / 2); context.scale(scale, scale);
@@ -167,12 +167,12 @@ function drawNext(target) {
   } finally { context.restore(); }
 }
 function paintBoard() {
-  ctx.setTransform(canvas.width / WIDTH, 0, 0, canvas.height / HEIGHT, 0, 0);
-  ctx.fillStyle = '#0d1315'; ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  ctx.setTransform(canvas.width / WIDTH, 0, 0, canvas.height / VIEW_GRID_HEIGHT, 0, -VIEW_GRID_TOP * canvas.height / VIEW_GRID_HEIGHT);
+  ctx.fillStyle = '#0d1315'; ctx.fillRect(0, VIEW_GRID_TOP, WIDTH, VIEW_GRID_HEIGHT);
   // The existing outer CSS border meets the physical field at x=0/288, y=512.
   // No inset rails or ruler marks occupy playable cells.
 }
-function clipBoard() { ctx.save(); ctx.beginPath(); ctx.rect(LEFT, 0, FIELD_WIDTH, FLOOR); ctx.clip(); }
+function clipBoard() { ctx.save(); ctx.beginPath(); ctx.rect(LEFT, VIEW_GRID_TOP, FIELD_WIDTH, VIEW_GRID_HEIGHT); ctx.clip(); }
 function currentVisualKey(){return visualFrameKey(snapshot,bodyStore,settings,clearStartTick);}
 function draw(timestamp = performance.now()) {
   const totalBegun=performance.now();
@@ -181,7 +181,7 @@ function draw(timestamp = performance.now()) {
   layerRenderer.synchronize(presentation.queue, sample);
   const afterSynchronize=performance.now();
   const begun = performance.now(), rect = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 3);
-  const w = Math.max(WIDTH, Math.round(rect.width * dpr)), h = Math.round(w * HEIGHT / WIDTH);
+  const w = Math.max(WORLD_WIDTH, Math.round(rect.width * dpr)), h = Math.round(w * WORLD_HEIGHT / WORLD_WIDTH);
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
   layerRenderer.configure(w, h, settings.contrast ? 'contrast' : 'standard');
   paintBoard(); clipBoard();
@@ -324,7 +324,7 @@ function fail(message) {
 }
 function setupWorker() {
   try {
-    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.4.11-simulation' });
+    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.4.12-simulation' });
     worker.onmessage = ({ data: incoming }) => {
       const handlerBegun=performance.now();
       const wire=incoming?.type==='snapshot-wire'?incoming:null;

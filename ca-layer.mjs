@@ -1,4 +1,5 @@
-import {WIDTH,HEIGHT} from './board-geometry.mjs';
+import {GRAIN_DIAMETER_SCALE, GRAIN_OUTLINES, GRAIN_LIGHT_EDGES, appendGrainPath} from './grain-material.mjs';
+import {WIDTH,HEIGHT,VIEW_GRID_TOP,VIEW_GRID_HEIGHT} from './board-geometry.mjs';
 import {MaterialContour, clipMaterialContour, paintContourRim} from './ca-contour.mjs';
 export const MATERIAL_FRAME_MS = 1000 / 60;
 export const MATERIAL_PHASES = 68;
@@ -104,8 +105,11 @@ function hashUnit(id, salt) {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
 }
 export function materialStyle(id) {
-  return { dx: (hashUnit(id, 0xa511e9b3) * 2 - 1) * .18, dy: (hashUnit(id, 0x63d83595) * 2 - 1) * .18,
-    radius: (.95 + hashUnit(id, 0xb5297a4d) * .3) / 2, brightness: .8 + hashUnit(id, 0x1b56c4e9) * .3 };
+  const variant=Math.min(63, Math.floor(hashUnit(id, 0x9e3779b9) * 64));
+  return { dx: (hashUnit(id, 0xa511e9b3) * 2 - 1) * .28, dy: (hashUnit(id, 0x63d83595) * 2 - 1) * .28,
+    radius: GRAIN_DIAMETER_SCALE * (.95 + hashUnit(id, 0xb5297a4d) * .3) / 2,
+    outline: GRAIN_OUTLINES[variant], lightEdge:GRAIN_LIGHT_EDGES[variant], facet: (variant & 7) === 0,
+    brightness: .84 + Math.min(11, Math.floor(hashUnit(id, 0x1b56c4e9) * 12)) * .22 / 11 };
 }
 function tint(hex, brightness) {
   if (!/^#[0-9a-f]{6}$/i.test(hex)) return hex;
@@ -114,7 +118,7 @@ function tint(hex, brightness) {
 }
 function tinyGrain(context, body, style, rawCells, x = body.x, y = body.y) {
   if (rawCells) { context.fillRect(x - .5, y - .5, 1, 1); return; }
-  context.beginPath(); context.arc(x + style.dx, y + style.dy, style.radius, 0, Math.PI * 2); context.fill();
+  context.beginPath(); appendGrainPath(context, x + style.dx, y + style.dy, style); context.fill();
 }
 
 /** Cell-sized fixed identity noise. Settled material is cached; only recorded
@@ -127,18 +131,18 @@ export class CALayerRenderer {
   }
   tileRect(key) {
     const x = (key % this.tileColumns) * this.tileSize, y = Math.floor(key / this.tileColumns) * this.tileSize;
-    return { x0: Math.floor(x * this.width / WIDTH), y0: Math.floor(y * this.height / HEIGHT),
-      x1: Math.floor(Math.min(WIDTH, x + this.tileSize) * this.width / WIDTH), y1: Math.floor(Math.min(HEIGHT, y + this.tileSize) * this.height / HEIGHT) };
+    return { x0: Math.floor(x * this.width / WIDTH), y0: Math.max(0, Math.floor((y - VIEW_GRID_TOP) * this.height / VIEW_GRID_HEIGHT)),
+      x1: Math.floor(Math.min(WIDTH, x + this.tileSize) * this.width / WIDTH), y1: Math.min(this.height, Math.floor((Math.min(HEIGHT, y + this.tileSize) - VIEW_GRID_TOP) * this.height / VIEW_GRID_HEIGHT)) };
   }
   footprintKeys(body) {
-    const style = this.styles.get(body.id), sx = this.width / WIDTH, sy = this.height / HEIGHT;
+    const style = this.styles.get(body.id), sx = this.width / WIDTH, sy = this.height / VIEW_GRID_HEIGHT;
     const x = body.x + (this.rawCells ? 0 : style.dx), y = body.y + (this.rawCells ? 0 : style.dy), radius = this.rawCells ? .5 : style.radius;
     // A one-device-pixel fringe includes antialiased neighbors. Tile bounds use
     // shared integer device pixels, while every arc retains the original origin.
-    const x0 = Math.max(0, Math.floor((x - radius) * sx) - 1), y0 = Math.max(0, Math.floor((y - radius) * sy) - 1);
-    const x1 = Math.min(this.width, Math.ceil((x + radius) * sx) + 1), y1 = Math.min(this.height, Math.ceil((y + radius) * sy) + 1), keys = [];
+    const x0 = Math.max(0, Math.floor((x - radius) * sx) - 1), y0 = Math.max(0, Math.floor((y - radius - VIEW_GRID_TOP) * sy) - 1);
+    const x1 = Math.min(this.width, Math.ceil((x + radius) * sx) + 1), y1 = Math.min(this.height, Math.ceil((y + radius - VIEW_GRID_TOP) * sy) + 1), keys = [];
     const left = Math.max(0, Math.floor(x0 / sx / this.tileSize) - 1), right = Math.min(this.tileColumns - 1, Math.floor(x1 / sx / this.tileSize) + 1);
-    const top = Math.max(0, Math.floor(y0 / sy / this.tileSize) - 1), bottom = Math.min(this.tileRows - 1, Math.floor(y1 / sy / this.tileSize) + 1);
+    const top = Math.max(0, Math.floor((y0 / sy + VIEW_GRID_TOP) / this.tileSize) - 1), bottom = Math.min(this.tileRows - 1, Math.floor((y1 / sy + VIEW_GRID_TOP) / this.tileSize) + 1);
     for (let row = top; row <= bottom; row++) for (let col = left; col <= right; col++) {
       const key = row * this.tileColumns + col, tile = this.tileRect(key);
       if (tile.x0 < x1 && tile.x1 > x0 && tile.y0 < y1 && tile.y1 > y0) keys.push(key);
@@ -152,7 +156,7 @@ export class CALayerRenderer {
   }
   addStatic(id, invalidate = true) {
     if (this.dirty || !this.width || !this.height || this.moving.has(id) || !this.bodies.has(id) || this.staticRecords.has(id)) return;
-    const keys = this.footprintKeys(this.bodies.get(id)); this.staticRecords.set(id, { keys });
+    const keys = this.footprintKeys(this.bodies.get(id)); this.staticRecords.set(id, { keys, id, rank: this.paintRanks.get(id) });
     for (const key of keys) { if (!this.tiles.has(key)) this.tiles.set(key, new Set()); this.tiles.get(key).add(id); if (invalidate) this.dirtyTiles.add(key); }
   }
   rebuildStaticIndex() {
@@ -194,8 +198,16 @@ export class CALayerRenderer {
       const body = ids ? this.bodies.get(entry) : entry; if (ids && !body) continue;
       const p = positions?.get(body.id), x = p ? p[0] : body.x, y = p ? p[1] : body.y;
       const style = this.styles.get(body.id), baseColor = this.resolveColor(body.color);
-      if (style.baseColor !== baseColor) { style.baseColor = baseColor; style.fillColor = tint(baseColor, style.brightness); }
-      context.fillStyle = this.rawCells ? baseColor : style.fillColor; tinyGrain(context, body, style, this.rawCells, x, y); n++;
+      if (style.baseColor !== baseColor) { style.baseColor = baseColor; style.fillColor = tint(baseColor, style.brightness); style.facetColor = tint(baseColor, Math.min(1.16,style.brightness + .08)); }
+      context.fillStyle = this.rawCells ? baseColor : style.fillColor; tinyGrain(context, body, style, this.rawCells, x, y);
+      if (!this.rawCells && style.facet) {
+        // One restrained diffuse facet, always facing upper-left. No glitter,
+        // outline stroke, cast shadow, extra alpha pass or transient random noise.
+        const points=style.outline,edge=style.lightEdge;
+        const a=points[edge],b=points[(edge+1)%points.length],gx=x+style.dx,gy=y+style.dy,r=style.radius;
+        context.fillStyle=style.facetColor;context.beginPath();context.moveTo(gx+a[0]*r*.9,gy+a[1]*r*.9);context.lineTo(gx+b[0]*r*.9,gy+b[1]*r*.9);context.lineTo(gx-r*.08,gy-r*.08);context.closePath();context.fill();
+      }
+      n++;
     }
     return n;
   }
@@ -215,10 +227,10 @@ export class CALayerRenderer {
     }
     context.save();
     try {
-    if (!this.rawCells) {const shape=this.contour.update(this.bodies,this.positions);clipMaterialContour(context,shape,this.styles);paintContourRim(context,shape,this.resolveColor);}
+    if (!this.rawCells) {const shape=this.contour.update(this.bodies,this.positions);clipMaterialContour(context,shape,this.styles);if(context.globalCompositeOperation==='source-over'){context.fillStyle='#4b4b4b';context.fillRect(0,VIEW_GRID_TOP,WIDTH,VIEW_GRID_HEIGHT);}paintContourRim(context,shape,this.resolveColor);}
     this.metrics.frames++; this.metrics.lastStablePaints = 0; this.metrics.lastDirtyTiles = 0; this.metrics.lastCacheCopiedPixels = 0;
     if (this.mode !== 'full-cell-fallback') {
-      if (this.dirty) { const c = this.context; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.width, this.height); c.setTransform(this.width / WIDTH, 0, 0, this.height / HEIGHT, 0, 0); const stable = [...this.bodies.values()].filter(b => !this.moving.has(b.id)); const count = this.paint(c, stable); this.metrics.lastStablePaints = count; this.metrics.stableCellPaints += count; this.metrics.fullCacheRebuilds++; this.dirty = false; this.rebuildStaticIndex(); }
+      if (this.dirty) { const c = this.context; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.width, this.height); c.setTransform(this.width / WIDTH, 0, 0, this.height / VIEW_GRID_HEIGHT, 0, -VIEW_GRID_TOP * this.height / VIEW_GRID_HEIGHT); const stable = [...this.bodies.values()].filter(b => !this.moving.has(b.id)); const count = this.paint(c, stable); this.metrics.lastStablePaints = count; this.metrics.stableCellPaints += count; this.metrics.fullCacheRebuilds++; this.dirty = false; this.rebuildStaticIndex(); }
       else if (this.dirtyTiles.size) {
         try {
           if (!this.scratchCanvas) { this.scratchCanvas = this.createCanvas(); this.scratchContext = this.scratchCanvas?.getContext('2d', { alpha: true }); if (!this.scratchContext) throw Error('Local cell repaint canvas unavailable'); }
@@ -231,9 +243,17 @@ export class CALayerRenderer {
         // to the per-tile raster; shared-border grains are painted only once.
         const ids = new Set();
         for (const key of this.dirtyTiles) for (const id of this.tiles.get(key) ?? []) ids.add(id);
-        scratch.setTransform(1, 0, 0, 1, 0, 0); scratch.clearRect(0, 0, this.width, this.height);
-        scratch.setTransform(this.width / WIDTH, 0, 0, this.height / HEIGHT, 0, 0);
-        paints = this.paint(scratch, [...ids].sort((a, b) => this.paintRanks.get(a) - this.paintRanks.get(b)).map(id => this.bodies.get(id)));
+        if (ids.size) {
+          // Static records already carry immutable insertion ranks. Sort those
+          // directly: no two Map lookups per comparator, and no body-array copy.
+          const ordered = [];
+          for (const id of ids) ordered.push(this.staticRecords.get(id));
+          ordered.sort((a, b) => a.rank - b.rank);
+          for (let i = 0; i < ordered.length; i++) ordered[i] = ordered[i].id;
+          scratch.setTransform(1, 0, 0, 1, 0, 0); scratch.clearRect(0, 0, this.width, this.height);
+          scratch.setTransform(this.width / WIDTH, 0, 0, this.height / VIEW_GRID_HEIGHT, 0, -VIEW_GRID_TOP * this.height / VIEW_GRID_HEIGHT);
+          paints = this.paint(scratch, ordered, null, true);
+        }
         // Copy disjoint horizontal runs with identical integer tile boundaries.
         // No extra pixels are cleared or copied, and original grain raster/order
         // stays on the same scratch surface. Save/transform once for the union.
@@ -246,14 +266,18 @@ export class CALayerRenderer {
             while (i < sortedKeys.length && sortedKeys[i] === last + 1 && Math.floor(sortedKeys[i] / this.tileColumns) === Math.floor(first / this.tileColumns)) last = sortedKeys[i++];
             const left = this.tileRect(first), right = this.tileRect(last), width = right.x1 - left.x0, height = left.y1 - left.y0;
             c.clearRect(left.x0, left.y0, width, height);
-            c.drawImage(this.scratchCanvas, left.x0, left.y0, width, height, left.x0, left.y0, width, height);
-            this.metrics.cacheTileCopies++; this.metrics.cacheCopiedPixels += width * height; this.metrics.lastCacheCopiedPixels += width * height;
+            // An empty union has no pixels to copy. Keep the identical clear
+            // runs and scratch initialization/failure boundary above.
+            if (ids.size) {
+              c.drawImage(this.scratchCanvas, left.x0, left.y0, width, height, left.x0, left.y0, width, height);
+              this.metrics.cacheTileCopies++; this.metrics.cacheCopiedPixels += width * height; this.metrics.lastCacheCopiedPixels += width * height;
+            }
           }
         } finally { c.restore(); }
         this.metrics.lastStablePaints = paints; this.metrics.stableCellPaints += paints; this.metrics.lastDirtyTiles = this.dirtyTiles.size; this.metrics.dirtyTilesRepainted += this.dirtyTiles.size; this.metrics.dirtyCacheRebuilds++; this.dirtyTiles.clear();
         }
       }
-      if (this.mode !== 'full-cell-fallback') context.drawImage(this.canvas, 0, 0, this.width, this.height, 0, 0, WIDTH, HEIGHT);
+      if (this.mode !== 'full-cell-fallback') context.drawImage(this.canvas, 0, 0, this.width, this.height, 0, VIEW_GRID_TOP, WIDTH, VIEW_GRID_HEIGHT);
     }
     const fallback = this.mode === 'full-cell-fallback';
     this.metrics.lastDynamicPaints = this.paint(context, fallback ? this.bodies.values() : this.moving, this.positions, !fallback); this.metrics.dynamicCellPaints += this.metrics.lastDynamicPaints;
@@ -271,5 +295,5 @@ export class CALayerRenderer {
   }
   paintSelection(context, ids) { for (const id of ids) { const body=this.bodies.get(id);if(body)tinyGrain(context,body,this.styles.get(id),this.rawCells); } }
   drawSelection(context, ids) { context.save(); try { if (!this.rawCells) clipMaterialContour(context,this.contour.update(this.bodies,this.positions),this.styles); this.paintSelection(context, ids); } finally { context.restore(); } }
-  read() { return { contour: {...this.contour.metrics}, mode: this.mode, fallbackReason: this.fallbackReason, liveCount: this.bodies.size, stableCount: this.bodies.size - this.moving.size, dynamicCount: this.moving.size, countsConserved: true, style: this.rawCells ? 'raw-1px-cell' : 'fixed-id-micro-circle', styleCacheSize: this.styles.size, indexedStableCount: this.staticRecords.size, pendingDirtyTiles: this.dirtyTiles.size, ...this.metrics }; }
+  read() { return { contour: {...this.contour.metrics}, mode: this.mode, fallbackReason: this.fallbackReason, liveCount: this.bodies.size, stableCount: this.bodies.size - this.moving.size, dynamicCount: this.moving.size, countsConserved: true, style: this.rawCells ? 'raw-1px-cell' : 'fixed-id-mineral-grain-grid15', styleCacheSize: this.styles.size, indexedStableCount: this.staticRecords.size, pendingDirtyTiles: this.dirtyTiles.size, ...this.metrics }; }
 }

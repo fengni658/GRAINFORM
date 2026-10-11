@@ -7,9 +7,12 @@ export class FrameWorld extends World {
  remove(ids){super.remove(ids);this.frameIds=this.frameIds.filter(id=>this.has(id))}
  stepFrame(){this.frame++;this.framePending=true;this.frameIds.length=0;this.frameDirty=null;const totals={steps:0,moves:0,particles:0,cellVisits:0};const cv=this.metrics.cellVisits;
  for(let s=0;s<4;s++){if(!this.chunks.size)break;super.step();totals.steps++;totals.moves+=this.last.moves;totals.particles+=this.last.particles;
+ // Keep original first-visited slot order, including stationary holds. A lazy
+ // rule path has no copied origin until it moves; its unchanged current cell
+ // supplies the same frame origin without reordering later-moving particles.
  // Cache every actual unit leg, including holds between rule steps, before base buffers overwrite.
  for(let i=0;i<this.n;i++){if(!this.live[i]||this.pathStamp[i]!==this.tick)continue;const dst=i*69,src=i*18;
- if(this.frameStamp[i]!==this.frame){this.frameStamp[i]=this.frame;this.frameIds.push(this.identity[i]);this.frameN[i]=1;this.frameX[dst]=this.pathX[src];this.frameY[dst]=this.pathY[src];this.framePhase[dst]=0;}
+ if(this.frameStamp[i]!==this.frame){this.frameStamp[i]=this.frame;this.frameIds.push(this.identity[i]);this.frameN[i]=1;this.frameX[dst]=this.pathN[i]?this.pathX[src]:this.x[i];this.frameY[dst]=this.pathN[i]?this.pathY[src]:this.y[i];this.framePhase[dst]=0;}
  for(let j=1;j<this.pathN[i];j++){const k=dst+this.frameN[i]++;if(this.frameN[i]>69)throw Error('frame-path-capacity');this.frameX[k]=this.pathX[src+j];this.frameY[k]=this.pathY[src+j];this.framePhase[k]=s*17+this.pathPhase[src+j];}}
  if(this.dirty){const d=this.dirty;if(!this.frameDirty)this.frameDirty={...d};else{const a=this.frameDirty;a.x0=Math.min(a.x0,d.x0);a.y0=Math.min(a.y0,d.y0);a.x1=Math.max(a.x1,d.x1);a.y1=Math.max(a.y1,d.y1)}}}
  totals.cellVisits=this.metrics.cellVisits-cv;this.frameLast=totals;return totals;}

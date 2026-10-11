@@ -1,5 +1,5 @@
-import {LEFT,FLOOR,FIELD_WIDTH,FIELD_HEIGHT} from './board-geometry.mjs';
-import { Game, SHAPES } from './game.mjs';
+import {LEFT,FLOOR,FIELD_WIDTH,FIELD_HEIGHT,BLOCK,GRAIN_PITCH} from './board-geometry.mjs';
+import { Game, SHAPES, PER_PIECE } from './game.mjs';
 import {CompositeBuilder} from './composite-protocol.mjs';
 import {SNAPSHOT_WIRE_BUDGET} from './snapshot-transport.mjs';
 
@@ -136,28 +136,28 @@ export function createSimulationRuntime({ GameType = Game, now = () => performan
         init({ seed: value?.seed ?? 1, qa: true });
         const admit = points => { const result = game.world.addMany(points); if (!result.accepted) throw Error('QA cell fixture admission failed'); return result.addedIds; };
         if (value?.fixture === 'capacity') {
-          game.world.maxParticles = 2303; game.start(); if (hidden) game.pause();
-          qaFixture = { name: 'artificial-capacity-2303', artificial: true, source: 'QA capacity boundary, no material admission' }; startClock(); return true;
+          game.world.maxParticles = PER_PIECE-1; game.start(); if (hidden) game.pause();
+          qaFixture = { name: `artificial-capacity-${PER_PIECE-1}`, artificial: true, source: 'QA capacity boundary, no material admission' }; startClock(); return true;
         }
         if (value?.fixture === 'early-clear') {
-          const base = Array.from({ length: FIELD_WIDTH }, (_, x) => ({ x: LEFT + x, y: FLOOR-1, color: 1 })).filter(p => p.x < 120 || p.x >= 168);
-          admit(base); game.world.step(); game.world.completePresentation(); if (game.world.chunks.size) throw Error('QA floor must settle before spawning'); game.added = base.length; game.next = { shape: SHAPES[0].map(p => p.slice()), color: 1 }; game.start(); game.active.x = 120;
+          const base = Array.from({ length: FIELD_WIDTH }, (_, x) => ({ x: LEFT + x, y: FLOOR-1, color: 1 })).filter(p => p.x < 5*BLOCK || p.x >= 7*BLOCK);
+          admit(base); game.world.step(); game.world.completePresentation(); if (game.world.chunks.size) throw Error('QA floor must settle before spawning'); game.added = base.length; game.next = { shape: SHAPES[0].map(p => p.slice()), color: 1 }; game.start(); game.active.x = 5*BLOCK;
           if (hidden) game.pause(); qaFixture = { name: 'early-clear-gap-real-O-drop', artificial: true, added: base.length, source: 'Artificial base; drop and settling run normal gameplay' }; startClock(); return true;
         }
         const bottom = Array.from({ length: FIELD_WIDTH }, (_, x) => ({ x: LEFT + x, y: FLOOR-1, color: 1 }));
         admit(bottom);
         let added = FIELD_WIDTH;
         if (value?.fixture === 'cascade') {
-          for (const y of [FLOOR-2, FLOOR-4]) { const sides = Array.from({ length: FIELD_WIDTH }, (_, x) => ({ x: LEFT + x, y, color: 2 })).filter(p => p.x !== 144); admit(sides); admit([{x:144,y,color:1}]); }
+          for (const y of [FLOOR-2, FLOOR-4]) { const sides = Array.from({ length: FIELD_WIDTH }, (_, x) => ({ x: LEFT + x, y, color: 2 })).filter(p => p.x !== FIELD_WIDTH/2); admit(sides); admit([{x:FIELD_WIDTH/2,y,color:1}]); }
           admit(Array.from({ length: FIELD_WIDTH }, (_, x) => ({ x: LEFT + x, y: FLOOR-3, color: 1 }))); added += 3*FIELD_WIDTH;
-        } else { const supported = Array.from({ length: 40 }, (_, i) => ({ x: 124 + i, y: FLOOR-2, color: 2 })); admit(supported); added += supported.length; }
+        } else { const supported = Array.from({ length: Math.round(40/GRAIN_PITCH) }, (_, i) => ({ x: Math.floor(FIELD_WIDTH/2-20/GRAIN_PITCH) + i, y: FLOOR-2, color: 2 })); admit(supported); added += supported.length; }
         game.added = added; game.active = null; game.world.pendingInbound = 0; game.setPhase('settling'); game.spawnDelay = 0; game.state = hidden ? 'paused' : 'playing';
         qaFixture = { name: value?.fixture === 'cascade' ? 'artificial-cell-support-cascade' : 'artificial-cell-bottom-bridge', artificial: true, added, bridgeGrains: FIELD_WIDTH, supportedGrains: added - FIELD_WIDTH, source: 'Explicit QA cell placement, not natural gameplay' };
         startClock(); return true;
       }
-      case 'left': return game.move(-24);
-      case 'right': return game.move(24);
-      case 'move': return game.move(Math.max(-48, Math.min(48, Number(value) || 0)));
+      case 'left': return game.move(-BLOCK);
+      case 'right': return game.move(BLOCK);
+      case 'move': return game.move(Math.trunc(Math.max(-48, Math.min(48, Number(value) || 0))/GRAIN_PITCH));
       case 'rotate': return game.rotate();
       case 'drop': return game.drop();
       case 'down': case 'softDrop': return game.softDrop();

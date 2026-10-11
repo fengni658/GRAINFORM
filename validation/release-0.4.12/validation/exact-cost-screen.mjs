@@ -1,0 +1,15 @@
+import fs from 'node:fs';import {createRequire} from 'node:module';import {performance} from 'node:perf_hooks';
+const {createCanvas}=createRequire(import.meta.url)('@napi-rs/canvas'),version=process.argv[2]??'after',pieces=Number(process.argv[3]??20),{CALayerRenderer}=await import(version==='before'?'../frozen0412/candidate/ca-layer.mjs':'../candidate/ca-layer.mjs');
+const n=pieces*1024,cols=160,bodies=Array.from({length:n},(_,id)=>({id,x:16.5+id%cols,y:30.5+Math.floor(id/cols),color:1+Math.floor(id/cols/16)%4})),r=new CALayerRenderer({createCanvas:()=>createCanvas(1,1)}),canvas=createCanvas(764,1358),c=canvas.getContext('2d');r.configure(764,1358,'standard');c.setTransform(764/192,0,0,1358/(512/1.5),0,-1358/512);const samples=[];
+const clear=()=>c.clearRect(0,2/3,192,512/1.5);
+function measure(label,prepare,draw,rounds=7){const timings=[];for(let i=0;i<rounds;i++){const a=performance.now();prepare(i);const b=performance.now();clear();const t=performance.now();draw(i);const end=performance.now();timings.push({prepareMs:b-a,drawMs:end-t,totalMs:b-a+end-t});}const stat=key=>{const values=timings.map(t=>t[key]).sort((a,b)=>a-b);return{median:values[Math.floor(values.length/2)],max:values.at(-1)};};samples.push({label,timings,prepare:stat('prepareMs'),draw:stat('drawMs'),total:stat('totalMs'),metrics:r.read()});}
+measure('initial',()=>r.apply({reset:true,upsert:bodies,removed:[]}),()=>r.draw(c),1);
+measure('warm-static',()=>{},()=>r.draw(c));
+const paths=bodies.filter((_,i)=>i%17===0).map(b=>({id:b.id,points:[b.x,b.y,0,b.x,b.y+1,68]}));
+measure('broad-leave-static',()=>{r.synchronize([],null);r.draw(c);r.synchronize([{paths}],null);},()=>r.draw(c));
+measure('broad-return-static',()=>{r.synchronize([{paths}],null);r.draw(c);r.synchronize([],null);},()=>r.draw(c));
+measure('unchanged-flash',()=>{},()=>r.draw(c,{ids:bodies.map(b=>b.id),alpha:.65,fillStyle:'#fffce8'}));
+// Count sorting's rank lookups separately, outside timing samples.
+r.synchronize([{paths}],null);r.draw(c);r.synchronize([],null);let rankGets=0;const get=r.paintRanks.get.bind(r.paintRanks);r.paintRanks.get=id=>{rankGets++;return get(id);};r.draw(c);r.paintRanks.get=get;
+measure('remove-all',()=>r.apply({reset:false,upsert:[],removed:bodies.map(b=>b.id)}),()=>r.draw(c),1);
+const result={version,pieces,grainCount:n,worldArea:pieces*2304,css:[382,679],dpr:2,rankGetsDuringDirtyDraw:rankGets,rssMiB:process.memoryUsage().rss/1048576,samples,limitations:'Bounded native stage fixtures, not Chrome/real rAF or natural-flow timing. Same world footprint/input operations; production material and geometry unchanged. Seven measured rounds except initial/remove-all. Preparation includes resetting opposite membership and its draw, shown separately; do not interpret it as one production callback.'};fs.writeFileSync(new URL(`../evidence/exact-cost-${version}-${pieces}.json`,import.meta.url),JSON.stringify(result,null,2));console.log(JSON.stringify({version,pieces,rankGets,samples:samples.map(s=>({label:s.label,draw:s.draw,copyPixels:s.metrics.lastCacheCopiedPixels,painted:s.metrics.lastStablePaints})),rssMiB:result.rssMiB}));

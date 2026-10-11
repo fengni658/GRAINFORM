@@ -1,4 +1,4 @@
-import {LEFT,FIELD_WIDTH,FIELD_HEIGHT} from './board-geometry.mjs';
+import {LEFT,FIELD_WIDTH,FIELD_HEIGHT,GRAIN_PITCH} from './board-geometry.mjs';
 import {FrameWorld} from './ca-frame-world.mjs';
 export const DT=1/60,R=.5,D=1;
 export class CAWorld extends FrameWorld{
@@ -25,7 +25,7 @@ export class CAWorld extends FrameWorld{
   for(const id of this.cache.keys())if(!this.has(id)){this.cache.delete(id);this.changedBodies.delete(id);this.removedBodies.add(id);changed=true;}
   if(changed)this.revision++;
  }
- addMany(points,{batch=0,initialVy=480}={}){if(this.count+points.length>this.maxParticles)return{accepted:false,reason:'capacity',addedIds:[]};try{const before=new Set(this.snapshot().map(p=>p.id));this.admit(points.map(p=>({x:p.x-LEFT,y:p.y})),points[0]?.color??1,batch,initialVy);const ids=this.snapshot().filter(p=>!before.has(p.id)).map(p=>p.id);this.sync();return{accepted:true,addedIds:ids}}catch(e){if(/capacity/.test(e.message))return{accepted:false,reason:'capacity',addedIds:[]};if(/admission|bounds/.test(e.message))return{accepted:false,reason:'occupied-slot',addedIds:[]};throw e}}
+ addMany(points,{batch=0,initialVy=480/GRAIN_PITCH}={}){if(this.count+points.length>this.maxParticles)return{accepted:false,reason:'capacity',addedIds:[]};try{const before=new Set(this.snapshot().map(p=>p.id));this.admit(points.map(p=>({x:p.x-LEFT,y:p.y})),points[0]?.color??1,batch,initialVy);const ids=this.snapshot().filter(p=>!before.has(p.id)).map(p=>p.id);this.sync();return{accepted:true,addedIds:ids}}catch(e){if(/capacity/.test(e.message))return{accepted:false,reason:'capacity',addedIds:[]};if(/admission|bounds/.test(e.message))return{accepted:false,reason:'occupied-slot',addedIds:[]};throw e}}
  remove(ids){super.remove(ids);this.sync()}
  step(){super.stepFrame();this.sync()}
  consumeChanges({full=false}={}){const previousRevision=this.consumedRevision;const p={reset:full,previousRevision,revision:this.revision,upsert:full?[...this.cache.values()]:[...this.changedBodies.values()],removed:full?[]:[...this.removedBodies]};this.changedBodies.clear();this.removedBodies.clear();this.consumedRevision=this.revision;return p}

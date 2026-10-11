@@ -1,166 +1,176 @@
 {
-  "version": "0.4.11",
-  "candidate": "0.4.11-accepted",
+  "version": "0.4.12",
+  "candidate": "rest-neutral-r1",
   "entry": "index.html",
-  "build": "b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87",
-  "scope": "Accepted 288 x 512 full-field runtime; 1 px material cells; initial rigid speed 46.224. No 0.4.12 changes. Immutable build files reproduce all 14 accepted source bytes. Root index is a content-addressed wrapper.",
+  "build": "b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3",
+  "scope": "Exact private r2 trial source; natural contact motion, stable-interior work reduction and neutral shading. No0.4.13 changes. Browser runtime not revalidated;166ms rAF cause unresolved.",
   "sourceFiles": [
     {
       "path": "app.mjs",
-      "sha256": "1cec462f202c97563b1f646cf0a31aa21956bcea386897ffb261540872ab5411",
-      "bytes": 41266
+      "bytes": 41492,
+      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
     },
     {
       "path": "board-geometry.mjs",
-      "sha256": "a8e238c80f477f8f0e87d4e78ec95396930ed594fc1049057d15a2df919eb55d",
-      "bytes": 685
+      "bytes": 1563,
+      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
     },
     {
       "path": "ca-adapter.mjs",
-      "sha256": "ff21f1b59ed04e898b6222ee0c4e09dd6433c204bd5a63c709da785afab33974",
-      "bytes": 4157
+      "bytes": 4181,
+      "sha256": "fa0e919c0125cb11917daa769770bb9ffe8fb138726a82c2d5ff15c0df150054"
     },
     {
       "path": "ca-contour.mjs",
-      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6",
-      "bytes": 11350
+      "bytes": 11350,
+      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
     },
     {
       "path": "ca-frame-world.mjs",
-      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383",
-      "bytes": 2652
+      "bytes": 2935,
+      "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
     },
     {
       "path": "ca-layer.mjs",
-      "sha256": "2a9db8de7571a48821b0dae55922856558a0e1e2591c50ddfeb9aa064dcd72b4",
-      "bytes": 20704
+      "bytes": 22786,
+      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
     },
     {
       "path": "ca-world.mjs",
-      "sha256": "895821b13ce2bec1e79c9c23cfbabbff0d6e304332559f5d28833ab43ef95f51",
-      "bytes": 10132
+      "bytes": 13339,
+      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
     },
     {
       "path": "composite-presentation.mjs",
-      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6",
-      "bytes": 3263
+      "bytes": 3263,
+      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
     },
     {
       "path": "composite-protocol.mjs",
-      "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f",
-      "bytes": 13609
+      "bytes": 13609,
+      "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
     },
     {
       "path": "game.mjs",
-      "sha256": "7b5ae4e2a59f34ff12434c975fba49d7f3e3d59a50e1a9697a7662f727c55a34",
-      "bytes": 9932
+      "bytes": 10141,
+      "sha256": "579a92440bccff67dd37761c9f0c5a25a790cc66a412d036d1ee830ed206b621"
+    },
+    {
+      "path": "grain-material.mjs",
+      "bytes": 1558,
+      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
     },
     {
       "path": "index.html",
-      "sha256": "7729123856fc2c5113cd915079928340abd385bb1ca02bea9eeff0ffab4595ad",
-      "bytes": 11314
+      "bytes": 11314,
+      "sha256": "065c6769c31bdb056195240276eae24e91a07589bdbe96ca66c8a704ed4eb296"
     },
     {
       "path": "simulation-worker.mjs",
-      "sha256": "c7593778f70f978a5ce3c15bb836f39eb3e86f6c8fa74d23f6c99e34fb6d57c2",
-      "bytes": 22360
+      "bytes": 22529,
+      "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
     },
     {
       "path": "snapshot-transport.mjs",
-      "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147",
-      "bytes": 763
+      "bytes": 763,
+      "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
     },
     {
       "path": "style.css",
-      "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619",
-      "bytes": 15663
+      "bytes": 15663,
+      "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619"
     }
   ],
   "runtimeFiles": [
     {
       "path": "app.mjs",
-      "bytes": 41266,
-      "sha256": "1cec462f202c97563b1f646cf0a31aa21956bcea386897ffb261540872ab5411"
+      "bytes": 41492,
+      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
     },
     {
       "path": "board-geometry.mjs",
-      "bytes": 685,
-      "sha256": "a8e238c80f477f8f0e87d4e78ec95396930ed594fc1049057d15a2df919eb55d"
+      "bytes": 1563,
+      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/app.mjs",
-      "bytes": 41266,
-      "sha256": "1cec462f202c97563b1f646cf0a31aa21956bcea386897ffb261540872ab5411"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/app.mjs",
+      "bytes": 41492,
+      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/board-geometry.mjs",
-      "bytes": 685,
-      "sha256": "a8e238c80f477f8f0e87d4e78ec95396930ed594fc1049057d15a2df919eb55d"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/board-geometry.mjs",
+      "bytes": 1563,
+      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ca-adapter.mjs",
-      "bytes": 4157,
-      "sha256": "ff21f1b59ed04e898b6222ee0c4e09dd6433c204bd5a63c709da785afab33974"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-adapter.mjs",
+      "bytes": 4181,
+      "sha256": "fa0e919c0125cb11917daa769770bb9ffe8fb138726a82c2d5ff15c0df150054"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ca-contour.mjs",
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-contour.mjs",
       "bytes": 11350,
       "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ca-frame-world.mjs",
-      "bytes": 2652,
-      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-frame-world.mjs",
+      "bytes": 2935,
+      "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ca-layer.mjs",
-      "bytes": 20704,
-      "sha256": "2a9db8de7571a48821b0dae55922856558a0e1e2591c50ddfeb9aa064dcd72b4"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-layer.mjs",
+      "bytes": 22786,
+      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ca-world.mjs",
-      "bytes": 10132,
-      "sha256": "895821b13ce2bec1e79c9c23cfbabbff0d6e304332559f5d28833ab43ef95f51"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/ca-world.mjs",
+      "bytes": 13339,
+      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/composite-presentation.mjs",
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/composite-presentation.mjs",
       "bytes": 3263,
       "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/composite-protocol.mjs",
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/composite-protocol.mjs",
       "bytes": 13609,
       "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/game.mjs",
-      "bytes": 9932,
-      "sha256": "7b5ae4e2a59f34ff12434c975fba49d7f3e3d59a50e1a9697a7662f727c55a34"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/game.mjs",
+      "bytes": 10141,
+      "sha256": "579a92440bccff67dd37761c9f0c5a25a790cc66a412d036d1ee830ed206b621"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/index.html",
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/grain-material.mjs",
+      "bytes": 1558,
+      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
+    },
+    {
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/index.html",
       "bytes": 11314,
-      "sha256": "7729123856fc2c5113cd915079928340abd385bb1ca02bea9eeff0ffab4595ad"
+      "sha256": "065c6769c31bdb056195240276eae24e91a07589bdbe96ca66c8a704ed4eb296"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/simulation-worker.mjs",
-      "bytes": 22360,
-      "sha256": "c7593778f70f978a5ce3c15bb836f39eb3e86f6c8fa74d23f6c99e34fb6d57c2"
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/simulation-worker.mjs",
+      "bytes": 22529,
+      "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/snapshot-transport.mjs",
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/snapshot-transport.mjs",
       "bytes": 763,
       "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
     },
     {
-      "path": "builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/style.css",
+      "path": "builds/b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3/style.css",
       "bytes": 15663,
       "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619"
     },
     {
       "path": "ca-adapter.mjs",
-      "bytes": 4157,
-      "sha256": "ff21f1b59ed04e898b6222ee0c4e09dd6433c204bd5a63c709da785afab33974"
+      "bytes": 4181,
+      "sha256": "fa0e919c0125cb11917daa769770bb9ffe8fb138726a82c2d5ff15c0df150054"
     },
     {
       "path": "ca-contour.mjs",
@@ -169,18 +179,18 @@
     },
     {
       "path": "ca-frame-world.mjs",
-      "bytes": 2652,
-      "sha256": "148ada4dfbe0d3ecc8ce3cbd44e51d90d270927375253d17aee432e184a0d383"
+      "bytes": 2935,
+      "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
     },
     {
       "path": "ca-layer.mjs",
-      "bytes": 20704,
-      "sha256": "2a9db8de7571a48821b0dae55922856558a0e1e2591c50ddfeb9aa064dcd72b4"
+      "bytes": 22786,
+      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
     },
     {
       "path": "ca-world.mjs",
-      "bytes": 10132,
-      "sha256": "895821b13ce2bec1e79c9c23cfbabbff0d6e304332559f5d28833ab43ef95f51"
+      "bytes": 13339,
+      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
     },
     {
       "path": "composite-presentation.mjs",
@@ -194,23 +204,28 @@
     },
     {
       "path": "game.mjs",
-      "bytes": 9932,
-      "sha256": "7b5ae4e2a59f34ff12434c975fba49d7f3e3d59a50e1a9697a7662f727c55a34"
+      "bytes": 10141,
+      "sha256": "579a92440bccff67dd37761c9f0c5a25a790cc66a412d036d1ee830ed206b621"
+    },
+    {
+      "path": "grain-material.mjs",
+      "bytes": 1558,
+      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
     },
     {
       "path": "index.html",
       "bytes": 11462,
-      "sha256": "bc749c180d77e70c06bf78b14d95e07d07f0551c7a5685d400ba95176a1eab14"
+      "sha256": "ff9cf0037d3093f603cf195979706e939187478f2bf394785a4f60ef3ed32275"
     },
     {
-      "path": "play-b560060d5b73b.html",
+      "path": "play-b37a7cdea50f9.html",
       "bytes": 11462,
-      "sha256": "bc749c180d77e70c06bf78b14d95e07d07f0551c7a5685d400ba95176a1eab14"
+      "sha256": "ff9cf0037d3093f603cf195979706e939187478f2bf394785a4f60ef3ed32275"
     },
     {
       "path": "simulation-worker.mjs",
-      "bytes": 22360,
-      "sha256": "c7593778f70f978a5ce3c15bb836f39eb3e86f6c8fa74d23f6c99e34fb6d57c2"
+      "bytes": 22529,
+      "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
     },
     {
       "path": "snapshot-transport.mjs",

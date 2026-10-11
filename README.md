@@ -1,38 +1,25 @@
-# 粒序 / GRAINFORM 0.4.11
+# 粒序 / GRAINFORM 0.4.12
 
-原生 JavaScript、ES Modules、Canvas 2D 和 Web Worker 流沙方块游戏。当前 main 为已验收的 0.4.11 测试版。1 px CA 材料网格是离散游戏规则，不是连续硬圆物理认证。
+原生 JavaScript、ES Modules、Canvas 2D 和 Web Worker 沙粒方块游戏。本次 main 保存已试玩的 0.4.12 r2；不包含 0.4.13。
 
-## 运行
+## 运行与验证
 
-Node.js 20+，游戏与默认测试不需要第三方依赖：
+Node.js 20+。运行游戏不需要第三方依赖：npm start，然后打开 http://127.0.0.1:4181/ 。默认仅监听本机。
 
-```sh
-npm start
-npm test
-```
+原生渲染测试需要 npm install 安装固定版本 @napi-rs/canvas 0.1.100。运行 npm test 执行发布完整性/HTTP检查及98项回归；npm run verify:0412 再执行源码身份、13项独立回归和7项中性阴影检查。
 
-打开 http://127.0.0.1:4181/ 。PORT 可调整端口，默认仅监听本机。根 index.html 与 play-b560060d5b73b.html 指向内容寻址构建。builds/b-560060d5b73b0e9f6b6d008b457beeaba4d90597bead659ec2339040eefcfe87/ 内 14 个文件逐字节复现验收源码；根模块是同字节副本，根 HTML 仅改写 CSS 与模块资源地址。
+## 本版范围
 
-静态部署请保留 RUNTIME-MANIFEST.json 中全部 29 个运行时文件及相对路径。server.mjs 仅服务清单内文件，不公开测试与报告。dist/ 和旧 builds/ 是历史归档。本次 main 更新不改变任何已发布站点。
+- 保留 0.4.12 的1.5材料粒距及现有视野、方块尺寸和初始下落速度
+- 自然接触运动，稳定内部减少重复计算，保持原有流动与呈现回执
+- 一次中性阴影降低透黑碎屑；不扩大粒径或视野来掩盖问题
 
-## 0.4.11 范围
+根入口通过内容寻址 builds/ 目录加载。15个原始运行文件在该构建目录逐字节保存，根模块为同字节副本；根HTML只重定向CSS和模块资源。静态部署保留 RUNTIME-MANIFEST.json 所列31个运行文件。server.mjs只服务该白名单，不公开测试或说明文件。
 
-- 288 × 512 全幅可玩区域，边缘、落底、出生区、容量与身份索引统一
-- 保持 1 px 材料单元与 24 px 方块单元；初始刚体下降速度 46.224，保留等级增量与速度上限
-- 有界复合呈现队列、独立传输回执与实际绘制 ACK，支持重同步和 epoch 切换
-- 共享材质与消除高亮裁切，失败绘制可重试；预览异常正确恢复 Canvas 状态
-- 不包含 0.4.12 的沙粒尺寸或样式修改
+## 已验证与边界
 
-方向键或 A/D/W/S 移动、旋转、软降，空格硬降，P/Esc 暂停；触屏提供对应按键。失焦或后台返回后需手动继续。
+该冻结构建通过98项工程测试、13项独立测试、7项阴影测试及独立挑战核验。测试源码和冻结对照在 validation/release-0.4.12/，不包含私人会话或原始内部报告。
 
-## 验证与边界
+实际浏览器新采样暂停。约166ms的rAF间隔尚未归因；亚格细缝仍有灰桥近似。本版不是商用画质或全设备性能验收，不保证持续60fps。
 
-本次发布重新运行 15/15 个独立规则、边界、身份、传输与发布完整性/HTTP 检查。此前对同一 14 文件源码完成的 66/66 原生检查与 12/12 独立检查记录已核对源码身份。默认测试是发布回归子集，不替代完整原生或浏览器测试。详见 [发布验证说明](validation/release-0.4.11/README.md)。
-
-这是测试版，不是商用或全设备通过。有限浏览器场景不代表所有设备持续 60 fps。?qa 有测量成本；关闭诊断须删除该参数。
-
-旧 Git 历史、dist/、旧 builds/、旧测试和报告均保留。test:0410、test:legacy、test:preview、verify:slots、verify:parity、verify:pixels、verify:pixels:browser 与 verify:browser 是历史工具，不是 0.4.11 验收命令，可能因当前几何或呈现协议而失败。旧像素 oracle 的既有差异没有被删改来制造通过。
-
-上一版 main 保存在 [backup/0.4.10-before-0411](https://github.com/fengni658/GRAINFORM/tree/backup/0.4.10-before-0411)，其精确提交为 ddc8a1aed5a525b2efa8bd5da384b6961b790db2。更早备份及 QA 分支保持原样。
-
-保留 [LICENSES.md](LICENSES.md)；UNLICENSED，公开源码不等于授予再分发许可。
+旧源码历史、builds、dist、旧测试和文档保留。test:0411及其他旧版命令是历史工具，不代表0.4.12验收。

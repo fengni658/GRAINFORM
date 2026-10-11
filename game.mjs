@@ -1,4 +1,4 @@
-import {VERSION,WIDTH,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH,BOARD,rigidFallSpeed} from './board-geometry.mjs';
+import {VERSION,WIDTH,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH,BOARD,rigidFallSpeed,GRAIN_PITCH} from './board-geometry.mjs';
 import {CAWorld,R,D,DT} from './ca-adapter.mjs';
 export {R,D,DT};
 export {VERSION,BLOCK,LEFT,RIGHT,FLOOR};
@@ -40,7 +40,7 @@ export class Game {
  move(dx){if(!this.acceptsInput()||!Number.isFinite(dx))return false;let moved=false,sign=Math.sign(dx);for(let i=0;i<Math.min(WIDTH,Math.abs(dx));i++){const p={...this.active,x:this.active.x+sign};if(!this.canPlace(p))break;this.active=p;moved=true;}return moved;}
  rotate(){if(!this.acceptsInput())return false;const shape=rotateShape(this.active.shape);for(const dx of[0,-BLOCK,BLOCK,-2*BLOCK,2*BLOCK]){const p={...this.active,x:this.active.x+dx,shape};if(this.canPlace(p)){this.active=p;return true;}}return false;}
  descend(pixels=1){if(!this.acceptsInput())return false;for(let i=0;i<pixels;i++){const p={...this.active,y:this.active.y+1};if(!this.canPlace(p)){this.touchDown();return false;}this.active=p;}return true;}
- softDrop(){return this.descend(12);}
+ softDrop(){return this.descend(12/GRAIN_PITCH);}
  drop(){if(!this.acceptsInput())return false;let d=0;while(this.canPlace({...this.active,y:this.active.y+1})){this.active.y++;d++;}const landed=this.touchDown();if(landed)this.score+=Math.floor(d/BLOCK)*2;return landed;}
  grainPositions(p){if(!p||p.shape.length!==4||new Set(p.shape.map(v=>v.join(','))).size!==4)throw Error('Piece must have four distinct cells');return p.shape.flatMap(([bx,by])=>cellSlots(p.x+bx*BLOCK,p.y+by*BLOCK).map(q=>({...q,color:p.color})));}
  touchDown(){if(!this.active)return false;if(this.canPlace({...this.active,y:this.active.y+1}))throw Error('Landing before contact');return this.land();}
@@ -50,7 +50,9 @@ export class Game {
   // A lower-field invariant violation is never mislabeled as top-out. Check
   // and reject atomically; the pre-contact guard must prevent this in real play.
   if(!this.canPlace(this.active))throw new Error('Atomic grid landing rejected: rigid piece already overlaps sand or bounds');
-  const points=this.grainPositions(this.active),before=this.world.stats().live,result=this.world.addMany(points,{batch:this.pieceId,initialVy:480});
+  // Remove the maximum-speed birth impulse. The historical four-rule-step
+  // material clock is retained; this is not wall-clock velocity matching.
+  const points=this.grainPositions(this.active),before=this.world.stats().live,result=this.world.addMany(points,{batch:this.pieceId,initialVy:rigidFallSpeed(this.level,this.pieces)});
   if(!result.accepted){if(result.reason==='capacity'||result.reason==='occupied-slot')return this.endGame(`grid-admission-${result.reason}`);throw new Error(`Atomic grid landing rejected: ${result.reason}`);}
   if(result.addedIds.length!==PER_PIECE||this.world.stats().live-before!==PER_PIECE)throw new Error('Grain conservation failed');
   this.added+=PER_PIECE;this.pieces++;this.chain=0;this.emit('land',{count:PER_PIECE,color:this.active.color,contactPose:{x:this.active.x,y:this.active.y,shape:this.active.shape.map(p=>p.slice())}});this.active=null;this.world.pendingInbound=0;this.spawnDelay=0;this.setPhase('settling');return true;

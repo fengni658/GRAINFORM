@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+const base='../../frozen-motion/';
+const next='../../candidate/';
+const {CAWorld:A}=await import(base+'ca-adapter.mjs');
+const {CAWorld:B}=await import(next+'ca-adapter.mjs');
+const compare=(a,b,label)=>{assert.deepEqual(b.snapshot(),a.snapshot(),label+' snapshot');assert.equal(b.seed,a.seed,label+' RNG');assert.deepEqual(b.materialPaths(),a.materialPaths(),label+' material paths');for(let i=0;i<a.n;i++)if(a.live[i]){assert.equal(b.vy[i],a.vy[i],label+' velocity');assert.equal(b.credit[i],a.credit[i],label+' credit');for(const alpha of [0,.01,.24,.25,.49,.5,.74,.75,.99,1])assert.deepEqual(b.positionAt(a.identity[i],alpha),a.positionAt(a.identity[i],alpha),label+' interpolation')}assert.deepEqual([...b.chunks],[...a.chunks],label+' chunks');assert.equal(b.ready(),a.ready(),label+' ready')};
+for(const scenario of ['late-freefall','floor-roll','column','reuse']){const a=new A,b=new B;for(const w of [a,b]){if(scenario==='late-freefall')w.admit([{x:96,y:5}],1,1,0);if(scenario==='floor-roll')w.admit([{x:96,y:341},{x:96,y:340},{x:96,y:339}],1,1,0);if(scenario==='column')w.admit(Array.from({length:64*4},(_,i)=>({x:90+i%4,y:15+Math.floor(i/4)})),1,1,0);if(scenario==='reuse'){w.admit([{x:96,y:0}],1,1,320);w.step();w.remove([0]);w.admit([{x:45,y:5},{x:46,y:5}],2,2,0)}}for(let f=0;f<30;f++){a.step();b.step();compare(a,b,`${scenario}/${f}`);a.completePresentation();b.completePresentation();compare(a,b,`${scenario}/${f}/ACK`)}}
+console.log('PASS: four independent frame/path/interpolation/slot-reuse fixtures, 30 frames each, exact snapshots, RNG, velocity, credit, chunk order, material paths, sampled interpolation and readiness');

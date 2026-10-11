@@ -1,0 +1,161 @@
+{
+  "buildId": "b-37a7cdea50f9c38c93add7838311507da4b31c90d84178c0b2811d7a98165de3",
+  "baselineBuild": "b-877c3544f62fc1059653fb76ac98c2fc33a143611f9ccfb7f896b13b6e3aea09",
+  "files": [
+    {
+      "file": "app.mjs",
+      "bytes": 41492,
+      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
+    },
+    {
+      "file": "board-geometry.mjs",
+      "bytes": 1563,
+      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
+    },
+    {
+      "file": "ca-adapter.mjs",
+      "bytes": 4181,
+      "sha256": "fa0e919c0125cb11917daa769770bb9ffe8fb138726a82c2d5ff15c0df150054"
+    },
+    {
+      "file": "ca-contour.mjs",
+      "bytes": 11350,
+      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
+    },
+    {
+      "file": "ca-frame-world.mjs",
+      "bytes": 2935,
+      "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
+    },
+    {
+      "file": "ca-layer.mjs",
+      "bytes": 22786,
+      "sha256": "59efa9f7088e91c97eadb330d27169514c09499ee51012370f0df96278ac9347"
+    },
+    {
+      "file": "ca-world.mjs",
+      "bytes": 13339,
+      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
+    },
+    {
+      "file": "composite-presentation.mjs",
+      "bytes": 3263,
+      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
+    },
+    {
+      "file": "composite-protocol.mjs",
+      "bytes": 13609,
+      "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
+    },
+    {
+      "file": "game.mjs",
+      "bytes": 10141,
+      "sha256": "579a92440bccff67dd37761c9f0c5a25a790cc66a412d036d1ee830ed206b621"
+    },
+    {
+      "file": "grain-material.mjs",
+      "bytes": 1558,
+      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
+    },
+    {
+      "file": "index.html",
+      "bytes": 11314,
+      "sha256": "065c6769c31bdb056195240276eae24e91a07589bdbe96ca66c8a704ed4eb296"
+    },
+    {
+      "file": "simulation-worker.mjs",
+      "bytes": 22529,
+      "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
+    },
+    {
+      "file": "snapshot-transport.mjs",
+      "bytes": 763,
+      "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
+    },
+    {
+      "file": "style.css",
+      "bytes": 15663,
+      "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619"
+    }
+  ],
+  "baselineFiles": [
+    {
+      "file": "app.mjs",
+      "bytes": 41492,
+      "sha256": "e55f313203f97f0a4a3eab29e898181b18254d2191a45923fb615817a6effd0e"
+    },
+    {
+      "file": "board-geometry.mjs",
+      "bytes": 1563,
+      "sha256": "74c3bd5726d3fe7f8e26325f6efce4499a1fa3256fc9612329fdb706133d86be"
+    },
+    {
+      "file": "ca-adapter.mjs",
+      "bytes": 4181,
+      "sha256": "fa0e919c0125cb11917daa769770bb9ffe8fb138726a82c2d5ff15c0df150054"
+    },
+    {
+      "file": "ca-contour.mjs",
+      "bytes": 11350,
+      "sha256": "f041baecb4192e6374d0205e91bb83f9ad6149fcbfbd4ac39644ad9bd90b5bc6"
+    },
+    {
+      "file": "ca-frame-world.mjs",
+      "bytes": 2935,
+      "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
+    },
+    {
+      "file": "ca-layer.mjs",
+      "bytes": 22647,
+      "sha256": "c1436768cf46292b9a5a25cdd0bf96189cdfcbe1fbd9cdaa913d771acb7767b9"
+    },
+    {
+      "file": "ca-world.mjs",
+      "bytes": 13339,
+      "sha256": "0692ea0d7b73679dac263a7d3fa94e7513c2887bd4dab29cc7ee9e9db65ced13"
+    },
+    {
+      "file": "composite-presentation.mjs",
+      "bytes": 3263,
+      "sha256": "2619c6714aada6fdffc5c02de9a352186d961385dfd6d568275b7dcc65fd9af6"
+    },
+    {
+      "file": "composite-protocol.mjs",
+      "bytes": 13609,
+      "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
+    },
+    {
+      "file": "game.mjs",
+      "bytes": 10141,
+      "sha256": "579a92440bccff67dd37761c9f0c5a25a790cc66a412d036d1ee830ed206b621"
+    },
+    {
+      "file": "grain-material.mjs",
+      "bytes": 1558,
+      "sha256": "33aafe620bfcf1254056bbf964aae88c96d904c140e4400a731a66a10035e467"
+    },
+    {
+      "file": "index.html",
+      "bytes": 11314,
+      "sha256": "065c6769c31bdb056195240276eae24e91a07589bdbe96ca66c8a704ed4eb296"
+    },
+    {
+      "file": "simulation-worker.mjs",
+      "bytes": 22529,
+      "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
+    },
+    {
+      "file": "snapshot-transport.mjs",
+      "bytes": 763,
+      "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
+    },
+    {
+      "file": "style.css",
+      "bytes": 15663,
+      "sha256": "ba764e6b3d174426fcd69aca52106fcd7b3b12073aaa0b4c7e26268b00565619"
+    }
+  ],
+  "changedFiles": [
+    "ca-layer.mjs"
+  ]
+}
