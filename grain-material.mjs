@@ -5,7 +5,7 @@ export const GRAIN_OFFSET_BOUND = .18;
 // opposite +/-radius tips guarantee the original grid-unit circle diameter. Camera pitch 3 doubles the world diameter relative to the frozen 1.5-pitch 0.4.12.
 // Four mineral-like silhouettes, sixteen stable orientations, twelve tones.
 // No time-dependent noise, per-pixel shader, gradients or physics rescaling.
-export const GRAIN_DIAMETER_SCALE = 1;
+export const GRAIN_DIAMETER_SCALE = .95625;
 const RADII = [
  [1,.99,.98,.96,.99,.98,1,.97,.99,.97,.98,.99],
  [1,.98,.97,.99,.98,.96,1,.99,.98,.97,.99,.98],

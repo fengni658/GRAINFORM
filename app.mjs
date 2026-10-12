@@ -1,3 +1,4 @@
+import {COLOR_COUNT,PALETTES,COLOR_NAMES} from './grain-palette.mjs';
 import {SettleAnchors} from './settle-anchors.mjs';
 import {decodeSnapshotWire} from './snapshot-transport.mjs';
 import {VERSION,WIDTH,HEIGHT,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH,WORLD_WIDTH,WORLD_HEIGHT,GRAIN_PITCH,VIEW_GRID_TOP,VIEW_GRID_HEIGHT} from './board-geometry.mjs';
@@ -22,7 +23,7 @@ export class GridBodyStore {
   if(message.epoch===this.epoch&&message.seq<=this.seq)return{accepted:false,duplicate:true};
   if(!full&&(this.awaitingFull||message.epoch!==this.epoch||message.seq!==this.seq+1||message.baseSeq!==this.seq||p.previousRevision!==this.revision))return this.request(message.epoch,'sequence-or-revision-gap');
   if(!Number.isInteger(p.revision)||p.revision<0||(!full&&p.revision<this.revision)||(full&&p.removed.length))return this.request(message.epoch,'invalid-revision');
-  const seen=new Set(),removed=new Set();for(const b of p.upsert){if(!b||!Number.isSafeInteger(b.id)||b.id<0||!Number.isFinite(b.x)||!Number.isFinite(b.y)||!Number.isInteger(b.color)||b.color<1||b.color>4||typeof b.sleep!=='boolean'||seen.has(b.id))return this.request(message.epoch,'invalid-body');seen.add(b.id);}for(const id of p.removed){if(!Number.isSafeInteger(id)||id<0||removed.has(id)||seen.has(id))return this.request(message.epoch,'invalid-removal');removed.add(id);}
+  const seen=new Set(),removed=new Set();for(const b of p.upsert){if(!b||!Number.isSafeInteger(b.id)||b.id<0||!Number.isFinite(b.x)||!Number.isFinite(b.y)||!Number.isInteger(b.color)||b.color<1||b.color>COLOR_COUNT||typeof b.sleep!=='boolean'||seen.has(b.id))return this.request(message.epoch,'invalid-body');seen.add(b.id);}for(const id of p.removed){if(!Number.isSafeInteger(id)||id<0||removed.has(id)||seen.has(id))return this.request(message.epoch,'invalid-removal');removed.add(id);}
   let expected=full?p.upsert.length:this.bodies.size;if(!full){for(const id of removed)if(this.bodies.has(id))expected--;for(const id of seen)if(!this.bodies.has(id))expected++;}
   if(Number.isInteger(message.snapshot?.bodyCount)&&message.snapshot.bodyCount!==expected)return this.request(message.epoch,'body-count-mismatch');
   const newEpoch=message.epoch!==this.epoch;if(full)this.bodies.clear();for(const id of removed)this.bodies.delete(id);for(const b of p.upsert)this.bodies.set(b.id,{...b});
@@ -41,9 +42,7 @@ async function bootApp() {
 const $ = (id) => document.getElementById(id);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const STORAGE = Object.freeze({ best: 'grainform:0.4.13:grid3:best', settings: 'grainform:0.4.8:grid:settings' });
-const PALETTES = { standard: ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'], contrast: ['', '#ffe07a', '#4df0b0', '#fc87b5', '#71a7ff'] };
-const COLOR_NAMES = ['', '琥珀色', '海青色', '玫红色', '雾蓝色'];
+const STORAGE = Object.freeze({ best: 'grainform:0.5.3:grid9:colors6:best', settings: 'grainform:0.4.8:grid:settings' });
 
 const query = new URLSearchParams(location.search);
 const solver = 'ca-path';
@@ -330,7 +329,7 @@ function fail(message) {
 }
 function setupWorker() {
   try {
-    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.4.13-simulation' });
+    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.5.3-simulation' });
     worker.onmessage = ({ data: incoming }) => {
       const handlerBegun=performance.now();
       const wire=incoming?.type==='snapshot-wire'?incoming:null;

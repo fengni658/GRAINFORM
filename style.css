@@ -15,3 +15,6 @@ dialog{color:var(--ink);background:#1b2323;border:1px solid #43504a;border-radiu
 .qa-diagnostics pre { overflow-wrap: anywhere; white-space: pre-wrap; }
 
 /* 0.4.11 retains every 0.4.10 horizontal sizing rule. The taller board scrolls naturally; controls remain in document flow. */
+
+/* Six-color053 legend; fixed palette IDs preserve the first four. */
+.swatches i:nth-child(5){background:#e88945}.swatches i:nth-child(6){background:#aa79e8}

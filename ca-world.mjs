@@ -1,3 +1,4 @@
+import {validColor} from './grain-palette.mjs';
 import {FIELD_WIDTH,FIELD_HEIGHT,GRAIN_PITCH,BLOCK} from './board-geometry.mjs';
 // Independently written gameplay CA, based on mechanisms described in the source review.
 // Cells are material units, not hard circles. No third-party source copied.
@@ -24,7 +25,7 @@ export class World{
  _resetSlot(i){this.vy[i]=0;this.credit[i]=0;this.slideBudget[i]=0;this.lastMoved[i]=this.tick;this.moveStamp[i]=(this.tick-1)>>>0;this.pathN[i]=0;this.pathStamp[i]=(this.tick-1)>>>0;const p=i*18;this.pathX.fill(0,p,p+18);this.pathY.fill(0,p,p+18);this.pathPhase.fill(0,p,p+18)}
  admit(points,color,batch,initialVy=0){
   if(!Array.isArray(points))throw Error('admission-points');
-  if(!Number.isFinite(color)||!Number.isFinite(batch)||!Number.isFinite(initialVy))throw Error('admission-fields');
+  if(!validColor(color)||!Number.isFinite(batch)||!Number.isFinite(initialVy))throw Error('admission-fields');
   const staged=[],seen=new Set();for(const p of points){const {x,y}=p;if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||x>=CFG.width||y<0||y>=CFG.height)throw Error('admission-bounds');const q=this.cell(x,y);if(this.grid[q]||seen.has(q))throw Error('non-atomic-admission');seen.add(q);staged.push({x,y})}
   const C=this.live.length;if(this.count+staged.length>C)throw Error('capacity');
   // Check every future handle before touching slots, grid, counts or wake state.

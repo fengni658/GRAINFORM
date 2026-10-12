@@ -1,0 +1,105 @@
+{
+  "board-geometry.mjs": [
+    {
+      "old": "VERSION='0.5.2'",
+      "replacement": "VERSION='0.5.3'"
+    },
+    {
+      "old": "GRAIN_PITCH=3",
+      "replacement": "GRAIN_PITCH=24/9"
+    },
+    {
+      "old": "GRID_ORIGIN_Y=-1",
+      "replacement": "GRID_ORIGIN_Y=0"
+    },
+    {
+      "old": "WIDTH=96,HEIGHT=171,BLOCK=8",
+      "replacement": "WIDTH=108,HEIGHT=192,BLOCK=9"
+    },
+    {
+      "old": "// Bottom-aligned uniform lattice: 171*3=513 world px. The excess 1px is\n// outside the TOP of the viewport. No bottom gap and no anisotropic stretching.",
+      "replacement": "// Uniform 108x192 lattice exactly covers288x512 world px; 9cells=24worldpx.\n// 053 glyph diameter scale .95625 yields exactly .85 times052 world diameter."
+    }
+  ],
+  "ca-world.mjs": [
+    {
+      "old": "import {FIELD_WIDTH",
+      "replacement": "import {validColor} from './grain-palette.mjs';\nimport {FIELD_WIDTH"
+    },
+    {
+      "old": "!Number.isFinite(color)",
+      "replacement": "!validColor(color)"
+    }
+  ],
+  "ca-adapter.mjs": [
+    {
+      "old": "import {LEFT",
+      "replacement": "import {validColor} from './grain-palette.mjs';\nimport {LEFT"
+    },
+    {
+      "old": "addMany(points,{batch=0,initialVy=480/GRAIN_PITCH}={}){",
+      "replacement": "addMany(points,{batch=0,initialVy=480/GRAIN_PITCH}={}){const color=points[0]?.color===undefined?1:points[0].color;if(!validColor(color)||points.some(p=>!p||!validColor(p.color===undefined?color:p.color)||(p.color===undefined?color:p.color)!==color))return{accepted:false,reason:'admission-colors',addedIds:[]};"
+    }
+  ],
+  "game.mjs": [
+    {
+      "old": "import {VERSION",
+      "replacement": "import {COLOR_COUNT} from './grain-palette.mjs';\nimport {VERSION"
+    },
+    {
+      "old": "color:1+this.rng.int(4)",
+      "replacement": "color:1+this.rng.int(COLOR_COUNT)"
+    }
+  ],
+  "grain-material.mjs": [
+    {
+      "old": "export const GRAIN_DIAMETER_SCALE = 1;",
+      "replacement": "export const GRAIN_DIAMETER_SCALE = .95625;"
+    }
+  ],
+  "ca-layer.mjs": [
+    {
+      "old": "import {GRAIN_SHAPE",
+      "replacement": "import {PALETTES} from './grain-palette.mjs';\nimport {GRAIN_SHAPE"
+    },
+    {
+      "old": "resolveColor = c => ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'][c]",
+      "replacement": "resolveColor = c => PALETTES.standard[c]"
+    }
+  ],
+  "app.mjs": [
+    {
+      "old": "import {SettleAnchors}",
+      "replacement": "import {COLOR_COUNT,PALETTES,COLOR_NAMES} from './grain-palette.mjs';\nimport {SettleAnchors}"
+    },
+    {
+      "old": "b.color>4",
+      "replacement": "b.color>COLOR_COUNT"
+    },
+    {
+      "old": "const STORAGE = Object.freeze({ best: 'grainform:0.4.13:grid3:best', settings: 'grainform:0.4.8:grid:settings' });\nconst PALETTES = { standard: ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'], contrast: ['', '#ffe07a', '#4df0b0', '#fc87b5', '#71a7ff'] };\nconst COLOR_NAMES = ['', '\u7425\u73c0\u8272', '\u6d77\u9752\u8272', '\u73ab\u7ea2\u8272', '\u96fe\u84dd\u8272'];",
+      "replacement": "const STORAGE = Object.freeze({ best: 'grainform:0.5.3:grid9:colors6:best', settings: 'grainform:0.4.8:grid:settings' });"
+    },
+    {
+      "old": "name: 'grainform-0.4.13-simulation'",
+      "replacement": "name: 'grainform-0.5.3-simulation'"
+    }
+  ],
+  "index.html": [
+    {
+      "old": "0.5.2 \u6d4b\u8bd5\u7248",
+      "replacement": "0.5.3 \u6d4b\u8bd5\u7248",
+      "count": 5
+    },
+    {
+      "old": "<div class=\"swatches\" aria-hidden=\"true\"><i></i><i></i><i></i><i></i></div><p>\u56db\u79cd\u989c\u8272",
+      "replacement": "<div class=\"swatches\" aria-hidden=\"true\"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>\u516d\u79cd\u989c\u8272"
+    }
+  ],
+  "style.css": [
+    {
+      "old": "/* 0.4.11 retains every 0.4.10 horizontal sizing rule. The taller board scrolls naturally; controls remain in document flow. */\n",
+      "replacement": "/* 0.4.11 retains every 0.4.10 horizontal sizing rule. The taller board scrolls naturally; controls remain in document flow. */\n\n/* Six-color053 legend; fixed palette IDs preserve the first four. */\n.swatches i:nth-child(5){background:#e88945}.swatches i:nth-child(6){background:#aa79e8}\n"
+    }
+  ]
+}

@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#121718">
-<meta name="description" content="粒序 GRAINFORM 0.5.2 测试版。方块落地化为细沙，同色连通两壁，释放空间。">
-<title>粒序 GRAINFORM · 0.5.2 测试版</title>
+<meta name="description" content="粒序 GRAINFORM 0.5.3 测试版。方块落地化为细沙，同色连通两壁，释放空间。">
+<title>粒序 GRAINFORM · 0.5.3 测试版</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eac370'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%234fc0b3'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./builds/b-2d6d08de2a639908e63ffcba4603cc15dd201d3481f49436c1ee1f54c264f48a/style.css">
+<link rel="stylesheet" href="./builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/style.css">
 </head>
 <body>
 <div class="app">
 <header class="topbar">
   <a class="brand" href="./" aria-label="粒序 GRAINFORM 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-cn">粒序</span><span class="brand-en">GRAINFORM</span></a>
-  <div class="top-actions"><span class="edition">流沙方块 <b>0.5.2 测试版</b></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 / 继续 · P" disabled>Ⅱ</button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg></button><button id="headerHelp" class="icon-button" aria-label="查看玩法" title="玩法">?</button></div>
+  <div class="top-actions"><span class="edition">流沙方块 <b>0.5.3 测试版</b></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 / 继续 · P" disabled>Ⅱ</button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg></button><button id="headerHelp" class="icon-button" aria-label="查看玩法" title="玩法">?</button></div>
 </header>
 <main class="game-layout">
   <aside class="left-panel">
@@ -30,7 +30,7 @@
       <canvas id="gameCanvas" width="576" height="864" tabindex="0" role="img" aria-label="流沙棋盘。方向键移动、旋转和软降，空格硬降，P 暂停。"></canvas>
       <section id="overlay" class="overlay" aria-labelledby="overlayTitle">
         <div id="homePanel" class="overlay-panel">
-          <div class="mode-label">流沙方块 · 0.5.2 测试版</div><h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1><p class="intro">方块落地，化为沙粒<br>同色连通两壁，整片消除</p><button id="startButton" class="primary-button" disabled>正在准备…</button><button id="howButton" class="text-button">怎么玩</button><p class="start-hint">测试版 · 本局进度不保存</p>
+          <div class="mode-label">流沙方块 · 0.5.3 测试版</div><h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1><p class="intro">方块落地，化为沙粒<br>同色连通两壁，整片消除</p><button id="startButton" class="primary-button" disabled>正在准备…</button><button id="howButton" class="text-button">怎么玩</button><p class="start-hint">测试版 · 本局进度不保存</p>
         </div>
         <div id="pausePanel" class="overlay-panel" hidden>
           <div class="mode-label">TAKE A BREATH</div><h2 id="pauseTitle">让沙粒等一等</h2><p id="pauseReason" class="intro">游戏已暂停</p><button id="resumeButton" class="primary-button">继续游戏 <span aria-hidden="true">▶</span></button><button id="restartButton" class="text-button">重新开始</button>
@@ -56,10 +56,10 @@
   <aside class="right-panel">
     <div class="next-box"><div class="eyebrow">下一个</div><canvas id="nextCanvas" width="192" height="128" aria-label="下一块预览"></canvas><span id="nextColor" class="subtle">等待开始</span></div>
     <div class="controls-guide"><div class="eyebrow">操作</div><div><span><kbd>←</kbd><kbd>→</kbd></span><span>左右移动</span></div><div><span><kbd>↑</kbd></span><span>旋转方块</span></div><div><span><kbd>↓</kbd></span><span>软降</span></div><div><span><kbd class="wide">SPACE</kbd></span><span>硬降</span></div><div><span><kbd>P</kbd><kbd>Esc</kbd></span><span>暂停 / 继续</span></div></div>
-    <div class="palette-note"><div class="swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></div><p>四种颜色<br>无数种可能</p></div><button id="helpButton" class="help-button">玩法与提示 <span aria-hidden="true">?</span></button>
+    <div class="palette-note"><div class="swatches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>六种颜色<br>无数种可能</p></div><button id="helpButton" class="help-button">玩法与提示 <span aria-hidden="true">?</span></button>
   </aside>
 </main>
-<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序 <b>0.5.2 测试版</b></span><span id="storageFooter">设置与最高分仅保存在此浏览器</span></footer>
+<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序 <b>0.5.3 测试版</b></span><span id="storageFooter">设置与最高分仅保存在此浏览器</span></footer>
 </div>
 <dialog id="settingsDialog" aria-labelledby="settingsTitle">
   <div class="dialog-top"><span class="eyebrow">偏好设置</span><button class="dialog-close icon-button" data-close aria-label="关闭设置">×</button></div><h2 id="settingsTitle">照你的节奏</h2>
@@ -78,6 +78,6 @@
 <dialog id="restartDialog" aria-labelledby="restartTitle"><div class="dialog-top"><span class="eyebrow">重新开始</span><button class="dialog-close icon-button" data-close aria-label="取消重新开始">×</button></div><h2 id="restartTitle">开始新的一局？</h2><p class="intro">当前这一局不会保留。最高分与设置不受影响。</p><div class="button-pair"><button id="cancelRestart" class="secondary-button">继续这一局</button><button id="confirmRestart" class="primary-button">重新开始</button></div></dialog>
 <div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <details id="qaDiagnostics" class="qa-diagnostics" hidden><summary>QA 只读诊断</summary><p>模拟、绘图与rAF回调独立计时；rAF回调率不是实际绘图率，倍率是模拟/活跃墙时。增量序号、缓存回退、积压与输入ACK延迟均如实显示。本地诊断，无遥测。</p><pre id="qaOutput"></pre></details>
-<script type="module" src="./builds/b-2d6d08de2a639908e63ffcba4603cc15dd201d3481f49436c1ee1f54c264f48a/app.mjs"></script>
+<script type="module" src="./builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/app.mjs"></script>
 </body>
 </html>

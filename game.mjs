@@ -1,3 +1,4 @@
+import {COLOR_COUNT} from './grain-palette.mjs';
 import {VERSION,WIDTH,BLOCK,LEFT,RIGHT,FLOOR,FIELD_WIDTH,BOARD,rigidFallSpeed,GRAIN_PITCH} from './board-geometry.mjs';
 import {CAWorld,R,D,DT} from './ca-adapter.mjs';
 export {R,D,DT};
@@ -28,7 +29,7 @@ export class Game {
  constructor({seed=1}={}){this.solver='ca-path';this.World=CAWorld;this.reset(seed);}
  reset(seed=1){this.seed=seed>>>0;this.world=new this.World({seed:this.seed});this.rng=new RNG(this.seed);this.physicsRng=new RNG((this.seed^0x9e3779b9)>>>0);this.gameTick=0;this.time=0;this.rawCleared=0;this.state='ready';this.phase='ready';this.settlingBurst=0;this.clearTicks=0;this.pieceId=0;this.gameOverReason=null;this.active=null;this.next=this.randomPiece();this.score=0;this.level=1;this.cleared=0;this.pieces=0;this.lines=0;this.chain=0;this.maxChain=0;this.added=0;this.events=[];this.eventSerial=0;this.fall=0;this.pendingClear=[];this.clearTimer=0;this.spawnDelay=0;this.lastScan=0;this.lastCounts={count:0,active:0};this.presentationToken=0;this.presentedToken=0;this.presentationTicks=new Map();this.pendingMaterialFrame=null;}
  emit(type,data={}){this.events.push({id:++this.eventSerial,type,tick:this.world.tick,controlTick:this.gameTick,physicsTick:this.world.tick,...data});if(this.events.length>32)this.events.shift();}
- randomPiece(){return {shape:SHAPES[this.rng.int(7)].map(p=>p.slice()),color:1+this.rng.int(4)};}
+ randomPiece(){return {shape:SHAPES[this.rng.int(7)].map(p=>p.slice()),color:1+this.rng.int(COLOR_COUNT)};}
  start(){if(this.state==='ready'){this.state='playing';this.spawn();return true;}return false;}
  pause(){if(this.state==='playing'){this.state='paused';return true;}return false;}
  resume(){if(this.state==='paused'){this.state='playing';return true;}return false;}

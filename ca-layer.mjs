@@ -1,3 +1,4 @@
+import {PALETTES} from './grain-palette.mjs';
 import {GRAIN_SHAPE, GRAIN_OFFSET_BOUND, GRAIN_DIAMETER_SCALE, GRAIN_OUTLINES, GRAIN_LIGHT_EDGES, appendGrainPath} from './grain-material.mjs';
 import {WIDTH,HEIGHT,VIEW_GRID_TOP,VIEW_GRID_HEIGHT} from './board-geometry.mjs';
 import {MaterialContour, clipMaterialContour, paintContourRim, clipMaterialField} from './ca-contour.mjs';
@@ -125,7 +126,7 @@ function tinyGrain(context, body, style, rawCells, x = body.x, y = body.y) {
 /** Cell-sized fixed identity noise. Settled material is cached; only recorded
  * moving IDs are redrawn each rAF. There is no legacy large circle/mask. */
 export class CALayerRenderer {
-  constructor({ createCanvas = () => document.createElement('canvas'), resolveColor = c => ['', '#eac370', '#4fc0b3', '#d378a3', '#789fef'][c], rawCells = false } = {}) {
+  constructor({ createCanvas = () => document.createElement('canvas'), resolveColor = c => PALETTES.standard[c], rawCells = false } = {}) {
     this.createCanvas = createCanvas; this.resolveColor = resolveColor; this.rawCells = rawCells; this.contour = new MaterialContour(); this.styles = new Map(); this.bodies = new Map(); this.moving = new Set(); this.physicalMoving = new Set(); this.anchorMoving = null; this.positions = new Map(); this.canvas = null; this.context = null; this.width = 0; this.height = 0; this.palette = null; this.dirty = true; this.mode = 'ca-cell-cached-layer'; this.fallbackReason = null;
     this.scratchCanvas = null; this.scratchContext = null; this.tileSize = 8; this.tileColumns = Math.ceil(WIDTH / this.tileSize); this.tileRows = Math.ceil(HEIGHT / this.tileSize); this.tiles = new Map(); this.staticRecords = new Map(); this.dirtyTiles = new Set(); this.paintRanks = new Map(); this.nextPaintRank = 0;
     this.tailStart=Infinity;this.tailIds=[];this.qualifyDirty=true;this.qualifyKeys=new Set;this.displayChanged=true;this.tailMetrics={qualifications:0,eligible:0,rejected:0,workScans:0,boundaryIds:0,tailPaints:0};
