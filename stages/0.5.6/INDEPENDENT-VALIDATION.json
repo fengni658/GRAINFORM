@@ -1,0 +1,24 @@
+{
+  "stage": "0.5.6",
+  "build": "b-e45dde000fc0d9e4f763621e157956473397fc32f45b48d551863291f6b3d314",
+  "status": "independent-engineering-and-headed-lifecycle-pass",
+  "sourceCheckpoint": "84e96e7a2161c37e5b643e33360dc060c575744c",
+  "verifiedAt": "2026-10-12",
+  "tests": {
+    "deterministicPassed": 36,
+    "headedBrowserPassed": 8
+  },
+  "headedScope": [
+    "background",
+    "blur",
+    "return remains paused",
+    "explicit resume",
+    "settings",
+    "restart and play"
+  ],
+  "limitations": [
+    "No performance or broad device certification",
+    "No main promotion or Site deployment"
+  ],
+  "reportSHA256": "74fe01890b4f4334b30e802d03a032411ace133ef174def1bcd9ab533ddaac35"
+}
