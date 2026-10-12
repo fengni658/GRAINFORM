@@ -1,0 +1,104 @@
+diff -ru grain056-candidate/candidate/board-geometry.mjs grain058-candidate/candidate/board-geometry.mjs
+--- grain056-candidate/candidate/board-geometry.mjs	2026-10-11 21:02:28.361792038 -0700
++++ grain058-candidate/candidate/board-geometry.mjs	2026-10-11 21:35:59.369540178 -0700
+@@ -1,7 +1,7 @@
+ // All simulation, wire paths, material contour and renderer tile coordinates are
+ // GRID units. Only the app camera converts to visible world pixels. Never mix
+ // grid bodies with world-pixel active blocks or paths.
+-export const VERSION='0.5.6';
++export const VERSION='0.5.8';
+ export const WORLD_WIDTH=288,WORLD_HEIGHT=512,WORLD_BLOCK=24,GRAIN_PITCH=24/9;
+ export const GRID_ORIGIN_X=0,GRID_ORIGIN_Y=0;
+ export const WIDTH=108,HEIGHT=192,BLOCK=9;
+diff -ru grain056-candidate/candidate/ca-frame-world.mjs grain058-candidate/candidate/ca-frame-world.mjs
+--- grain056-candidate/candidate/ca-frame-world.mjs	2026-10-11 17:37:25.831920338 -0700
++++ grain058-candidate/candidate/ca-frame-world.mjs	2026-10-11 21:28:06.727273319 -0700
+@@ -2,7 +2,7 @@
+ export {CFG};
+ // Fixed four original material rule steps per 60 Hz display frame. Rigid fall stays 60 Hz.
+ export class FrameWorld extends World {
+- constructor(){super();const C=this.live.length;this.frame=0;this.framePending=false;this.frameIds=[];this.frameStamp=new Uint32Array(C);this.frameN=new Uint8Array(C);this.frameX=new Int16Array(C*69);this.frameY=new Int16Array(C*69);this.framePhase=new Uint8Array(C*69);this.frameDirty=null;this.frameLast=null;}
++ constructor(){super();const C=this.live.length;this.frameVisitBits=new Uint32Array(Math.ceil(C/32));this.frame=0;this.framePending=false;this.frameIds=[];this.frameStamp=new Uint32Array(C);this.frameN=new Uint8Array(C);this.frameX=new Int16Array(C*69);this.frameY=new Int16Array(C*69);this.framePhase=new Uint8Array(C*69);this.frameDirty=null;this.frameLast=null;}
+  _resetSlot(i){super._resetSlot(i);this.frameStamp[i]=(this.frame-1)>>>0;this.frameN[i]=0;const p=i*69;this.frameX.fill(0,p,p+69);this.frameY.fill(0,p,p+69);this.framePhase.fill(0,p,p+69)}
+  remove(ids){super.remove(ids);this.frameIds=this.frameIds.filter(id=>this.has(id))}
+  stepFrame(){this.frame++;this.framePending=true;this.frameIds.length=0;this.frameDirty=null;const totals={steps:0,moves:0,particles:0,cellVisits:0};const cv=this.metrics.cellVisits;
+@@ -11,9 +11,15 @@
+  // rule path has no copied origin until it moves; its unchanged current cell
+  // supplies the same frame origin without reordering later-moving particles.
+  // Cache every actual unit leg, including holds between rule steps, before base buffers overwrite.
+- for(let i=0;i<this.n;i++){if(!this.live[i]||this.pathStamp[i]!==this.tick)continue;const dst=i*69,src=i*18;
++ // The base step stamps exactly its integrated IDs, including stationary holds.
++ // Enumerate that same set in ascending slot order, matching the old full scan.
++ // Capacity follows the live-slot store; malformed out-of-capacity IDs fail loudly.
++ if(this.frameVisitBits.length<Math.ceil(this.live.length/32))this.frameVisitBits=new Uint32Array(Math.ceil(this.live.length/32));
++ const words=Math.ceil(this.n/32);this.frameVisitBits.fill(0,0,words);
++ for(const i of this.stepIds){if(i<0||i>=this.live.length)throw Error('frame-visited-slot-capacity');this.frameVisitBits[i>>>5]|=1<<(i&31);}
++ for(let word=0;word<words;word++){let bits=this.frameVisitBits[word];while(bits){const bit=31-Math.clz32(bits&-bits),i=word*32+bit;bits=(bits&(bits-1))>>>0;if(!this.live[i]||this.pathStamp[i]!==this.tick)continue;const dst=i*69,src=i*18;
+  if(this.frameStamp[i]!==this.frame){this.frameStamp[i]=this.frame;this.frameIds.push(this.identity[i]);this.frameN[i]=1;this.frameX[dst]=this.pathN[i]?this.pathX[src]:this.x[i];this.frameY[dst]=this.pathN[i]?this.pathY[src]:this.y[i];this.framePhase[dst]=0;}
+- for(let j=1;j<this.pathN[i];j++){const k=dst+this.frameN[i]++;if(this.frameN[i]>69)throw Error('frame-path-capacity');this.frameX[k]=this.pathX[src+j];this.frameY[k]=this.pathY[src+j];this.framePhase[k]=s*17+this.pathPhase[src+j];}}
++ for(let j=1;j<this.pathN[i];j++){const k=dst+this.frameN[i]++;if(this.frameN[i]>69)throw Error('frame-path-capacity');this.frameX[k]=this.pathX[src+j];this.frameY[k]=this.pathY[src+j];this.framePhase[k]=s*17+this.pathPhase[src+j];}}}
+  if(this.dirty){const d=this.dirty;if(!this.frameDirty)this.frameDirty={...d};else{const a=this.frameDirty;a.x0=Math.min(a.x0,d.x0);a.y0=Math.min(a.y0,d.y0);a.x1=Math.max(a.x1,d.x1);a.y1=Math.max(a.y1,d.y1)}}}
+  totals.cellVisits=this.metrics.cellVisits-cv;this.frameLast=totals;return totals;}
+  completePresentation(){super.completePresentation();this.framePending=false;}
+diff -ru grain056-candidate/candidate/ca-world.mjs grain058-candidate/candidate/ca-world.mjs
+--- grain056-candidate/candidate/ca-world.mjs	2026-10-11 18:33:03.664058442 -0700
++++ grain058-candidate/candidate/ca-world.mjs	2026-10-11 21:28:06.725419105 -0700
+@@ -7,7 +7,7 @@
+ // schedules real local rolls; it never alters appearance or collision paths.
+ export function slideCohort(id){let h=(id>>>0)^Math.imul(Math.floor(id/4294967296),0x9e3779b1);h=Math.imul(h^(h>>>16),0x7feb352d);h=Math.imul(h^(h>>>15),0x846ca68b);return ((h^(h>>>16))>>>0)%5}
+ export class World{
+- constructor(){const C=CFG.width*CFG.height;this.grid=new Int32Array(C);this.x=new Int16Array(C);this.y=new Int16Array(C);this.color=new Uint8Array(C);this.batch=new Uint16Array(C);this.live=new Uint8Array(C);this.vy=new Float64Array(C);this.credit=new Float64Array(C);this.slideBudget=new Uint8Array(C);this.n=0;this.count=0;this.identity=new Float64Array(C);this.freeSlots=new Int32Array(C);this.freeCount=0;this.tick=0;this.time=0;this.seed=0x842199;this.cols=Math.ceil(CFG.width/CFG.chunk);this.rows=Math.ceil(CFG.height/CFG.chunk);this.chunks=new Set();this.quiet=new Uint8Array(this.cols*this.rows);this.changed=new Uint8Array(this.quiet.length);this.potential=new Uint8Array(this.quiet.length);this.noMoveSweeps=0;this.pendingInbound=0;this.lastMoveTick=-1;this.presentedTick=-1;this.dirty=null;this.lastMoved=new Uint32Array(C);this.moveStamp=new Uint32Array(C);this.pathN=new Uint8Array(C);this.pathX=new Int16Array(C*18);this.pathY=new Int16Array(C*18);this.pathPhase=new Uint8Array(C*18);this.pathStamp=new Uint32Array(C);this.reserved=new Int32Array(C);this.reserveStamp=new Uint32Array(C);this.reserveEpoch=0;this.metrics={stepCalls:0,chunkVisits:0,cellVisits:0,particleVisits:0,pathMoves:0,directionChecks:0,verticalMoves:0,slideMoves:0,pathInitializations:0,verticalCandidateVisits:0,blockedDirections:0};this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.audit=null;}
++ constructor(){const C=CFG.width*CFG.height;this.grid=new Int32Array(C);this.x=new Int16Array(C);this.y=new Int16Array(C);this.color=new Uint8Array(C);this.batch=new Uint16Array(C);this.live=new Uint8Array(C);this.vy=new Float64Array(C);this.credit=new Float64Array(C);this.slideBudget=new Uint8Array(C);this.n=0;this.count=0;this.identity=new Float64Array(C);this.freeSlots=new Int32Array(C);this.freeCount=0;this.tick=0;this.time=0;this.seed=0x842199;this.cols=Math.ceil(CFG.width/CFG.chunk);this.rows=Math.ceil(CFG.height/CFG.chunk);this.chunks=new Set();this.quiet=new Uint8Array(this.cols*this.rows);this.changed=new Uint8Array(this.quiet.length);this.potential=new Uint8Array(this.quiet.length);this.noMoveSweeps=0;this.pendingInbound=0;this.stepIds=null;this.lastMoveTick=-1;this.presentedTick=-1;this.dirty=null;this.lastMoved=new Uint32Array(C);this.moveStamp=new Uint32Array(C);this.pathN=new Uint8Array(C);this.pathX=new Int16Array(C*18);this.pathY=new Int16Array(C*18);this.pathPhase=new Uint8Array(C*18);this.pathStamp=new Uint32Array(C);this.reserved=new Int32Array(C);this.reserveStamp=new Uint32Array(C);this.reserveEpoch=0;this.metrics={stepCalls:0,chunkVisits:0,cellVisits:0,particleVisits:0,pathMoves:0,directionChecks:0,verticalMoves:0,slideMoves:0,pathInitializations:0,verticalCandidateVisits:0,blockedDirections:0};this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.audit=null;}
+  rand(){let s=this.seed;s^=s<<13;s^=s>>>17;s^=s<<5;this.seed=s>>>0;return this.seed/4294967296}
+  cell(x,y){return y*CFG.width+x}chunk(x,y){return Math.floor(y/CFG.chunk)*this.cols+Math.floor(x/CFG.chunk)}
+  wake(x,y){
+@@ -60,7 +60,7 @@
+   }
+  }
+ 
+- step(){this.metrics.stepCalls++;this.tick++;this.time+=CFG.dt;this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.dirty=null;if(!this.chunks.size)return;this.wakeSupportedChunks();this.changed.fill(0);this.potential.fill(0);const ids=[];for(const c of this.chunks){this.metrics.chunkVisits++;this.last.chunks++;const cx=c%this.cols,cy=Math.floor(c/this.cols);for(let y=cy*CFG.chunk;y<Math.min((cy+1)*CFG.chunk,CFG.height);y++)for(let x=cx*CFG.chunk;x<Math.min((cx+1)*CFG.chunk,CFG.width);x++){this.metrics.cellVisits++;const v=this.grid[this.cell(x,y)];if(v)ids.push(v-1)}}ids.sort((a,b)=>this.y[b]-this.y[a]||((this.tick&1)?this.x[a]-this.x[b]:this.x[b]-this.x[a]));this.last.particles=ids.length;
++ step(){this.metrics.stepCalls++;this.tick++;this.time+=CFG.dt;this.last={moves:0,movedParticles:0,particles:0,chunks:0,pending:0};this.dirty=null;this.stepIds=null;if(!this.chunks.size)return;this.wakeSupportedChunks();this.changed.fill(0);this.potential.fill(0);const ids=[];for(const c of this.chunks){this.metrics.chunkVisits++;this.last.chunks++;const cx=c%this.cols,cy=Math.floor(c/this.cols);for(let y=cy*CFG.chunk;y<Math.min((cy+1)*CFG.chunk,CFG.height);y++)for(let x=cx*CFG.chunk;x<Math.min((cx+1)*CFG.chunk,CFG.width);x++){this.metrics.cellVisits++;const v=this.grid[this.cell(x,y)];if(v)ids.push(v-1)}}ids.sort((a,b)=>this.y[b]-this.y[a]||((this.tick&1)?this.x[a]-this.x[b]:this.x[b]-this.x[a]));this.last.particles=ids.length;this.stepIds=ids;
+  const fallers=[];for(const i of ids){this.metrics.particleVisits++;if(this.empty(this.x[i],this.y[i]+1)){this.vy[i]=Math.min(CFG.maxSpeed,this.vy[i]+CFG.gravity*CFG.dt);this.credit[i]=Math.min(CFG.maxVertical+1,this.credit[i]+this.vy[i]*CFG.dt)}else{const support=this.grid[this.cell(this.x[i],this.y[i]+1)]-1;if(support>=0&&this.vy[support]>0){this.vy[i]=this.vy[support];this.credit[i]=this.credit[support];}else{this.vy[i]=0;this.credit[i]=0}}this.pathN[i]=0;this.pathStamp[i]=this.tick;if(this.credit[i]>=1-1e-9)fallers.push(i)}
+  // Keep every support integration bottom-up. Only fall credit can authorize
+  // vertical work; no phase below increases credit, so this stable subset keeps
+diff -ru grain056-candidate/candidate/index.html grain058-candidate/candidate/index.html
+--- grain056-candidate/candidate/index.html	2026-10-11 21:02:28.362051587 -0700
++++ grain058-candidate/candidate/index.html	2026-10-11 21:35:59.372496277 -0700
+@@ -4,8 +4,8 @@
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+ <meta name="theme-color" content="#121718">
+-<meta name="description" content="粒序 GRAINFORM 0.5.6 测试版。方块落地化为细沙，同色连通两壁，释放空间。">
+-<title>粒序 GRAINFORM · 0.5.6 测试版</title>
++<meta name="description" content="粒序 GRAINFORM 0.5.8 测试版。方块落地化为细沙，同色连通两壁，释放空间。">
++<title>粒序 GRAINFORM · 0.5.8 测试版</title>
+ <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121718'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7z' fill='%23eac370'/%3E%3Cpath d='M18 18h3v3h-3zm5 2h3v3h-3zm-5 5h3v3h-3z' fill='%234fc0b3'/%3E%3C/svg%3E">
+ <link rel="stylesheet" href="./style.css">
+ </head>
+@@ -13,7 +13,7 @@
+ <div class="app">
+ <header class="topbar">
+   <a class="brand" href="./" aria-label="粒序 GRAINFORM 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-cn">粒序</span><span class="brand-en">GRAINFORM</span></a>
+-  <div class="top-actions"><span class="edition">流沙方块 <b>0.5.6 测试版</b></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 / 继续 · P" disabled>Ⅱ</button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg></button><button id="headerHelp" class="icon-button" aria-label="查看玩法" title="玩法">?</button></div>
++  <div class="top-actions"><span class="edition">流沙方块 <b>0.5.8 测试版</b></span><button id="pauseButton" class="icon-button" aria-label="暂停游戏" title="暂停 / 继续 · P" disabled>Ⅱ</button><button id="settingsButton" class="icon-button" aria-label="游戏设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg></button><button id="headerHelp" class="icon-button" aria-label="查看玩法" title="玩法">?</button></div>
+ </header>
+ <main class="game-layout">
+   <aside class="left-panel">
+@@ -30,7 +30,7 @@
+       <canvas id="gameCanvas" width="576" height="864" tabindex="0" role="img" aria-label="流沙棋盘。方向键移动、旋转和软降，空格硬降，P 暂停。"></canvas>
+       <section id="overlay" class="overlay" aria-labelledby="overlayTitle">
+         <div id="homePanel" class="overlay-panel">
+-          <div class="mode-label">流沙方块 · 0.5.6 测试版</div><h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1><p class="intro">方块落地，化为沙粒<br>同色连通两壁，整片消除</p><button id="startButton" class="primary-button" disabled>正在准备…</button><button id="howButton" class="text-button">怎么玩</button><p class="start-hint">测试版 · 本局进度不保存</p>
++          <div class="mode-label">流沙方块 · 0.5.8 测试版</div><h1 id="overlayTitle">方寸之间<br><span>自有流动</span></h1><p class="intro">方块落地，化为沙粒<br>同色连通两壁，整片消除</p><button id="startButton" class="primary-button" disabled>正在准备…</button><button id="howButton" class="text-button">怎么玩</button><p class="start-hint">测试版 · 本局进度不保存</p>
+         </div>
+         <div id="pausePanel" class="overlay-panel" hidden>
+           <div class="mode-label">TAKE A BREATH</div><h2 id="pauseTitle">让沙粒等一等</h2><p id="pauseReason" class="intro">游戏已暂停</p><button id="resumeButton" class="primary-button">继续游戏 <span aria-hidden="true">▶</span></button><button id="restartButton" class="text-button">重新开始</button>
+@@ -59,7 +59,7 @@
+     <div class="palette-note"><div class="swatches" aria-hidden="true"><i id="grainColor1"></i><i id="grainColor2"></i><i id="grainColor3"></i><i id="grainColor4"></i><i id="grainColor5"></i><i id="grainColor6"></i></div><p>六种颜色<br>无数种可能</p></div><button id="helpButton" class="help-button">玩法与提示 <span aria-hidden="true">?</span></button>
+   </aside>
+ </main>
+-<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序 <b>0.5.6 测试版</b></span><span id="storageFooter">设置与最高分仅保存在此浏览器</span></footer>
++<footer class="footer"><span>GRAINFORM <span class="footer-slash">/</span> 粒序 <b>0.5.8 测试版</b></span><span id="storageFooter">设置与最高分仅保存在此浏览器</span></footer>
+ </div>
+ <dialog id="settingsDialog" aria-labelledby="settingsTitle">
+   <div class="dialog-top"><span class="eyebrow">偏好设置</span><button class="dialog-close icon-button" data-close aria-label="关闭设置">×</button></div><h2 id="settingsTitle">照你的节奏</h2>

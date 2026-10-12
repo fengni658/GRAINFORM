@@ -1,0 +1,24 @@
+INVALID_SLOT_DIAGNOSTIC [{"slot":"NaN","threw":false,"error":null},{"slot":"0.5","threw":false,"error":null},{"slot":"31.5","threw":false,"error":null},{"slot":"undefined","threw":false,"error":null},{"slot":"0","threw":false,"error":null}]
+FRAME_VISIT_BITMAP_COVERAGE {"frames":231,"acks":182,"ruleSteps":585,"interpolations":492708}
+✔ late first movement retains early stationary origin and UNSORTED path order (130.504894ms)
+✔ a sleeping lower slot first visited later appends after the early higher slot (34.371887ms)
+✔ bit 31 and word boundaries preserve slot ordering despite reverse physical order (299.177444ms)
+✔ removed holes and recycled generations keep live slot order, pending removal patches and ACK semantics (208.011961ms)
+✔ maximum C-1 slot, long deleted holes and shortened bitmap recover full capacity (282.221701ms)
+✔ old persistent paths in sleeping unvisited slots are neither remerged nor cleared (33.674664ms)
+✔ unvisited reset/clear markers and removed slots cannot leak phantom paths (16.103876ms)
+✔ quiet two-sweep frame and idle frames clear enumeration without changing presentation gate (40.977953ms)
+✔ support removal wakes an entire sleeping cross-chunk column before integration (3376.977514ms)
+✔ seeded short admissions/removals retain exact RNG, buffers, patch insertion order and unsorted paths (383.477771ms)
+✔ real composite groups and delayed/stale ACKs preserve material and body revisions (27.89258ms)
+✔ out-of-capacity and negative captured slots throw explicit errors (20.849174ms)
+✔ noninteger and nonfinite captured slots: diagnostic reports explicit guard coverage (125.180113ms)
+✔ coverage counters (0.557797ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5409.047358

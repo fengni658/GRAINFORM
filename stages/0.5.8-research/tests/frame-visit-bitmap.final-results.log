@@ -1,0 +1,27 @@
+✔ oracle rejects moving-only collection, including lost early stationary holds (48.663891ms)
+✔ oracle rejects direct physical-integration order instead of ascending slot order (36.88284ms)
+✔ oracle rejects global frame slot sorting that destroys first-visited order (46.408307ms)
+INVALID_SLOT_DIAGNOSTIC [{"slot":"NaN","threw":false,"error":null},{"slot":"0.5","threw":false,"error":null},{"slot":"31.5","threw":false,"error":null},{"slot":"undefined","threw":false,"error":null},{"slot":"0","threw":false,"error":null}]
+FRAME_VISIT_BITMAP_COVERAGE {"frames":231,"acks":182,"ruleSteps":585,"interpolations":492708}
+✔ late first movement retains early stationary origin and UNSORTED path order (109.186703ms)
+✔ a sleeping lower slot first visited later appends after the early higher slot (20.14169ms)
+✔ bit 31 and word boundaries preserve slot ordering despite reverse physical order (254.403985ms)
+✔ removed holes and recycled generations keep live slot order, pending removal patches and ACK semantics (156.64028ms)
+✔ maximum C-1 slot, long deleted holes and shortened bitmap recover full capacity (262.959572ms)
+✔ old persistent paths in sleeping unvisited slots are neither remerged nor cleared (30.374021ms)
+✔ unvisited reset/clear markers and removed slots cannot leak phantom paths (10.41785ms)
+✔ quiet two-sweep frame and idle frames clear enumeration without changing presentation gate (24.78576ms)
+✔ support removal wakes an entire sleeping cross-chunk column before integration (3408.740137ms)
+✔ seeded short admissions/removals retain exact RNG, buffers, patch insertion order and unsorted paths (288.516414ms)
+✔ real composite groups and delayed/stale ACKs preserve material and body revisions (25.681267ms)
+✔ out-of-capacity and negative captured slots throw explicit errors (71.517273ms)
+✔ noninteger and nonfinite captured slots: diagnostic reports explicit guard coverage (202.140463ms)
+✔ coverage counters (0.223519ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5171.744026

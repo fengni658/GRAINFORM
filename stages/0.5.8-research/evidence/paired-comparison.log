@@ -1,0 +1,139 @@
+{
+  "frames": 223,
+  "acks": 38,
+  "timings": {
+    "active:game.step": {
+      "baseline": {
+        "calls": 162,
+        "totalMs": 696.025661,
+        "medianMs": 2.633634,
+        "p95Ms": 11.326811,
+        "p99Ms": 36.317539,
+        "maxMs": 39.855919
+      },
+      "candidate": {
+        "calls": 162,
+        "totalMs": 928.879725,
+        "medianMs": 4.010404,
+        "p95Ms": 14.397719,
+        "p99Ms": 36.54548,
+        "maxMs": 36.684843
+      },
+      "totalChangePercent": 33.454810224302925
+    },
+    "active:world.frameStep": {
+      "baseline": {
+        "calls": 147,
+        "totalMs": 609.397086,
+        "medianMs": 2.627937,
+        "p95Ms": 10.959093,
+        "p99Ms": 26.418126,
+        "maxMs": 36.279751
+      },
+      "candidate": {
+        "calls": 147,
+        "totalMs": 827.779939,
+        "medianMs": 4.078547,
+        "p95Ms": 12.761047,
+        "p99Ms": 28.426512,
+        "maxMs": 33.88785
+      },
+      "totalChangePercent": 35.835887308460165
+    },
+    "active:world.ruleStep": {
+      "baseline": {
+        "calls": 585,
+        "totalMs": 259.183053,
+        "medianMs": 0.218582,
+        "p95Ms": 1.307725,
+        "p99Ms": 4.758927,
+        "maxMs": 16.592647
+      },
+      "candidate": {
+        "calls": 585,
+        "totalMs": 366.452062,
+        "medianMs": 0.349025,
+        "p95Ms": 1.991664,
+        "p99Ms": 5.232827,
+        "maxMs": 9.770497
+      },
+      "totalChangePercent": 41.387354519664555
+    },
+    "active:world.sync": {
+      "baseline": {
+        "calls": 149,
+        "totalMs": 301.772958,
+        "medianMs": 1.334524,
+        "p95Ms": 7.122357,
+        "p99Ms": 10.248903,
+        "maxMs": 10.836691
+      },
+      "candidate": {
+        "calls": 149,
+        "totalMs": 451.074914,
+        "medianMs": 1.991675,
+        "p95Ms": 7.775642,
+        "p99Ms": 31.767006,
+        "maxMs": 32.187253
+      },
+      "totalChangePercent": 49.47492876416049
+    },
+    "active:renderer.drawSubmit": {
+      "baseline": {
+        "calls": 162,
+        "totalMs": 1728.363249,
+        "medianMs": 6.91075,
+        "p95Ms": 34.512167,
+        "p99Ms": 83.3288,
+        "maxMs": 118.767967
+      },
+      "candidate": {
+        "calls": 162,
+        "totalMs": 1820.976655,
+        "medianMs": 8.157262,
+        "p95Ms": 27.719717,
+        "p99Ms": 121.274702,
+        "maxMs": 134.452909
+      },
+      "totalChangePercent": 5.358445688635438
+    },
+    "active:renderer.fullReadback": {
+      "baseline": {
+        "calls": 162,
+        "totalMs": 311.210539,
+        "medianMs": 1.20365,
+        "p95Ms": 5.259362,
+        "p99Ms": 8.483968,
+        "maxMs": 9.166113
+      },
+      "candidate": {
+        "calls": 162,
+        "totalMs": 278.650209,
+        "medianMs": 1.302296,
+        "p95Ms": 4.439254,
+        "p99Ms": 5.806024,
+        "maxMs": 7.758701
+      },
+      "totalChangePercent": -10.462476657964325
+    },
+    "active:main.prepareInclusive": {
+      "baseline": {
+        "calls": 46,
+        "totalMs": 118.068345,
+        "medianMs": 1.19284,
+        "p95Ms": 10.024638,
+        "p99Ms": 13.207801,
+        "maxMs": 13.207801
+      },
+      "candidate": {
+        "calls": 46,
+        "totalMs": 118.349145,
+        "medianMs": 1.26333,
+        "p95Ms": 12.257853,
+        "p99Ms": 14.200307,
+        "maxMs": 14.200307
+      },
+      "totalChangePercent": 0.2378283527223246
+    }
+  }
+}

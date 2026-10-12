@@ -1,0 +1,231 @@
+{
+  "baselineBuild": "b-e45dde000fc0d9e4f763621e157956473397fc32f45b48d551863291f6b3d314",
+  "candidateBuild": "b-bb03cf0b2a27da2086c9a803d51834da17fb5f50ed224ffc36ec02b9dbbb16ad",
+  "exactFrames": 223,
+  "acks": 38,
+  "physicsPathsAndLedgerEquivalent": true,
+  "RGBAAndPaintOperationsEquivalent": true,
+  "quietZeroRepaintFrames": 60,
+  "timings": {
+    "active:game.step": {
+      "baseline": {
+        "calls": 162,
+        "totalMs": 495.010162,
+        "medianMs": 2.931874,
+        "p95Ms": 4.310274,
+        "p99Ms": 12.147259,
+        "maxMs": 13.388574
+      },
+      "candidate": {
+        "calls": 162,
+        "totalMs": 446.232961,
+        "medianMs": 2.543433,
+        "p95Ms": 4.733362,
+        "p99Ms": 12.072466,
+        "maxMs": 14.074837
+      },
+      "totalChangePercent": -9.853777708910949
+    },
+    "active:world.frameStep": {
+      "baseline": {
+        "calls": 147,
+        "totalMs": 465.265479,
+        "medianMs": 2.92272,
+        "p95Ms": 4.250399,
+        "p99Ms": 10.605107,
+        "maxMs": 11.663126
+      },
+      "candidate": {
+        "calls": 147,
+        "totalMs": 415.888729,
+        "medianMs": 2.558244,
+        "p95Ms": 4.255073,
+        "p99Ms": 10.828599,
+        "maxMs": 13.961629
+      },
+      "totalChangePercent": -10.6125969427446
+    },
+    "active:world.ruleStep": {
+      "baseline": {
+        "calls": 585,
+        "totalMs": 220.112309,
+        "medianMs": 0.306793,
+        "p95Ms": 0.779807,
+        "p99Ms": 1.724439,
+        "maxMs": 3.259163
+      },
+      "candidate": {
+        "calls": 585,
+        "totalMs": 197.885977,
+        "medianMs": 0.268826,
+        "p95Ms": 0.682555,
+        "p99Ms": 1.593965,
+        "maxMs": 6.313228
+      },
+      "totalChangePercent": -10.09772333995188
+    },
+    "active:world.sync": {
+      "baseline": {
+        "calls": 149,
+        "totalMs": 198.966311,
+        "medianMs": 1.225973,
+        "p95Ms": 2.086093,
+        "p99Ms": 4.190856,
+        "maxMs": 4.815207
+      },
+      "candidate": {
+        "calls": 149,
+        "totalMs": 207.741633,
+        "medianMs": 1.300836,
+        "p95Ms": 2.160048,
+        "p99Ms": 4.376671,
+        "maxMs": 5.490253
+      },
+      "totalChangePercent": 4.410456200296142
+    },
+    "active:renderer.drawSubmit": {
+      "baseline": {
+        "calls": 162,
+        "totalMs": 930.265893,
+        "medianMs": 5.097532,
+        "p95Ms": 8.99062,
+        "p99Ms": 36.81844,
+        "maxMs": 65.09534
+      },
+      "candidate": {
+        "calls": 162,
+        "totalMs": 833.301025,
+        "medianMs": 4.83795,
+        "p95Ms": 7.941466,
+        "p99Ms": 25.00087,
+        "maxMs": 28.246703
+      },
+      "totalChangePercent": -10.423349789520875
+    },
+    "active:renderer.fullReadback": {
+      "baseline": {
+        "calls": 162,
+        "totalMs": 152.882753,
+        "medianMs": 0.817407,
+        "p95Ms": 1.713733,
+        "p99Ms": 2.535699,
+        "maxMs": 2.976163
+      },
+      "candidate": {
+        "calls": 162,
+        "totalMs": 161.363125,
+        "medianMs": 0.859345,
+        "p95Ms": 1.813061,
+        "p99Ms": 2.646089,
+        "maxMs": 6.678777
+      },
+      "totalChangePercent": 5.5469775586785675
+    },
+    "active:main.prepareInclusive": {
+      "baseline": {
+        "calls": 46,
+        "totalMs": 67.670672,
+        "medianMs": 0.787025,
+        "p95Ms": 7.453773,
+        "p99Ms": 11.167015,
+        "maxMs": 11.167015
+      },
+      "candidate": {
+        "calls": 46,
+        "totalMs": 57.205922,
+        "medianMs": 0.795538,
+        "p95Ms": 3.939393,
+        "p99Ms": 8.923722,
+        "maxMs": 8.923722
+      },
+      "totalChangePercent": -15.464232422577384
+    }
+  },
+  "operations": {
+    "baseline": {
+      "game.frameCalls": 157,
+      "game.snapshotCalls": 157,
+      "world.consumeChangesCalls": 157,
+      "worker.snapshotPackets": 48,
+      "worker.bytes": 2094366,
+      "main.patchUpserts": 21467,
+      "main.patchRemovals": 648,
+      "presentation.restoreCalls": 1,
+      "presentation.acceptCalls": 48,
+      "presentation.sampleCalls": 271,
+      "renderer.synchronizeCalls": 271,
+      "renderer.synchronizeQueuePathVisits": 9324,
+      "renderer.synchronizeSamplePositionVisits": 7278,
+      "renderer.priorMovingScans": 7652,
+      "renderer.nextMovingScans": 7652,
+      "renderer.syncMovingLayersCalls": 271,
+      "renderer.applyCalls": 48,
+      "main.snapshotPackets": 48,
+      "renderer.qualifyTailCalls": 223,
+      "renderer.paintCalls": 373,
+      "renderer.rebuildStaticIndexCalls": 1,
+      "presentation.didDrawCalls": 223,
+      "game.moveCalls": 2,
+      "game.dropCalls": 1,
+      "world.snapshotCalls": 4,
+      "world.snapshotSlotScans": 33688,
+      "world.syncCalls": 149,
+      "world.syncSlotScans": 1266947,
+      "world.syncCacheMembershipScans": 1265975,
+      "game.stepCalls": 162,
+      "world.frameStepCalls": 147,
+      "world.ruleStepCalls": 585,
+      "world.referenceMergeSlotScans": 4974255,
+      "world.mergeSlotsVisited": 4974255,
+      "world.materialPathsCalls": 147,
+      "world.materialPathCandidateIds": 61513,
+      "game.findConnectionsCalls": 2,
+      "world.connectionGridScans": 41472
+    },
+    "candidate": {
+      "game.frameCalls": 157,
+      "game.snapshotCalls": 157,
+      "world.consumeChangesCalls": 157,
+      "worker.snapshotPackets": 48,
+      "worker.bytes": 2094366,
+      "main.patchUpserts": 21467,
+      "main.patchRemovals": 648,
+      "presentation.restoreCalls": 1,
+      "presentation.acceptCalls": 48,
+      "presentation.sampleCalls": 271,
+      "renderer.synchronizeCalls": 271,
+      "renderer.synchronizeQueuePathVisits": 9324,
+      "renderer.synchronizeSamplePositionVisits": 7278,
+      "renderer.priorMovingScans": 7652,
+      "renderer.nextMovingScans": 7652,
+      "renderer.syncMovingLayersCalls": 271,
+      "renderer.applyCalls": 48,
+      "main.snapshotPackets": 48,
+      "renderer.qualifyTailCalls": 223,
+      "renderer.paintCalls": 373,
+      "renderer.rebuildStaticIndexCalls": 1,
+      "presentation.didDrawCalls": 223,
+      "game.moveCalls": 2,
+      "game.dropCalls": 1,
+      "world.snapshotCalls": 4,
+      "world.snapshotSlotScans": 33688,
+      "world.syncCalls": 149,
+      "world.syncSlotScans": 1266947,
+      "world.syncCacheMembershipScans": 1265975,
+      "game.stepCalls": 162,
+      "world.frameStepCalls": 147,
+      "world.ruleStepCalls": 585,
+      "world.referenceMergeSlotScans": 4974255,
+      "world.bitsetWordsCleared": 155610,
+      "world.bitsetWordsEnumerated": 155610,
+      "world.bitsetIdsMarked": 202355,
+      "world.mergeSlotsVisited": 202355,
+      "world.materialPathsCalls": 147,
+      "world.materialPathCandidateIds": 61513,
+      "game.findConnectionsCalls": 2,
+      "world.connectionGridScans": 41472
+    }
+  },
+  "scope": "Single serial native pair, one fixed dense state and same actual inputs. Timings include probes, same-process clone only. Output canvas released each frame, persistent material caches. No browser FPS, persistent browser memory or IPC claim.",
+  "timingValidity": "INTERFERED: independent 5.17s Node regression overlapped final phase; do not infer speedup. Pixel/state/count equivalence remains valid."
+}

@@ -1,0 +1,96 @@
+{
+  "buildId": "b-bb03cf0b2a27da2086c9a803d51834da17fb5f50ed224ffc36ec02b9dbbb16ad",
+  "version": "0.5.8",
+  "files": [
+    {
+      "file": "anchor-table.mjs",
+      "bytes": 181452,
+      "sha256": "f06de137a820c5b2f684bd374fc77e130c86e05e76086fea6706f59645a8d50e"
+    },
+    {
+      "file": "app.mjs",
+      "bytes": 42992,
+      "sha256": "be3a743175f56996465df109892d5bc7175660fcdd290869837284cc3494a015"
+    },
+    {
+      "file": "board-geometry.mjs",
+      "bytes": 1561,
+      "sha256": "77e8cb070b0787fd7dc8f5beb4455a59d77f111ca6785a7eb7e33ed3fce06502"
+    },
+    {
+      "file": "ca-adapter.mjs",
+      "bytes": 4484,
+      "sha256": "8dee89d464b5517ec855479345143ed25c7f5a1e7436b5f67bb175946cade979"
+    },
+    {
+      "file": "ca-contour.mjs",
+      "bytes": 11851,
+      "sha256": "f5f780dcad569934b82928c61e42273356997a480905d8c9088242b981d1eca0"
+    },
+    {
+      "file": "ca-frame-world.mjs",
+      "bytes": 3709,
+      "sha256": "85f5f4d4f379d9c8f65a48e51b487ca1ca17a8960dcfd8e337edf74ced32baa1"
+    },
+    {
+      "file": "ca-layer.mjs",
+      "bytes": 30897,
+      "sha256": "dd4419558aa3a76fe4da15c27474757af03aca18e60ba1ad9902c231a398c6bf"
+    },
+    {
+      "file": "ca-world.mjs",
+      "bytes": 13834,
+      "sha256": "d3680acc7b6ddf7c7e2c31b1763dce28dbc4ba460bbe0e7f59d4f3824ef9d9e4"
+    },
+    {
+      "file": "composite-presentation.mjs",
+      "bytes": 3711,
+      "sha256": "ad6cd1d8f7b81a15315e0ca89f75ff374cf26db057ff6e7a557de85c648c5149"
+    },
+    {
+      "file": "composite-protocol.mjs",
+      "bytes": 13609,
+      "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
+    },
+    {
+      "file": "game.mjs",
+      "bytes": 10200,
+      "sha256": "7dd57facb6d1246fbcfb571d39640bb622f0361b88db2799894c3c8917b59725"
+    },
+    {
+      "file": "grain-material.mjs",
+      "bytes": 1947,
+      "sha256": "d44cc90db93b7468fd4bda2bef41f84e4d581241ea5d858d127e7b6faff6ded6"
+    },
+    {
+      "file": "grain-palette.mjs",
+      "bytes": 514,
+      "sha256": "a1f2b3736fce57c232196b26896bb358d9d3677bdb8cfc87eacff10b2c30cee0"
+    },
+    {
+      "file": "index.html",
+      "bytes": 11425,
+      "sha256": "93ba9b54f9394fd3e2024ca892b5a375a1510a46ad54b4feaf19ebbe118fb1d9"
+    },
+    {
+      "file": "settle-anchors.mjs",
+      "bytes": 1299,
+      "sha256": "cac0e724b09f2e892c97c36345cd4bf2b7034cc120c6a363036c1c33ebaba594"
+    },
+    {
+      "file": "simulation-worker.mjs",
+      "bytes": 22529,
+      "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
+    },
+    {
+      "file": "snapshot-transport.mjs",
+      "bytes": 763,
+      "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
+    },
+    {
+      "file": "style.css",
+      "bytes": 16165,
+      "sha256": "5e5a3cf0da93bc12e77376d1a784912aa562730f00fb37a4af798faa1574cbfc"
+    }
+  ]
+}
