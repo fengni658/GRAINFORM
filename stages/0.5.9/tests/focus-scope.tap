@@ -1,0 +1,32 @@
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 056 negative control: ready/over Enter steals focused buttons, links, summary and editable targets (255.908555ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 056 negative control: BUTTON Space was already protected; link/summary/editable Space was intercepted (206.178868ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 interactive targets retain Enter/Space and all editing keys in ready, playing and over (131.103593ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 closest checks ancestors; isContentEditable inherits and honors explicit false islands (42.912231ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 body/canvas retain Enter start/restart, movement, rotation, drop and P/Escape (194.123013ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 handled events and modal layer do not receive any global game shortcuts (42.833957ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 keyup releases holds after focus enters controls or modal; repeats remain bounded (72.719304ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 button default-action model opens help/settings once without start, restart or drop (191.666629ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 button default-action model emits exactly one start/restart and one command per touch control (240.771511ms)
+NATIVE_RELEASE surfaces=0 surface_bytes=0
+✔ 059 pointer click does not double-submit and keyboard-style click remains single (47.52542ms)
+NATIVE_RELEASE surfaces=3 surface_bytes=692224
+✔ 059 fixed six-color copy matches all six existing legend IDs (15.314747ms)
+✔ 059 Space Start default-action model submits exactly one start (45.119976ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2463.205005

@@ -1,0 +1,32 @@
+{
+  "base055Hotfix": "b-f3090837ff779a483eb565573d53a30302740df59a32741f9a7a05d24c720bc0",
+  "stage056": {
+    "buildId": "b-e45dde000fc0d9e4f763621e157956473397fc32f45b48d551863291f6b3d314",
+    "status": "independent PASS, included",
+    "branch": "qa/stage-0.5.6",
+    "commit": "7f958e7be97b2134fbed4450cda2cd495ac7ab76",
+    "reportSha256": "74fe01890b4f4334b30e802d03a032411ace133ef174def1bcd9ab533ddaac35"
+  },
+  "stage057": {
+    "status": "rejected flow experiment, not included",
+    "branch": "research/stage-0.5.7",
+    "commit": "5cbb0d203ce45486a6ab24d088cfb61ae038ed93",
+    "screenSyncPercentBefore": 35.8621,
+    "screenSyncPercentExperiment": 38.6923
+  },
+  "stage058": {
+    "status": "equivalent optimization experiment, no demonstrated timing benefit, not included",
+    "branch": "research/stage-0.5.8",
+    "commit": "046789dae44e996f6391fb60cf05d4d41a7f4941",
+    "experimentalBuild": "b-bb03cf0b2a27da2086c9a803d51834da17fb5f50ed224ffc36ec02b9dbbb16ad",
+    "cleanPairGameStepTotalMs": [
+      696.025661,
+      928.879725
+    ]
+  },
+  "stage059": {
+    "buildId": "b-b4d94a0ddacbb0968f76640a90b6cb8c280dddb8c927496eae3613192466d5b9",
+    "status": "local complete scope passed, independent review required"
+  },
+  "main": "0.5.4 unchanged by these development stages"
+}

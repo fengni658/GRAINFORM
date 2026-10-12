@@ -1,0 +1,12 @@
+{
+  "name": "grainform-stage-059",
+  "version": "0.5.9",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --expose-gc --test tests/focus-scope.test.mjs"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "0.1.100"
+  }
+}
