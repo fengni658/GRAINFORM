@@ -1,0 +1,82 @@
+[
+  {
+    "file": "local-roll/BUDGET.md",
+    "originalSHA256": "907a1d1d2167bb9ceece1ac848ad1b7b80346a2dbbe816addfdd6f4488757371",
+    "archivedSHA256": "907a1d1d2167bb9ceece1ac848ad1b7b80346a2dbbe816addfdd6f4488757371"
+  },
+  {
+    "file": "local-roll/RESULT.md",
+    "originalSHA256": "97c664ab875b08889f4536ffc66812d87c963985f335f44964d6dc55bb967a82",
+    "archivedSHA256": "97c664ab875b08889f4536ffc66812d87c963985f335f44964d6dc55bb967a82"
+  },
+  {
+    "file": "local-roll/CHECKPOINT.json",
+    "originalSHA256": "f9be7ef84a6b6461b7b15ebb25ec821d994ebf314dec1d2e4f8e1488f791958c",
+    "archivedSHA256": "f9be7ef84a6b6461b7b15ebb25ec821d994ebf314dec1d2e4f8e1488f791958c"
+  },
+  {
+    "file": "local-roll/RESEARCH-runtime.patch",
+    "originalSHA256": "8e22c74abc198dea8c3fe9d87da3306582ad54d75b113cde6601a1eefe726bf4",
+    "archivedSHA256": "8e22c74abc198dea8c3fe9d87da3306582ad54d75b113cde6601a1eefe726bf4"
+  },
+  {
+    "file": "local-roll/tests/probe-util.mjs",
+    "originalSHA256": "32993adc960c4f968635269701ad9606f00c35fa9f81ff12e61317d5340c7d63",
+    "archivedSHA256": "32993adc960c4f968635269701ad9606f00c35fa9f81ff12e61317d5340c7d63"
+  },
+  {
+    "file": "local-roll/tests/oracle-util.mjs",
+    "originalSHA256": "7eb1b90bd049cc0d9471328fd8a48a6348bcc474b29f8a3f193dc36bb8c0a441",
+    "archivedSHA256": "7eb1b90bd049cc0d9471328fd8a48a6348bcc474b29f8a3f193dc36bb8c0a441"
+  },
+  {
+    "file": "local-roll/tests/runtime-oracle.mjs",
+    "originalSHA256": "c3ae1bd3f3bc2ee088e4c576a677e5dc664831eafcf86295e4d3b05f77c91e7a",
+    "archivedSHA256": "c3ae1bd3f3bc2ee088e4c576a677e5dc664831eafcf86295e4d3b05f77c91e7a"
+  },
+  {
+    "file": "local-roll/tests/auto-run.mjs",
+    "originalSHA256": "23f1980de53a6b089518c57cbe055261cba5dd0bc41e5472d1e0beb2a69ade58",
+    "archivedSHA256": "23f1980de53a6b089518c57cbe055261cba5dd0bc41e5472d1e0beb2a69ade58"
+  },
+  {
+    "file": "incident/MODEL-OPTIONS.md",
+    "originalSHA256": "e5c04d33b48f1426d6c342adcf25779e7c92cc2aacdc60e4f6f712df14d72722",
+    "archivedSHA256": "e5c04d33b48f1426d6c342adcf25779e7c92cc2aacdc60e4f6f712df14d72722"
+  },
+  {
+    "file": "incident/LOCAL-MOTION-DIAGNOSIS.md",
+    "originalSHA256": "8089cd1dc0a8e32f2cea056db8cb4bfa47c6dc6f5eb85a05e140120725f6d08c",
+    "archivedSHA256": "8089cd1dc0a8e32f2cea056db8cb4bfa47c6dc6f5eb85a05e140120725f6d08c"
+  },
+  {
+    "file": "incident/tests/REPORT-auto-run.md",
+    "originalSHA256": "8448a95bf0172769b15a7b018faba8feb73d828f57af85bbe8ed5c74874b8b9d",
+    "archivedSHA256": "8448a95bf0172769b15a7b018faba8feb73d828f57af85bbe8ed5c74874b8b9d"
+  },
+  {
+    "file": "incident/tests/auto-run-analysis.json",
+    "originalSHA256": "afa452dc6bebb5483aabb79288cf32dd72029d2841d9272c77e317c0b128e9e0",
+    "archivedSHA256": "afa452dc6bebb5483aabb79288cf32dd72029d2841d9272c77e317c0b128e9e0"
+  },
+  {
+    "file": "incident/tests/local-roll-trace.mjs",
+    "originalSHA256": "a8c60c0fce7fd4464acc57e30b7610110412a8077d304c1281e34b8f09bd6ec8",
+    "archivedSHA256": "a8c60c0fce7fd4464acc57e30b7610110412a8077d304c1281e34b8f09bd6ec8"
+  },
+  {
+    "file": "incident/tests/local-roll-fixture-7.json",
+    "originalSHA256": "542fb416533896dcfc5dbf664aa8cda3cf1627bc8f72b44a780443914e01187a",
+    "archivedSHA256": "542fb416533896dcfc5dbf664aa8cda3cf1627bc8f72b44a780443914e01187a"
+  },
+  {
+    "file": "incident/tests/local-roll-trace-results.json",
+    "originalSHA256": "f54eb559001b5ad7a467db6a127d21ef81b933797d8d7eb8e40ff0761a290a64",
+    "archivedSHA256": "a6fc1c1379ba3a527faa183df63c3141cba12be8b135b0da30c8ad8b85c72df6"
+  },
+  {
+    "file": "incident/tests/local-roll-trace-summary.json",
+    "originalSHA256": "bf549de21f71ccddbaa8a2d552297d7c6ac36781605f1564a0716263e031a9d7",
+    "archivedSHA256": "bf549de21f71ccddbaa8a2d552297d7c6ac36781605f1564a0716263e031a9d7"
+  }
+]

@@ -1,0 +1,959 @@
+{
+  "method": "Offline postprocessing only; no second simulation. SHA-256 is over the complete Int32 grid of occupied slot handles. Identical final grid to preceding piece, after one clear of 324 and no subsequent admission, establishes disappearance of all newly admitted slots and restoration of old geometry; count coincidence alone is not used.",
+  "firstClear": {
+    "tick": 5363,
+    "physicsTick": 3758,
+    "piece": 9,
+    "count": 324,
+    "regions": 1,
+    "chain": 1,
+    "colors": {
+      "3": 324
+    },
+    "after": {
+      "count": 2592,
+      "active": 2592,
+      "chunks": 37,
+      "height": 50,
+      "topY": 142,
+      "centerHeight": 50,
+      "edgeHeights": [
+        0,
+        0
+      ],
+      "occupiedAreaCells": 2592,
+      "occupiedWorldArea": 18432,
+      "mass": 5408,
+      "colors": {
+        "1": 972,
+        "2": 324,
+        "3": 324,
+        "4": 324,
+        "5": 648
+      }
+    }
+  },
+  "identicalBaselineSinglePieceClears": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    22,
+    25,
+    29,
+    30,
+    31,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "doubleClears": [
+    {
+      "piece": 20,
+      "color": 2,
+      "contactTick": 10945,
+      "firstSettledTick": 11085,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 11099,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "2": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        7
+      ]
+    },
+    {
+      "piece": 23,
+      "color": 2,
+      "contactTick": 12327,
+      "firstSettledTick": 12480,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 12494,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "2": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        7,
+        20
+      ]
+    },
+    {
+      "piece": 26,
+      "color": 6,
+      "contactTick": 13598,
+      "firstSettledTick": 13729,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 13743,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "6": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        7,
+        20,
+        23
+      ]
+    },
+    {
+      "piece": 32,
+      "color": 6,
+      "contactTick": 15970,
+      "firstSettledTick": 16117,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 16131,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "6": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        27
+      ]
+    },
+    {
+      "piece": 34,
+      "color": 3,
+      "contactTick": 16697,
+      "firstSettledTick": 16850,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 16864,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "3": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        27,
+        32
+      ]
+    }
+  ],
+  "finalHeightRangeAfterFirstClear": [
+    47,
+    53
+  ],
+  "rows": [
+    {
+      "piece": 1,
+      "color": 3,
+      "contactTick": 606,
+      "firstSettledTick": 640,
+      "firstSettledHeight": 17,
+      "finalSettledTick": 640,
+      "finalSettledHeight": 17,
+      "finalCount": 324,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 2,
+      "color": 4,
+      "contactTick": 1184,
+      "firstSettledTick": 1255,
+      "firstSettledHeight": 25,
+      "finalSettledTick": 1255,
+      "finalSettledHeight": 25,
+      "finalCount": 648,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 3,
+      "color": 5,
+      "contactTick": 1768,
+      "firstSettledTick": 1872,
+      "firstSettledHeight": 31,
+      "finalSettledTick": 1872,
+      "finalSettledHeight": 31,
+      "finalCount": 972,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 4,
+      "color": 1,
+      "contactTick": 2391,
+      "firstSettledTick": 2476,
+      "firstSettledHeight": 35,
+      "finalSettledTick": 2476,
+      "finalSettledHeight": 35,
+      "finalCount": 1296,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 5,
+      "color": 5,
+      "contactTick": 2947,
+      "firstSettledTick": 3078,
+      "firstSettledHeight": 39,
+      "finalSettledTick": 3078,
+      "finalSettledHeight": 39,
+      "finalCount": 1620,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 6,
+      "color": 1,
+      "contactTick": 3533,
+      "firstSettledTick": 3670,
+      "firstSettledHeight": 43,
+      "finalSettledTick": 3670,
+      "finalSettledHeight": 43,
+      "finalCount": 1944,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 7,
+      "color": 1,
+      "contactTick": 4108,
+      "firstSettledTick": 4231,
+      "firstSettledHeight": 47,
+      "finalSettledTick": 4231,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 8,
+      "color": 2,
+      "contactTick": 4682,
+      "firstSettledTick": 4800,
+      "firstSettledHeight": 50,
+      "finalSettledTick": 4800,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 9,
+      "color": 3,
+      "contactTick": 5209,
+      "firstSettledTick": 5350,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 5364,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "3": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8
+      ]
+    },
+    {
+      "piece": 10,
+      "color": 3,
+      "contactTick": 5799,
+      "firstSettledTick": 5917,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 5931,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "3": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9
+      ]
+    },
+    {
+      "piece": 11,
+      "color": 4,
+      "contactTick": 6334,
+      "firstSettledTick": 6471,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 6485,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "4": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "piece": 12,
+      "color": 6,
+      "contactTick": 6885,
+      "firstSettledTick": 7024,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 7038,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "piece": 13,
+      "color": 6,
+      "contactTick": 7435,
+      "firstSettledTick": 7572,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 7586,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "piece": 14,
+      "color": 5,
+      "contactTick": 8009,
+      "firstSettledTick": 8130,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 8144,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "5": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    {
+      "piece": 15,
+      "color": 4,
+      "contactTick": 8536,
+      "firstSettledTick": 8680,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 8694,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "4": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "piece": 16,
+      "color": 6,
+      "contactTick": 9083,
+      "firstSettledTick": 9219,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 9233,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "piece": 17,
+      "color": 6,
+      "contactTick": 9549,
+      "firstSettledTick": 9690,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 9704,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "piece": 18,
+      "color": 4,
+      "contactTick": 10018,
+      "firstSettledTick": 10156,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 10170,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "4": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "piece": 19,
+      "color": 6,
+      "contactTick": 10482,
+      "firstSettledTick": 10621,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 10635,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "piece": 20,
+      "color": 2,
+      "contactTick": 10945,
+      "firstSettledTick": 11085,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 11099,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "2": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        7
+      ]
+    },
+    {
+      "piece": 21,
+      "color": 2,
+      "contactTick": 11415,
+      "firstSettledTick": 11551,
+      "firstSettledHeight": 50,
+      "finalSettledTick": 11551,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 22,
+      "color": 3,
+      "contactTick": 11858,
+      "firstSettledTick": 12008,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 12022,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "3": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        21
+      ]
+    },
+    {
+      "piece": 23,
+      "color": 2,
+      "contactTick": 12327,
+      "firstSettledTick": 12480,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 12494,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "2": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        7,
+        20
+      ]
+    },
+    {
+      "piece": 24,
+      "color": 6,
+      "contactTick": 12758,
+      "firstSettledTick": 12899,
+      "firstSettledHeight": 50,
+      "finalSettledTick": 12899,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 25,
+      "color": 4,
+      "contactTick": 13156,
+      "firstSettledTick": 13310,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 13324,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "4": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        24
+      ]
+    },
+    {
+      "piece": 26,
+      "color": 6,
+      "contactTick": 13598,
+      "firstSettledTick": 13729,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 13743,
+      "finalSettledHeight": 47,
+      "finalCount": 2268,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "6": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        7,
+        20,
+        23
+      ]
+    },
+    {
+      "piece": 27,
+      "color": 4,
+      "contactTick": 14004,
+      "firstSettledTick": 14150,
+      "firstSettledHeight": 50,
+      "finalSettledTick": 14150,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 28,
+      "color": 6,
+      "contactTick": 14404,
+      "firstSettledTick": 14541,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 14541,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 29,
+      "color": 3,
+      "contactTick": 14787,
+      "firstSettledTick": 14943,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 14957,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "3": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        28
+      ]
+    },
+    {
+      "piece": 30,
+      "color": 1,
+      "contactTick": 15202,
+      "firstSettledTick": 15338,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 15352,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "1": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        28,
+        29
+      ]
+    },
+    {
+      "piece": 31,
+      "color": 4,
+      "contactTick": 15596,
+      "firstSettledTick": 15743,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 15757,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "4": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "piece": 32,
+      "color": 6,
+      "contactTick": 15970,
+      "firstSettledTick": 16117,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 16131,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "6": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        27
+      ]
+    },
+    {
+      "piece": 33,
+      "color": 3,
+      "contactTick": 16348,
+      "firstSettledTick": 16486,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 16486,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 34,
+      "color": 3,
+      "contactTick": 16697,
+      "firstSettledTick": 16850,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 16864,
+      "finalSettledHeight": 50,
+      "finalCount": 2592,
+      "clearCount": 648,
+      "clearColors": [
+        {
+          "3": 648
+        }
+      ],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": [
+        27,
+        32
+      ]
+    },
+    {
+      "piece": 35,
+      "color": 5,
+      "contactTick": 17079,
+      "firstSettledTick": 17226,
+      "firstSettledHeight": 53,
+      "finalSettledTick": 17226,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 0,
+      "clearColors": [],
+      "samePreviousGrid": false,
+      "sameEarlierPieces": []
+    },
+    {
+      "piece": 36,
+      "color": 1,
+      "contactTick": 17435,
+      "firstSettledTick": 17573,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 17587,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "1": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        35
+      ]
+    },
+    {
+      "piece": 37,
+      "color": 3,
+      "contactTick": 17811,
+      "firstSettledTick": 17935,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 17949,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "3": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        35,
+        36
+      ]
+    },
+    {
+      "piece": 38,
+      "color": 6,
+      "contactTick": 18172,
+      "firstSettledTick": 18297,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 18311,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        35,
+        36,
+        37
+      ]
+    },
+    {
+      "piece": 39,
+      "color": 6,
+      "contactTick": 18495,
+      "firstSettledTick": 18644,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 18658,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "6": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        35,
+        36,
+        37,
+        38
+      ]
+    },
+    {
+      "piece": 40,
+      "color": 4,
+      "contactTick": 18842,
+      "firstSettledTick": 18979,
+      "firstSettledHeight": 56,
+      "finalSettledTick": 18993,
+      "finalSettledHeight": 53,
+      "finalCount": 2916,
+      "clearCount": 324,
+      "clearColors": [
+        {
+          "4": 324
+        }
+      ],
+      "samePreviousGrid": true,
+      "sameEarlierPieces": [
+        35,
+        36,
+        37,
+        38,
+        39
+      ]
+    }
+  ]
+}

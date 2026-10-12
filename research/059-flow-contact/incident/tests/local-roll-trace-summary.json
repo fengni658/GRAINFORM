@@ -1,0 +1,2144 @@
+[
+  {
+    "variant": "baseline",
+    "n": 3,
+    "mode": "one-rule-step",
+    "initialCount": 18,
+    "round0Possible": [
+      2
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 3,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 4,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 3,
+    "mode": "two-display-frames",
+    "initialCount": 18,
+    "round0Possible": [
+      2
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 6,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2
+          ]
+        },
+        "pathLegs": 16,
+        "pending": 3,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 0,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 3,
+    "mode": "one-rule-step",
+    "initialCount": 18,
+    "round0Possible": [
+      2
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0
+          ],
+          "1,1": [
+            1,
+            2
+          ]
+        },
+        "pathLegs": 8,
+        "pending": 5,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 3,
+    "mode": "two-display-frames",
+    "initialCount": 18,
+    "round0Possible": [
+      2
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 6,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 2,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2
+          ]
+        },
+        "pathLegs": 16,
+        "pending": 3,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 0,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 4,
+    "mode": "one-rule-step",
+    "initialCount": 25,
+    "round0Possible": [
+      3
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 4,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "pathLegs": 14,
+        "pending": 5,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 4,
+    "mode": "two-display-frames",
+    "initialCount": 25,
+    "round0Possible": [
+      3
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 8,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "pathLegs": 22,
+        "pending": 4,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 1,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 4,
+    "mode": "one-rule-step",
+    "initialCount": 25,
+    "round0Possible": [
+      3
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1
+          ],
+          "1,1": [
+            2,
+            3
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 6,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 4,
+    "mode": "two-display-frames",
+    "initialCount": 25,
+    "round0Possible": [
+      3
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 8,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 2,
+            "phase": 12,
+            "framePhase": 29
+          },
+          {
+            "id": 1,
+            "tick": 2,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "pathLegs": 22,
+        "pending": 4,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 1,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 5,
+    "mode": "one-rule-step",
+    "initialCount": 33,
+    "round0Possible": [
+      4
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 5,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "pathLegs": 16,
+        "pending": 6,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 5,
+    "mode": "two-display-frames",
+    "initialCount": 33,
+    "round0Possible": [
+      4
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 10,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "pathLegs": 26,
+        "pending": 5,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 2,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 5,
+    "mode": "one-rule-step",
+    "initialCount": 33,
+    "round0Possible": [
+      4
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2
+          ],
+          "1,1": [
+            3,
+            4
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 7,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 5,
+    "mode": "two-display-frames",
+    "initialCount": 33,
+    "round0Possible": [
+      4
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 10,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 3,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 1,
+            "tick": 2,
+            "phase": 12,
+            "framePhase": 29
+          },
+          {
+            "id": 2,
+            "tick": 2,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "pathLegs": 26,
+        "pending": 5,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "pathLegs": 10,
+        "pending": 2,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 6,
+    "mode": "one-rule-step",
+    "initialCount": 42,
+    "round0Possible": [
+      5
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 6,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "pathLegs": 20,
+        "pending": 7,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 6,
+    "mode": "two-display-frames",
+    "initialCount": 42,
+    "round0Possible": [
+      5
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 12,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "pathLegs": 32,
+        "pending": 6,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "pathLegs": 12,
+        "pending": 4,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 6,
+    "mode": "one-rule-step",
+    "initialCount": 42,
+    "round0Possible": [
+      5
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "1,1": [
+            4,
+            5
+          ]
+        },
+        "pathLegs": 12,
+        "pending": 8,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 6,
+    "mode": "two-display-frames",
+    "initialCount": 42,
+    "round0Possible": [
+      5
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 10,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 4,
+            "phase": 12,
+            "framePhase": 63
+          },
+          {
+            "id": 1,
+            "tick": 4,
+            "phase": 9,
+            "framePhase": 60
+          },
+          {
+            "id": 2,
+            "tick": 3,
+            "phase": 12,
+            "framePhase": 46
+          },
+          {
+            "id": 3,
+            "tick": 3,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1
+          ],
+          "2,2": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "pathLegs": 28,
+        "pending": 7,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 1,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1
+          ],
+          "0,0": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "pathLegs": 16,
+        "pending": 4,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 7,
+    "mode": "one-rule-step",
+    "initialCount": 52,
+    "round0Possible": [
+      6
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 7,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "pathLegs": 22,
+        "pending": 8,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 7,
+    "mode": "two-display-frames",
+    "initialCount": 52,
+    "round0Possible": [
+      6
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 14,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "pathLegs": 36,
+        "pending": 7,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 0,
+        "firstRolls": [],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "pathLegs": 14,
+        "pending": 4,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 7,
+    "mode": "one-rule-step",
+    "initialCount": 52,
+    "round0Possible": [
+      6
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "1,1": [
+            5,
+            6
+          ]
+        },
+        "pathLegs": 12,
+        "pending": 9,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 7,
+    "mode": "two-display-frames",
+    "initialCount": 52,
+    "round0Possible": [
+      6
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 12,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 4,
+            "phase": 12,
+            "framePhase": 63
+          },
+          {
+            "id": 1,
+            "tick": 4,
+            "phase": 9,
+            "framePhase": 60
+          },
+          {
+            "id": 2,
+            "tick": 3,
+            "phase": 12,
+            "framePhase": 46
+          },
+          {
+            "id": 3,
+            "tick": 3,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 4,
+            "tick": 2,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1
+          ],
+          "2,2": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "pathLegs": 32,
+        "pending": 8,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 1,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1
+          ],
+          "0,0": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "pathLegs": 18,
+        "pending": 4,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 8,
+    "mode": "one-rule-step",
+    "initialCount": 63,
+    "round0Possible": [
+      7
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 8,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "pathLegs": 26,
+        "pending": 9,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 8,
+    "mode": "two-display-frames",
+    "initialCount": 63,
+    "round0Possible": [
+      7
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 10,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "2,2": [
+            6,
+            7
+          ]
+        },
+        "pathLegs": 30,
+        "pending": 9,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 6,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 1,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 2,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 3,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "0,0": [
+            6,
+            7
+          ]
+        },
+        "pathLegs": 30,
+        "pending": 6,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 8,
+    "mode": "one-rule-step",
+    "initialCount": 63,
+    "round0Possible": [
+      7
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "1,1": [
+            6,
+            7
+          ]
+        },
+        "pathLegs": 14,
+        "pending": 10,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 8,
+    "mode": "two-display-frames",
+    "initialCount": 63,
+    "round0Possible": [
+      7
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 10,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 4,
+            "phase": 12,
+            "framePhase": 63
+          },
+          {
+            "id": 1,
+            "tick": 4,
+            "phase": 9,
+            "framePhase": 60
+          },
+          {
+            "id": 2,
+            "tick": 3,
+            "phase": 12,
+            "framePhase": 46
+          },
+          {
+            "id": 3,
+            "tick": 3,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 4,
+            "tick": 2,
+            "phase": 12,
+            "framePhase": 29
+          },
+          {
+            "id": 5,
+            "tick": 2,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "2,2": [
+            6,
+            7
+          ]
+        },
+        "pathLegs": 30,
+        "pending": 9,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 6,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 7,
+            "phase": 12,
+            "framePhase": 46
+          },
+          {
+            "id": 1,
+            "tick": 7,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 2,
+            "tick": 6,
+            "phase": 12,
+            "framePhase": 29
+          },
+          {
+            "id": 3,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 4,
+            "tick": 5,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 5,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "0,0": [
+            6,
+            7
+          ]
+        },
+        "pathLegs": 30,
+        "pending": 6,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 9,
+    "mode": "one-rule-step",
+    "initialCount": 75,
+    "round0Possible": [
+      8
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 9,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 8,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        "pathLegs": 26,
+        "pending": 9,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "baseline",
+    "n": 9,
+    "mode": "two-display-frames",
+    "initialCount": 75,
+    "round0Possible": [
+      8
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 12,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 1,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 2,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 3,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 6,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 8,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "2,2": [
+            6,
+            7,
+            8
+          ]
+        },
+        "pathLegs": 32,
+        "pending": 10,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 6,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 1,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 2,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 3,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 4,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          },
+          {
+            "id": 5,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "1,1": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "0,0": [
+            6,
+            7,
+            8
+          ]
+        },
+        "pathLegs": 30,
+        "pending": 6,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 9,
+    "mode": "one-rule-step",
+    "initialCount": 75,
+    "round0Possible": [
+      8
+    ],
+    "states": [
+      {
+        "tick": 1,
+        "rolls": 2,
+        "firstRolls": [
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 8,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "1,1": [
+            7,
+            8
+          ]
+        },
+        "pathLegs": 12,
+        "pending": 10,
+        "ready": false
+      }
+    ]
+  },
+  {
+    "variant": "candidate",
+    "n": 9,
+    "mode": "two-display-frames",
+    "initialCount": 75,
+    "round0Possible": [
+      8
+    ],
+    "states": [
+      {
+        "tick": 4,
+        "rolls": 11,
+        "firstRolls": [
+          {
+            "id": 1,
+            "tick": 4,
+            "phase": 12,
+            "framePhase": 63
+          },
+          {
+            "id": 2,
+            "tick": 4,
+            "phase": 9,
+            "framePhase": 60
+          },
+          {
+            "id": 3,
+            "tick": 3,
+            "phase": 12,
+            "framePhase": 46
+          },
+          {
+            "id": 4,
+            "tick": 3,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 5,
+            "tick": 2,
+            "phase": 12,
+            "framePhase": 29
+          },
+          {
+            "id": 6,
+            "tick": 2,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 7,
+            "tick": 1,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 8,
+            "tick": 1,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "0,0": [
+            0
+          ],
+          "1,1": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "2,2": [
+            6,
+            7,
+            8
+          ]
+        },
+        "pathLegs": 30,
+        "pending": 11,
+        "ready": false
+      },
+      {
+        "tick": 8,
+        "rolls": 7,
+        "firstRolls": [
+          {
+            "id": 0,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 1,
+            "tick": 7,
+            "phase": 9,
+            "framePhase": 43
+          },
+          {
+            "id": 2,
+            "tick": 6,
+            "phase": 12,
+            "framePhase": 29
+          },
+          {
+            "id": 3,
+            "tick": 6,
+            "phase": 9,
+            "framePhase": 26
+          },
+          {
+            "id": 4,
+            "tick": 5,
+            "phase": 12,
+            "framePhase": 12
+          },
+          {
+            "id": 5,
+            "tick": 5,
+            "phase": 9,
+            "framePhase": 9
+          }
+        ],
+        "equalDisplacements": {
+          "2,2": [
+            0
+          ],
+          "1,1": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "0,0": [
+            6,
+            7,
+            8
+          ]
+        },
+        "pathLegs": 32,
+        "pending": 6,
+        "ready": false
+      }
+    ]
+  }
+]
