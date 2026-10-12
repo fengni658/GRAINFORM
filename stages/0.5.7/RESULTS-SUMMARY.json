@@ -1,0 +1,54 @@
+[
+  {
+    "variant": "OLD",
+    "presentedRows": 99,
+    "lateralMovingOccurrences": 1305,
+    "coincident": 468,
+    "fraction": 0.3586206896551724,
+    "maxRun": 9,
+    "ledger": {
+      "piece": 6,
+      "contactAt": 4483.333333333326,
+      "endAt": 6166.66666666669,
+      "presentedDurationMs": 1683.333333333364,
+      "added": 1944,
+      "rawCleared": 0,
+      "remaining": 1944,
+      "remainingWorldArea": 13824,
+      "remainingMass": 4056,
+      "colors": [
+        2,
+        4,
+        5,
+        1
+      ]
+    },
+    "framesWithChainAtLeast8": 3
+  },
+  {
+    "variant": "NEW",
+    "presentedRows": 101,
+    "lateralMovingOccurrences": 1300,
+    "coincident": 503,
+    "fraction": 0.3869230769230769,
+    "maxRun": 8,
+    "ledger": {
+      "piece": 6,
+      "contactAt": 4483.333333333326,
+      "endAt": 6200.000000000024,
+      "presentedDurationMs": 1716.666666666698,
+      "added": 1944,
+      "rawCleared": 0,
+      "remaining": 1944,
+      "remainingWorldArea": 13824,
+      "remainingMass": 4056,
+      "colors": [
+        2,
+        4,
+        5,
+        1
+      ]
+    },
+    "framesWithChainAtLeast8": 3
+  }
+]

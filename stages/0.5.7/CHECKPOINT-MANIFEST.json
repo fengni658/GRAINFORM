@@ -1,0 +1,22 @@
+{
+  "runtimeUnchangedBuild": "b-e45dde000fc0d9e4f763621e157956473397fc32f45b48d551863291f6b3d314",
+  "status": "rejected-experiment-no-runtime-change",
+  "files": [
+    {
+      "file": "REPORT.md",
+      "sha256": "f6cc7631c43d7f1a473a4c79afddd2cae72dbb0859447dc2c19f8adaf2e3cf07"
+    },
+    {
+      "file": "REJECTED-runtime.patch",
+      "sha256": "9584067c3f91e89ace7cf07fef0505c320c1d963b5ef024b70178d404d14877e"
+    },
+    {
+      "file": "RESULTS-SUMMARY.json",
+      "sha256": "6622f19559bdc7162b8e40ee184865428b2ddcd2f9dc7d7ac6a1e8dc4e8b2794"
+    },
+    {
+      "file": "evidence/SCREEN-COMPARISON.json",
+      "sha256": "2ee630eae60288de7dffc5c4afc7cdc171ddf537ee7ed18388c67c446e117297"
+    }
+  ]
+}
