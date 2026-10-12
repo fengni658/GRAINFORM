@@ -310,7 +310,7 @@ function pause(reason = '') {
   pauseReason = reason; pauseRequested = true; presentation.setPaused(true, performance.now());
   const promise = sendCommand('pause'); updateUI(); return promise;
 }
-function resume() { if (document.hidden || pauseRequested) return Promise.resolve({ applied: false }); pauseReason = ''; return sendCommand('resume'); }
+function resume() { if (document.hidden || pauseRequested) return Promise.resolve({ applied: false }); pauseReason = ''; worker?.postMessage({ type: 'visibility', hidden: false, epoch }); return sendCommand('resume'); }
 function togglePause() { return snapshot.state === 'paused' ? resume() : pause(); }
 function seed() {
   if (query.has('seed')) return Number(query.get('seed')) >>> 0;
@@ -330,7 +330,7 @@ function fail(message) {
 }
 function setupWorker() {
   try {
-    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.5.4-simulation' });
+    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.5.5-simulation' });
     worker.onmessage = ({ data: incoming }) => {
       const handlerBegun=performance.now();
       const wire=incoming?.type==='snapshot-wire'?incoming:null;
@@ -348,7 +348,7 @@ function setupWorker() {
         const accepted = bodyStore.accept(data); if (!accepted.accepted) { updateInputStatus(); return; }
         if (accepted.newEpoch) {
           presentation.reset(data.epoch);
-          epoch = data.epoch; lastEventId = 0; roundBestSuppressedUntil = -1; clearSignature = ''; clearStartTick = 0;
+          epoch = data.epoch; worker?.postMessage({ type: 'visibility', hidden: document.hidden, epoch }); lastEventId = 0; roundBestSuppressedUntil = -1; clearSignature = ''; clearStartTick = 0;
           for (const [id, item] of pending) if (item.name !== 'restart' && item.name !== 'qa-bridge') { pending.delete(id); item.resolve({ applied: false, reason: 'round-replaced', epoch }); }
         }
         if (data.snapshot.pieceId !== snapshot.pieceId || data.snapshot.phase !== snapshot.phase) releaseAll();

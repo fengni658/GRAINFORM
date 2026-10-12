@@ -1,12 +1,12 @@
 {
   "name": "grainform",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "type": "module",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --expose-gc --test --test-concurrency=1 tests/release-054-integrity.test.mjs tests/release-054-a/*.test.mjs",
+    "test": "node --test tests/release-055-startup-integrity.test.mjs && node validation/startup-0.5.5/tests/run.mjs",
     "verify:slots": "node merge-test.mjs",
     "verify:parity": "node merge-parity.mjs",
     "verify:browser": "node browser-smoke.mjs",
@@ -24,7 +24,9 @@
     "test:052-a": "node --expose-gc --test --test-concurrency=1 tests/release-052-integrity.test.mjs tests/release-052-a/*.test.mjs",
     "verify:053-a": "npm test",
     "test:053-a": "node --expose-gc --test --test-concurrency=1 tests/release-053-integrity.test.mjs tests/release-053-a/*.test.mjs",
-    "verify:054-a": "npm test"
+    "verify:054-a": "npm test",
+    "test:054-a": "node --expose-gc --test --test-concurrency=1 tests/release-054-integrity.test.mjs tests/release-054-a/*.test.mjs",
+    "verify:055-startup": "npm test"
   },
   "devDependencies": {
     "@napi-rs/canvas": "0.1.100"

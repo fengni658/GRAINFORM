@@ -1,13 +1,11 @@
-# 粒序 / GRAINFORM 0.5.4 A r1
+# GRAINFORM 0.5.5 startup QA baseline
 
-main 保存已交付的 0.5.4 A r1，18 个 runtime 与冻结试玩逐字节一致。无 0.5.5 改动。
+This branch preserves the delivered 0.5.5 startup hotfix and the original 0.5.5 motion build. Main remains the accepted 0.5.4 version. No 0.5.6 or later changes are included.
 
-## 运行与测试
-Node.js 20+，npm start，打开 http://127.0.0.1:4181/ 。npm install 安装固定 @napi-rs/canvas 0.1.100 后，npm test 运行发布完整性、HTTP 白名单、几何、颜色、物理一致性及呈现回归子集。游戏无第三方运行依赖。
-原始源码位于内容寻址 builds 目录，根模块为同字节副本；根 HTML 仅调整 CSS 和 app 路径。37 个运行文件由 RUNTIME-MANIFEST.json 绑定。
+Node.js 20+; npm install installs pinned @napi-rs/canvas 0.1.100 for tests. npm start serves the game on http://127.0.0.1:4181/ . npm test runs release integrity/HTTP checks and 20 deterministic startup/preview/native-canvas contracts. The runtime itself has no third-party dependency.
 
-## 本版变化与边界
-固定 ID 偏移上限从 ±0.18 缩至 ±0.15 cell，保持 053 半径、轮廓与物理中心。十二个基础色按 HSL 饱和度乘 1.10、上限 100% 离线预计算；图例随调色板设置更新。
-静态样例缝隙标准差下降 13.92%，改善温和，仍有行列感，不代表均匀连续堆积。原生配对综合成本约持平，单次尾延迟不能用于速度提升承诺。
-同一冻结构建已通过限定云端工程核验：167 项测试、2985 物理检查点、1420 呈现配对、额外 240 静动和 30 图例事件。本仓库默认测试为发布回归子集。未进行真实浏览器 FPS 验收，历史 166ms rAF 未归因，不宣称商业画质或性能验收。
-旧构建与项目文件保留；保存 main 不改任何私有试玩。
+RUNTIME-MANIFEST.json binds 18 production sources and 37 served files. Original and hotfix content-addressed builds are preserved. validation/startup-0.5.5 contains self-contained source fixtures, tests and exact build identities. Test output is generated locally rather than committed as internal execution logs.
+
+The hotfix changes only app.mjs: synchronize current document visibility after adopting an epoch and before explicit resume. A controlled real-worker protocol test reproduces the old hidden-initialization race; the fixed candidate resumes. This is a demonstrated failure mode, not proof of the user's screenshot cause. Real Chromium ordinary startup/play and deployed-cloud-browser start, pause, resume, restart, keyboard, hard drop and next-piece checks passed. Natural hidden lifecycle remains incompletely reproduced.
+
+0.5.5 reduces synchronized diagonal flow, but retains occasional nine-grain runs and possible subtle local cadence. It does not promise absence of starvation, commercial quality, or browser FPS improvement. Historical builds and other project files remain preserved.

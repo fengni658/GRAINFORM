@@ -1,0 +1,18 @@
+import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';
+import {createCanvas} from './native-resources.mjs';
+import {appHarness,current} from './sixcolor-harness.mjs';
+import {PALETTES as Expected} from './fixtures/palette-oracle.mjs';
+import * as Palette from '../candidate/grain-palette.mjs';
+const shape=[[0,0],[0,1],[1,1],[2,1]];
+function expectedPreview(w,h,color){const c=createCanvas(w,h),x=c.getContext('2d'),scale=Math.min((w-24)/(3*24),(h-20)/(2*24),1.5);x.translate((w-3*24*scale)/2,(h-2*24*scale)/2);x.scale(scale,scale);x.fillStyle=color;x.beginPath();for(const[a,b]of shape)x.rect(a*24,b*24,24,24);x.fill();return c;}
+const pixels=c=>Buffer.from(c.getContext('2d').getImageData(0,0,c.width,c.height).data);
+test('six-color contract preserves IDs1-4 and actual desktop/mobile preview pixels for5/6 in standard and contrast',()=>{
+ assert.equal(Palette.COLOR_COUNT,6);assert.deepEqual(Palette.PALETTES,Expected);
+ for(const colorId of[5,6])for(const contrast of[false,true]){const a=appHarness(null,{colorId,contrast});const name=contrast?'contrast':'standard';for(const p of[a.desktop,a.mobile]){a.c.drawNext(p.target);const ref=expectedPreview(p.canvas.width,p.canvas.height,Expected[name][colorId]);assert(pixels(p.canvas).equals(pixels(ref)),'exact independently drawn world24 preview');const colors=pixels(p.canvas);const rgb=Expected[name][colorId].slice(1).match(/../g).map(x=>parseInt(x,16));assert(Array.from({length:colors.length/4},(_,i)=>i*4).some(i=>colors[i+3]===255&&rgb.every((v,k)=>colors[i+k]===v)),'actual opaque5/6 pixel; no fallback amber');assert.equal(p.depth(),0);}assert.equal(a.c.color(colorId),Expected[name][colorId]);}
+});
+test('5/6 actual preview failure restores context and retries both previews before one presentation ACK, in both palettes',()=>{
+ for(const colorId of[5,6])for(const contrast of[false,true])for(const target of['nextCanvas','nextMobile']){const a=appHarness(target,{colorId,contrast}),before=a.c.lastNextSignature;assert.throws(()=>a.c.draw(100),/native preview fill failure/);assert.equal(a.c.lastNextSignature,before);assert.equal(a.acks(),0);assert.equal(a.b.pending.length,1);for(const p of[a.board,a.desktop,a.mobile])assert.equal(p.depth(),0);a.c.draw(120);assert.equal(a.acks(),1);assert.equal(a.b.pending.length,0);assert.equal(a.p.core.completedMaterialTicks,4);const reference=appHarness(null,{colorId,contrast});reference.c.draw(100);for(const key of['desktop','mobile','board'])assert(pixels(a[key].canvas).equals(pixels(reference[key].canvas)),key+' exact recovery');a.c.draw(140);assert.equal(a.acks(),1);}
+});
+test('5/6 material and selection failures preserve unacknowledged ownership and exact successful retry',()=>{
+ for(const colorId of[5,6])for(const contrast of[false,true])for(const hook of['paint','drawSelection']){const a=appHarness(null,{colorId,contrast}),r=a.c.layerRenderer,original=r[hook].bind(r);let failures=2;r[hook]=(...args)=>{if(failures-->0){if(hook==='drawSelection')original(...args);throw Error('sixcolor-'+hook);}return original(...args);};assert.throws(()=>a.c.draw(100),new RegExp('sixcolor-'+hook));assert.equal(a.acks(),0);assert.equal(a.b.pending.length,1);assert.equal(a.p.core.completedMaterialTicks,0);assert.equal(a.board.depth(),0);a.c.draw(120);assert.equal(a.acks(),1);assert.equal(a.b.pending.length,0);const reference=appHarness(null,{colorId,contrast});reference.c.layerRenderer.fallback('independent full recovery reference');reference.c.draw(100);for(const key of['desktop','mobile','board'])assert(pixels(a[key].canvas).equals(pixels(reference[key].canvas)),key+' material/selection recovery');a.c.draw(140);assert.equal(a.acks(),1);}
+});
