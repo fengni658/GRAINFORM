@@ -1,0 +1,18 @@
+{
+  "stage": "0.5.9-r2",
+  "status": "input-stability-pass-flow-hold",
+  "build": "b-b4d94a0ddacbb0968f76640a90b6cb8c280dddb8c927496eae3613192466d5b9",
+  "sourceCheckpoint": "3ee7f5837a1cc8f820262781a7f14d5fa8162fef",
+  "verifiedAt": "2026-10-12",
+  "scope": {
+    "positiveTests": 204,
+    "cohortChecks": 10,
+    "runtimeRoutes": 6,
+    "realBrowser": "lifecycle and focus checks at three viewports passed"
+  },
+  "overallDelivery": "HOLD",
+  "reason": "User-reported diagonal synchronization and automatic-clear gameplay behavior remain unresolved; this verifies input stability only.",
+  "noPublication": true,
+  "noMainPromotion": true,
+  "reportSHA256": "3714163edf7d9745b749261b950551bd8877ce889a9ff43ae05732f9849f0f37"
+}
