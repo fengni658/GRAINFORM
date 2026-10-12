@@ -129,6 +129,7 @@ function resetBest() {
   $('resetStatus').hidden = false; updateStorageUI(); announce($('resetStatus').textContent); if ($('resetConfirm').hidden) $('resetBest').focus();
 }
 function applySettings() {
+  for(let id=1;id<=COLOR_COUNT;id++) $('grainColor'+id).style.background=PALETTES[settings.contrast?'contrast':'standard'][id];
   $('soundToggle').checked = settings.sound; $('contrastToggle').checked = settings.contrast; $('motionToggle').checked = !settings.motion;
   document.documentElement.classList.toggle('reduce-motion', !settings.motion);
   requestDraw();
@@ -329,7 +330,7 @@ function fail(message) {
 }
 function setupWorker() {
   try {
-    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.5.3-simulation' });
+    worker = new Worker(new URL('./simulation-worker.mjs', import.meta.url), { type: 'module', name: 'grainform-0.5.4-simulation' });
     worker.onmessage = ({ data: incoming }) => {
       const handlerBegun=performance.now();
       const wire=incoming?.type==='snapshot-wire'?incoming:null;

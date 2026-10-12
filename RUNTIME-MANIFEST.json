@@ -1,9 +1,9 @@
 {
-  "version": "0.5.3",
-  "candidate": "A-r2",
-  "build": "b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28",
+  "version": "0.5.4",
+  "candidate": "A-r1",
+  "build": "b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56",
   "entry": "index.html",
-  "scope": "Exact accepted 0.5.3 r2 private trial. No 0.5.4 changes.",
+  "scope": "Exact accepted 0.5.4 r1 private trial. No 0.5.5 changes.",
   "sourceFiles": [
     {
       "path": "anchor-table.mjs",
@@ -12,13 +12,13 @@
     },
     {
       "path": "app.mjs",
-      "bytes": 41785,
-      "sha256": "9193cde5d57fb3fbafbe61608cdc6ad3bf86ad2deb8430e85d36211e296c37bf"
+      "bytes": 41913,
+      "sha256": "ae4730eeb6d07483b52fb86e7399bd967bfe963afa0e3413354e7bd647b5d33a"
     },
     {
       "path": "board-geometry.mjs",
       "bytes": 1561,
-      "sha256": "a4a4be63d44682649a8e7df00c4175ab8fec3d085d454ec4038b8cc3ea1edeb5"
+      "sha256": "ea9c6bb3a88579f138a0c8da6b254161aa2f860b7548e108fa7d5017ef106ceb"
     },
     {
       "path": "ca-adapter.mjs",
@@ -62,18 +62,18 @@
     },
     {
       "path": "grain-material.mjs",
-      "bytes": 1951,
-      "sha256": "b4e08e352041e6fea6e2dd72a88682e62deea4d46cf06041be1feedfecca1bc5"
+      "bytes": 1947,
+      "sha256": "d44cc90db93b7468fd4bda2bef41f84e4d581241ea5d858d127e7b6faff6ded6"
     },
     {
       "path": "grain-palette.mjs",
       "bytes": 514,
-      "sha256": "7f435f74d312c4f85336ea8006c6c8a0a57a71d21d3d7581affced787e743997"
+      "sha256": "a1f2b3736fce57c232196b26896bb358d9d3677bdb8cfc87eacff10b2c30cee0"
     },
     {
       "path": "index.html",
-      "bytes": 11323,
-      "sha256": "70263c1b26d9f8a1e6970c9896e8fa544776bef4c34d5be04ebd88ba19867341"
+      "bytes": 11425,
+      "sha256": "64a718a2d61e80fbf453c69cae699ffaa0bc5689b9de071ec5aa2a91d7ed4471"
     },
     {
       "path": "settle-anchors.mjs",
@@ -92,8 +92,8 @@
     },
     {
       "path": "style.css",
-      "bytes": 15823,
-      "sha256": "02cf388d50b1d7c8a57a68a66e9a2ad98727613bfe2a4f8302bdadff6d0adbb9"
+      "bytes": 16165,
+      "sha256": "5e5a3cf0da93bc12e77376d1a784912aa562730f00fb37a4af798faa1574cbfc"
     }
   ],
   "runtimeFiles": [
@@ -104,103 +104,103 @@
     },
     {
       "path": "app.mjs",
-      "bytes": 41785,
-      "sha256": "9193cde5d57fb3fbafbe61608cdc6ad3bf86ad2deb8430e85d36211e296c37bf"
+      "bytes": 41913,
+      "sha256": "ae4730eeb6d07483b52fb86e7399bd967bfe963afa0e3413354e7bd647b5d33a"
     },
     {
       "path": "board-geometry.mjs",
       "bytes": 1561,
-      "sha256": "a4a4be63d44682649a8e7df00c4175ab8fec3d085d454ec4038b8cc3ea1edeb5"
+      "sha256": "ea9c6bb3a88579f138a0c8da6b254161aa2f860b7548e108fa7d5017ef106ceb"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/anchor-table.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/anchor-table.mjs",
       "bytes": 181452,
       "sha256": "f06de137a820c5b2f684bd374fc77e130c86e05e76086fea6706f59645a8d50e"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/app.mjs",
-      "bytes": 41785,
-      "sha256": "9193cde5d57fb3fbafbe61608cdc6ad3bf86ad2deb8430e85d36211e296c37bf"
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/app.mjs",
+      "bytes": 41913,
+      "sha256": "ae4730eeb6d07483b52fb86e7399bd967bfe963afa0e3413354e7bd647b5d33a"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/board-geometry.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/board-geometry.mjs",
       "bytes": 1561,
-      "sha256": "a4a4be63d44682649a8e7df00c4175ab8fec3d085d454ec4038b8cc3ea1edeb5"
+      "sha256": "ea9c6bb3a88579f138a0c8da6b254161aa2f860b7548e108fa7d5017ef106ceb"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/ca-adapter.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/ca-adapter.mjs",
       "bytes": 4484,
       "sha256": "8dee89d464b5517ec855479345143ed25c7f5a1e7436b5f67bb175946cade979"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/ca-contour.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/ca-contour.mjs",
       "bytes": 11851,
       "sha256": "f5f780dcad569934b82928c61e42273356997a480905d8c9088242b981d1eca0"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/ca-frame-world.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/ca-frame-world.mjs",
       "bytes": 2935,
       "sha256": "3351f6ea7043339c608ef864a6a8cc31cc4499dcedcd320402c62944d067bdc6"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/ca-layer.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/ca-layer.mjs",
       "bytes": 30897,
       "sha256": "dd4419558aa3a76fe4da15c27474757af03aca18e60ba1ad9902c231a398c6bf"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/ca-world.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/ca-world.mjs",
       "bytes": 13384,
       "sha256": "6f6257975fa777eae732a28f75674d2c9913f601326a0458ce052b2174390015"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/composite-presentation.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/composite-presentation.mjs",
       "bytes": 3711,
       "sha256": "ad6cd1d8f7b81a15315e0ca89f75ff374cf26db057ff6e7a557de85c648c5149"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/composite-protocol.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/composite-protocol.mjs",
       "bytes": 13609,
       "sha256": "0b6a53ac985cd10590dd02d65933f65410b66b11d9389974d9d9d6cd4f8aaf1f"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/game.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/game.mjs",
       "bytes": 10200,
       "sha256": "7dd57facb6d1246fbcfb571d39640bb622f0361b88db2799894c3c8917b59725"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/grain-material.mjs",
-      "bytes": 1951,
-      "sha256": "b4e08e352041e6fea6e2dd72a88682e62deea4d46cf06041be1feedfecca1bc5"
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/grain-material.mjs",
+      "bytes": 1947,
+      "sha256": "d44cc90db93b7468fd4bda2bef41f84e4d581241ea5d858d127e7b6faff6ded6"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/grain-palette.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/grain-palette.mjs",
       "bytes": 514,
-      "sha256": "7f435f74d312c4f85336ea8006c6c8a0a57a71d21d3d7581affced787e743997"
+      "sha256": "a1f2b3736fce57c232196b26896bb358d9d3677bdb8cfc87eacff10b2c30cee0"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/index.html",
-      "bytes": 11323,
-      "sha256": "70263c1b26d9f8a1e6970c9896e8fa544776bef4c34d5be04ebd88ba19867341"
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/index.html",
+      "bytes": 11425,
+      "sha256": "64a718a2d61e80fbf453c69cae699ffaa0bc5689b9de071ec5aa2a91d7ed4471"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/settle-anchors.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/settle-anchors.mjs",
       "bytes": 1299,
       "sha256": "cac0e724b09f2e892c97c36345cd4bf2b7034cc120c6a363036c1c33ebaba594"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/simulation-worker.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/simulation-worker.mjs",
       "bytes": 22529,
       "sha256": "c95f19971363aa16ad94255df41fb3e7d10916fbdcaa18b378be808893aff617"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/snapshot-transport.mjs",
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/snapshot-transport.mjs",
       "bytes": 763,
       "sha256": "46b0478f28670531a765881f3145bbabf62e9560e3e742ffe79e4e5b0cda6147"
     },
     {
-      "path": "builds/b-73c2c80616249e99328df43ae03f9fd4583fb1062aa8d26bdb00037d86b19a28/style.css",
-      "bytes": 15823,
-      "sha256": "02cf388d50b1d7c8a57a68a66e9a2ad98727613bfe2a4f8302bdadff6d0adbb9"
+      "path": "builds/b-195ab55f82a0132a5a6e3195a479fcfe8384200b1ed70d8b681c224c09013f56/style.css",
+      "bytes": 16165,
+      "sha256": "5e5a3cf0da93bc12e77376d1a784912aa562730f00fb37a4af798faa1574cbfc"
     },
     {
       "path": "ca-adapter.mjs",
@@ -244,23 +244,23 @@
     },
     {
       "path": "grain-material.mjs",
-      "bytes": 1951,
-      "sha256": "b4e08e352041e6fea6e2dd72a88682e62deea4d46cf06041be1feedfecca1bc5"
+      "bytes": 1947,
+      "sha256": "d44cc90db93b7468fd4bda2bef41f84e4d581241ea5d858d127e7b6faff6ded6"
     },
     {
       "path": "grain-palette.mjs",
       "bytes": 514,
-      "sha256": "7f435f74d312c4f85336ea8006c6c8a0a57a71d21d3d7581affced787e743997"
+      "sha256": "a1f2b3736fce57c232196b26896bb358d9d3677bdb8cfc87eacff10b2c30cee0"
     },
     {
       "path": "index.html",
-      "bytes": 11471,
-      "sha256": "5f1f683050358ef0bb6c9a3193a4637ce60b044ae8f0bd0facfdbbd2a7346a2a"
+      "bytes": 11573,
+      "sha256": "f782aaa62b687e85be9a772ba23e22463cba31f47835e9dc430ce0c5819a9b70"
     },
     {
-      "path": "play-053-a.html",
-      "bytes": 11471,
-      "sha256": "5f1f683050358ef0bb6c9a3193a4637ce60b044ae8f0bd0facfdbbd2a7346a2a"
+      "path": "play-054-a.html",
+      "bytes": 11573,
+      "sha256": "f782aaa62b687e85be9a772ba23e22463cba31f47835e9dc430ce0c5819a9b70"
     },
     {
       "path": "settle-anchors.mjs",
@@ -279,8 +279,8 @@
     },
     {
       "path": "style.css",
-      "bytes": 15823,
-      "sha256": "02cf388d50b1d7c8a57a68a66e9a2ad98727613bfe2a4f8302bdadff6d0adbb9"
+      "bytes": 16165,
+      "sha256": "5e5a3cf0da93bc12e77376d1a784912aa562730f00fb37a4af798faa1574cbfc"
     }
   ]
 }

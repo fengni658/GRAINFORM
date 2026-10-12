@@ -1,0 +1,51 @@
+{
+  "board-geometry.mjs": [
+    {
+      "old": "VERSION='0.5.3'",
+      "replacement": "VERSION='0.5.4'"
+    }
+  ],
+  "grain-material.mjs": [
+    {
+      "old": "export const GRAIN_OFFSET_BOUND = .18;",
+      "replacement": "export const GRAIN_OFFSET_BOUND = .15;"
+    },
+    {
+      "old": "// opposite +/-radius tips guarantee the original grid-unit circle diameter. Camera pitch 3 doubles the world diameter relative to the frozen 1.5-pitch 0.4.12.",
+      "replacement": "// opposite +/-radius tips preserve the accepted053 maximum diameter.\n// 054 keeps pitch24/9 and diameter scale.95625; only the fixed offset bound changes."
+    }
+  ],
+  "grain-palette.mjs": [
+    {
+      "old": "export const PALETTES=Object.freeze({standard:Object.freeze(['','#eac370','#4fc0b3','#d378a3','#789fef','#e88945','#aa79e8']),contrast:Object.freeze(['','#ffe07a','#4df0b0','#fc87b5','#71a7ff','#ff9a45','#bc83ff'])});",
+      "replacement": "export const PALETTES=Object.freeze({standard:Object.freeze([\"\",\"#f0c56a\",\"#49c6b7\",\"#d873a3\",\"#729df5\",\"#f0883d\",\"#a973ee\"]),contrast:Object.freeze([\"\",\"#ffe07a\",\"#45f8b2\",\"#ff84b4\",\"#71a7ff\",\"#ff9a45\",\"#bc83ff\"])});"
+    }
+  ],
+  "app.mjs": [
+    {
+      "old": "function applySettings() {\n",
+      "replacement": "function applySettings() {\n  for(let id=1;id<=COLOR_COUNT;id++) $('grainColor'+id).style.background=PALETTES[settings.contrast?'contrast':'standard'][id];\n"
+    },
+    {
+      "old": "name: 'grainform-0.5.3-simulation'",
+      "replacement": "name: 'grainform-0.5.4-simulation'"
+    }
+  ],
+  "index.html": [
+    {
+      "old": "0.5.3 测试版",
+      "replacement": "0.5.4 测试版",
+      "count": 5
+    },
+    {
+      "old": "<div class=\"swatches\" aria-hidden=\"true\"><i></i><i></i><i></i><i></i><i></i><i></i></div>",
+      "replacement": "<div class=\"swatches\" aria-hidden=\"true\"><i id=\"grainColor1\"></i><i id=\"grainColor2\"></i><i id=\"grainColor3\"></i><i id=\"grainColor4\"></i><i id=\"grainColor5\"></i><i id=\"grainColor6\"></i></div>"
+    }
+  ],
+  "style.css": [
+    {
+      "old": ".swatches i:nth-child(5){background:#e88945}.swatches i:nth-child(6){background:#aa79e8}\n",
+      "replacement": ".swatches i:nth-child(5){background:#e88945}.swatches i:nth-child(6){background:#aa79e8}\n\n/* 054 grain palette: JS keeps these six IDs in sync with contrast mode. */\n.swatches i:nth-child(1){background:#f0c56a}.swatches i:nth-child(2){background:#49c6b7}.swatches i:nth-child(3){background:#d873a3}.swatches i:nth-child(4){background:#729df5}.swatches i:nth-child(5){background:#f0883d}.swatches i:nth-child(6){background:#a973ee}\n"
+    }
+  ]
+}
